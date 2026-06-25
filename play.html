@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Blast from the Past — Claude Created from Scratch</title>
+  <meta name="description" content="A free, instantly playable top-down Zelda-inspired adventure across six Earth biomes." />
+
+  <!-- Installable web app (PWA) -->
+  <meta name="theme-color" content="#11101a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Blast from the Past" />
+
+  <style>
+:root {
+  --ink: #e8e6d6;
+  --frame: #2a2438;
+  --frame-light: #4a3f63;
+  --gold: #f2d272;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #11101a;
+  color: var(--ink);
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-font-smoothing: none;
+}
+
+#game-shell {
+  position: relative;
+  width: 768px;
+  max-width: 100vw;
+  border: 6px solid var(--frame-light);
+  border-radius: 10px;
+  box-shadow: 0 0 0 4px var(--frame), 0 18px 50px rgba(0, 0, 0, 0.6);
+  background: #000;
+  overflow: hidden;
+}
+
+#hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  background: linear-gradient(180deg, #3a3252, #221d33);
+  border-bottom: 2px solid var(--frame-light);
+}
+
+#hearts {
+  display: flex;
+  gap: 4px;
+  font-size: 20px;
+  min-height: 24px;
+}
+
+.heart {
+  filter: drop-shadow(0 1px 0 #000);
+}
+.heart.full {
+  color: #ff5a73;
+}
+.heart.empty {
+  color: #5a4a4a;
+}
+
+#realm-name {
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: var(--gold);
+  text-shadow: 0 1px 0 #000;
+}
+
+#sound-toggle {
+  background: var(--frame);
+  color: var(--ink);
+  border: 1px solid var(--frame-light);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+#sound-toggle:hover {
+  background: var(--frame-light);
+}
+
+canvas#screen {
+  display: block;
+  width: 768px;
+  height: 512px;
+  image-rendering: pixelated;
+  background: #1a1a2a;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 7, 18, 0.92);
+  text-align: center;
+  padding: 20px;
+  transition: opacity 0.4s ease;
+}
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.overlay-card {
+  max-width: 480px;
+}
+
+.overlay-card h1 {
+  margin: 0 0 4px;
+  color: var(--gold);
+  font-size: 30px;
+  text-shadow: 0 2px 0 #000;
+}
+
+.subtitle {
+  margin: 0 0 18px;
+  font-style: italic;
+  color: #b9b3d0;
+}
+
+.controls {
+  list-style: none;
+  padding: 0;
+  margin: 18px auto;
+  display: inline-block;
+  text-align: left;
+  line-height: 1.9;
+}
+
+button#start-btn {
+  margin-top: 8px;
+  background: var(--gold);
+  color: #241c0a;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #b89a3f;
+}
+button#start-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #b89a3f;
+}
+
+.hint {
+  margin-top: 14px;
+  font-size: 12px;
+  color: #8a85a0;
+}
+
+</style>
+</head>
+<body>
+  <div id="game-shell">
+    <header id="hud">
+      <div id="hearts" aria-label="health"></div>
+      <div id="realm-name">The Six Realms</div>
+      <button id="sound-toggle" type="button" title="Toggle music">♪ Music: On</button>
+    </header>
+
+    <canvas id="screen" width="768" height="512"></canvas>
+
+    <div id="overlay" class="overlay">
+      <div class="overlay-card">
+        <h1>Blast from the Past</h1>
+        <p class="subtitle">Claude Created from Scratch &mdash; a Link to the Past tribute</p>
+        <p>
+          Six realms of Earth have fallen to ghosts, goblins, and bats.
+          Travel from biome to biome, clear each realm, and restore the light.
+        </p>
+        <ul class="controls">
+          <li><b>Move</b> &mdash; Arrow keys or <b>W A S D</b></li>
+          <li><b>Swing sword</b> &mdash; <b>Spacebar</b> or <b>Z</b></li>
+          <li><b>Clear every foe</b> to open the way onward</li>
+        </ul>
+        <button id="start-btn" type="button">Begin the Journey</button>
+        <p class="hint">Click to enable music.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+/*
+ * Whispers of the Six Realms — audio engine
+ *
+ * A tiny chiptune sequencer built on the Web Audio API. The melodies are
+ * original but written in the spirit of Nobuo Uematsu's Final Fantasy VI
+ * score: wandering minor-key leads over gentle arpeggiated chords, with a
+ * distinct mood for each biome.
+ */
+(function () {
+  "use strict";
+
+  // Equal-tempered note table (A4 = 440Hz). Names like "c4", "fs4", "r" (rest).
+  const SEMI = {
+    c: 0, cs: 1, d: 2, ds: 3, e: 4, f: 5, fs: 6,
+    g: 7, gs: 8, a: 9, as: 10, b: 11,
+  };
+  function freq(note) {
+    if (note === "r") return 0;
+    const m = /^([a-g]s?)(\d)$/.exec(note);
+    if (!m) return 0;
+    const midi = SEMI[m[1]] + (parseInt(m[2], 10) + 1) * 12;
+    return 440 * Math.pow(2, (midi - 69) / 12);
+  }
+
+  const AudioEngine = {
+    ctx: null,
+    master: null,
+    enabled: true,
+    _timer: null,
+    _step: 0,
+    _track: null,
+    _bpm: 112,
+
+    init() {
+      if (this.ctx) return;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AC();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.0;
+      this.master.connect(this.ctx.destination);
+    },
+
+    resume() {
+      if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+    },
+
+    setEnabled(on) {
+      this.enabled = on;
+      if (!this.master) return;
+      const now = this.ctx.currentTime;
+      this.master.gain.cancelScheduledValues(now);
+      this.master.gain.linearRampToValueAtTime(on ? 0.5 : 0.0, now + 0.3);
+    },
+
+    // --- one-shot tone, used for melody/bass voices and sound effects ---
+    blip(f, dur, type, vol, dest) {
+      if (!this.ctx || f <= 0) return;
+      const t = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      osc.type = type;
+      osc.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      osc.connect(g);
+      g.connect(dest || this.master);
+      osc.start(t);
+      osc.stop(t + dur + 0.02);
+    },
+
+    // --- short noise burst for percussive / impact sound effects ---
+    noise(dur, vol, hp) {
+      if (!this.ctx) return;
+      const t = this.ctx.currentTime;
+      const len = Math.floor(this.ctx.sampleRate * dur);
+      const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+      const src = this.ctx.createBufferSource();
+      src.buffer = buf;
+      const filt = this.ctx.createBiquadFilter();
+      filt.type = "highpass";
+      filt.frequency.value = hp || 600;
+      const g = this.ctx.createGain();
+      g.gain.setValueAtTime(vol, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(filt);
+      filt.connect(g);
+      g.connect(this.master);
+      src.start(t);
+    },
+
+    // ---- sound effects -------------------------------------------------
+    sfx(name) {
+      if (!this.ctx || !this.enabled) return;
+      switch (name) {
+        case "sword":
+          this.noise(0.12, 0.18, 1800);
+          this.blip(660, 0.1, "square", 0.12);
+          break;
+        case "hit":
+          this.blip(180, 0.16, "sawtooth", 0.22);
+          this.noise(0.1, 0.14, 400);
+          break;
+        case "hurt":
+          this.blip(140, 0.28, "square", 0.25);
+          break;
+        case "door":
+          this.blip(523, 0.12, "triangle", 0.2);
+          this.blip(784, 0.18, "triangle", 0.2);
+          break;
+        case "win":
+          ["c5", "e5", "g5", "c6"].forEach((n, i) =>
+            setTimeout(() => this.blip(freq(n), 0.4, "triangle", 0.25), i * 160)
+          );
+          break;
+      }
+    },
+
+    // ---- looping biome music ------------------------------------------
+    playTrack(track) {
+      this.init();
+      this._track = track;
+      this._bpm = track.bpm || 112;
+      this._step = 0;
+      if (this._timer) clearInterval(this._timer);
+      const stepMs = (60000 / this._bpm) / 2; // eighth notes
+      this._timer = setInterval(() => this._tick(), stepMs);
+    },
+
+    stopTrack() {
+      if (this._timer) clearInterval(this._timer);
+      this._timer = null;
+    },
+
+    _tick() {
+      if (!this.enabled || !this._track) return;
+      const tr = this._track;
+      const i = this._step;
+      const lead = tr.lead[i % tr.lead.length];
+      const bass = tr.bass[i % tr.bass.length];
+      const stepDur = (60 / this._bpm) / 2;
+
+      if (lead && lead !== "r") {
+        this.blip(freq(lead), stepDur * 1.7, tr.leadWave || "square", 0.16);
+        this.blip(freq(lead) * 2, stepDur * 1.7, "triangle", 0.05);
+      }
+      if (bass && bass !== "r") {
+        this.blip(freq(bass), stepDur * 1.9, "triangle", 0.22);
+      }
+      // gentle arpeggio shimmer every other step
+      if (tr.arp && i % 2 === 0) {
+        const a = tr.arp[(i / 2) % tr.arp.length];
+        if (a && a !== "r") this.blip(freq(a), stepDur * 1.2, "sine", 0.07);
+      }
+      this._step++;
+    },
+  };
+
+  /*
+   * Biome themes. Each is a short loop of eighth notes.
+   * `_` is shorthand for a held/rest beat ("r").
+   */
+  const r = "r";
+  window.REALM_THEMES = {
+    // 1. FOREST — pastoral, hopeful (overworld feel)
+    forest: {
+      bpm: 116, leadWave: "square",
+      lead: ["e4","g4","a4","b4","a4","g4","e4",r, "d4","e4","g4","e4","d4",r,"b3",r,
+             "c4","e4","g4","c5","b4","g4","e4",r, "d4","e4","d4","b3","a3",r,r,r],
+      bass: ["a2",r,"a2",r,"e2",r,"e2",r, "f2",r,"f2",r,"c3",r,"c3",r,
+             "a2",r,"a2",r,"e2",r,"e2",r, "g2",r,"g2",r,"d2",r,r,r],
+      arp: ["a3","c4","e4","c4","e3","g3","b3","g3"],
+    },
+    // 2. DESERT — exotic, swaying (harmonic minor color)
+    desert: {
+      bpm: 104, leadWave: "sawtooth",
+      lead: ["d4","ef4","fs4","g4","fs4","ef4","d4",r, "c4","d4","ef4","d4","c4",r,"as3",r,
+             "d4","fs4","a4","as4","a4","fs4","d4",r, "ef4","d4","c4","as3","a3",r,r,r],
+      bass: ["d2",r,"d2",r,"as2",r,"as2",r, "g2",r,"g2",r,"a2",r,"a2",r,
+             "d2",r,"d2",r,"as2",r,"as2",r, "g2",r,"a2",r,"d2",r,r,r],
+      arp: ["d3","f3","a3","f3","as3","d4","f4","d4"],
+    },
+    // 3. TUNDRA — sparse, crystalline, melancholic
+    tundra: {
+      bpm: 92, leadWave: "triangle",
+      lead: ["a4",r,"e4",r,"f4",r,"e4",r, "d4",r,"c4",r,"d4","e4","d4",r,
+             "g4",r,"d4",r,"e4",r,"d4",r, "c4",r,"a3",r,"b3",r,r,r],
+      bass: ["a2",r,r,r,"f2",r,r,r, "d2",r,r,r,"e2",r,r,r,
+             "g2",r,r,r,"e2",r,r,r, "a2",r,r,r,"e2",r,r,r],
+      arp: ["a3","c4","e4","c4","f3","a3","c4","a3"],
+    },
+    // 4. VOLCANO — driving, tense, dramatic
+    volcano: {
+      bpm: 132, leadWave: "sawtooth",
+      lead: ["c4","c4","ef4","c4","g4","ef4","c4",r, "af3","af3","c4","af3","ef4","c4","af3",r,
+             "bf3","bf3","d4","bf3","f4","d4","bf3",r, "g3","bf3","c4","ef4","d4","c4","bf3",r],
+      bass: ["c2","c2","r","c2","g2","r","c2","r", "af1","af1","r","af1","ef2","r","af1","r",
+             "bf1","bf1","r","bf1","f2","r","bf1","r", "g1","g1","r","g1","d2","r","g1","r"],
+      arp: ["c3","ef3","g3","ef3","af2","c3","ef3","c3"],
+    },
+    // 5. SWAMP — murky, mysterious, slow
+    swamp: {
+      bpm: 96, leadWave: "square",
+      lead: ["e4",r,"f4","e4","d4",r,"e4",r, "c4",r,"d4","c4","b3",r,"a3",r,
+             "a4",r,"g4","f4","e4",r,"d4",r, "e4",r,"d4","c4","b3",r,r,r],
+      bass: ["a2",r,"e2",r,"f2",r,"c2",r, "d2",r,"a2",r,"e2",r,"e2",r,
+             "f2",r,"c2",r,"d2",r,"a2",r, "e2",r,"e2",r,"a2",r,r,r],
+      arp: ["a3","c4","e4","g4","f3","a3","c4","e4"],
+    },
+    // 6. COAST — triumphant, soaring (the final realm)
+    coast: {
+      bpm: 120, leadWave: "square",
+      lead: ["g4","a4","b4","d5","b4","a4","g4",r, "e4","g4","a4","b4","a4","g4","e4",r,
+             "c5","b4","a4","g4","a4","b4","c5","d5", "b4","a4","g4","a4","g4",r,r,r],
+      bass: ["g2",r,"d3",r,"e2",r,"b2",r, "c2",r,"g2",r,"d2",r,"d2",r,
+             "c2",r,"g2",r,"a2",r,"e2",r, "g2",r,"d3",r,"g2",r,r,r],
+      arp: ["g3","b3","d4","b3","c4","e4","g4","e4"],
+    },
+  };
+
+  window.AudioEngine = AudioEngine;
+})();
+
+</script>
+<script>
+/*
+ * Whispers of the Six Realms
+ * A small top-down, Zelda: A Link to the Past-inspired adventure.
+ *
+ * Six single-screen realms, each a different Earth biome. Clear every foe —
+ * ghosts, goblins, and bats — to open the gate onward. Reach the relic in the
+ * final realm to win. Tuned to be gentle: lots of hearts, weak enemies.
+ */
+(function () {
+  "use strict";
+
+  const canvas = document.getElementById("screen");
+  const ctx = canvas.getContext("2d");
+
+  const TILE = 32;
+  const COLS = canvas.width / TILE; // 24
+  const ROWS = canvas.height / TILE; // 16
+  const MAX_HP = 12; // 6 hearts (2 halves each)
+
+  // ---- input ---------------------------------------------------------
+  const keys = {};
+  const KEYMAP = {
+    ArrowUp: "up", KeyW: "up",
+    ArrowDown: "down", KeyS: "down",
+    ArrowLeft: "left", KeyA: "left",
+    ArrowRight: "right", KeyD: "right",
+    Space: "attack", KeyZ: "attack",
+  };
+  window.addEventListener("keydown", (e) => {
+    const a = KEYMAP[e.code];
+    if (a) {
+      keys[a] = true;
+      e.preventDefault();
+    }
+  });
+  window.addEventListener("keyup", (e) => {
+    const a = KEYMAP[e.code];
+    if (a) keys[a] = false;
+  });
+
+  // ---- realm (biome) definitions -------------------------------------
+  // Each realm is one screen. `enemies` lists spawns. Cleared = gate opens.
+  const REALMS = [
+    {
+      name: "Verdant Wood",
+      music: "forest",
+      ground: ["#3a7d3a", "#347234"],
+      accent: "#235023",
+      decor: "trees",
+      enemies: [
+        { type: "goblin", x: 6, y: 4 },
+        { type: "goblin", x: 17, y: 9 },
+        { type: "bat", x: 12, y: 6 },
+      ],
+    },
+    {
+      name: "Sun-Scoured Desert",
+      music: "desert",
+      ground: ["#d9b15e", "#cfa651"],
+      accent: "#b88f3e",
+      decor: "cacti",
+      enemies: [
+        { type: "goblin", x: 5, y: 8 },
+        { type: "bat", x: 16, y: 4 },
+        { type: "bat", x: 18, y: 11 },
+        { type: "goblin", x: 11, y: 6 },
+      ],
+    },
+    {
+      name: "Frostpeak Tundra",
+      music: "tundra",
+      ground: ["#cfe6f0", "#bcd9e8"],
+      accent: "#9cc2d6",
+      decor: "ice",
+      enemies: [
+        { type: "ghost", x: 6, y: 5 },
+        { type: "ghost", x: 17, y: 10 },
+        { type: "bat", x: 12, y: 4 },
+      ],
+    },
+    {
+      name: "Emberreach Volcano",
+      music: "volcano",
+      ground: ["#5a2620", "#4a1f1a"],
+      accent: "#8a3322",
+      decor: "lava",
+      enemies: [
+        { type: "goblin", x: 5, y: 5 },
+        { type: "goblin", x: 18, y: 5 },
+        { type: "bat", x: 12, y: 8 },
+        { type: "ghost", x: 12, y: 12 },
+      ],
+    },
+    {
+      name: "Mistmire Swamp",
+      music: "swamp",
+      ground: ["#3f5234", "#36482d"],
+      accent: "#2a3a22",
+      decor: "reeds",
+      enemies: [
+        { type: "ghost", x: 6, y: 6 },
+        { type: "ghost", x: 17, y: 6 },
+        { type: "goblin", x: 11, y: 10 },
+        { type: "bat", x: 8, y: 11 },
+      ],
+    },
+    {
+      name: "Lumin Coast",
+      music: "coast",
+      ground: ["#e6d8a8", "#dccd99"],
+      accent: "#3a78b5",
+      decor: "shore",
+      isFinal: true,
+      enemies: [
+        { type: "goblin", x: 6, y: 8 },
+        { type: "bat", x: 16, y: 6 },
+        { type: "ghost", x: 13, y: 10 },
+      ],
+    },
+  ];
+
+  // ---- enemy archetypes ----------------------------------------------
+  const ENEMY_KIND = {
+    goblin: { hp: 2, speed: 48, r: 12, touch: 1, color: "#6fae4a" },
+    bat: { hp: 1, speed: 96, r: 9, touch: 1, color: "#7a5a8a" },
+    ghost: { hp: 2, speed: 40, r: 12, touch: 1, color: "#dfe6f2" },
+  };
+
+  // ---- game state ----------------------------------------------------
+  let state = "title"; // title | play | dead | win
+  let realmIndex = 0;
+  let enemies = [];
+  let gateOpen = false;
+  let particles = [];
+  let shake = 0;
+  let lastTime = 0;
+
+  const player = {
+    x: canvas.width / 2,
+    y: canvas.height - TILE * 2,
+    r: 12,
+    speed: 150,
+    hp: MAX_HP,
+    facing: "up",
+    attack: 0, // frames remaining in swing
+    attackCd: 0,
+    invuln: 0,
+  };
+
+  // ---- helpers -------------------------------------------------------
+  function dist2(a, b) {
+    const dx = a.x - b.x, dy = a.y - b.y;
+    return dx * dx + dy * dy;
+  }
+
+  function spawnRealm(i) {
+    const realm = REALMS[i];
+    enemies = realm.enemies.map((e) => {
+      const k = ENEMY_KIND[e.type];
+      return {
+        type: e.type,
+        x: e.x * TILE + TILE / 2,
+        y: e.y * TILE + TILE / 2,
+        hp: k.hp,
+        r: k.r,
+        speed: k.speed,
+        color: k.color,
+        touch: k.touch,
+        hurt: 0,
+        phase: Math.random() * Math.PI * 2, // for bat/ghost motion
+      };
+    });
+    gateOpen = false;
+    player.x = TILE * 1.5;
+    player.y = canvas.height / 2;
+    player.facing = "right";
+    document.getElementById("realm-name").textContent =
+      `Realm ${i + 1}/6 — ${realm.name}`;
+    if (window.AudioEngine) AudioEngine.playTrack(REALM_THEMES[realm.music]);
+  }
+
+  function addParticles(x, y, color, n) {
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = 40 + Math.random() * 120;
+      particles.push({
+        x, y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp,
+        life: 0.5,
+        color,
+      });
+    }
+  }
+
+  // ---- combat: the sword hitbox in front of the player ---------------
+  function swordBox() {
+    const reach = 26;
+    const w = 30;
+    let b = { x: player.x, y: player.y, w, h: w };
+    if (player.facing === "up") { b.y -= reach; b.h = reach + 8; b.w = 22; }
+    else if (player.facing === "down") { b.y += reach - 6; b.h = reach + 8; b.w = 22; }
+    else if (player.facing === "left") { b.x -= reach; b.w = reach + 8; b.h = 22; }
+    else { b.x += reach - 6; b.w = reach + 8; b.h = 22; }
+    return b;
+  }
+
+  function boxHitsCircle(box, c) {
+    const cx = Math.max(box.x - box.w / 2, Math.min(c.x, box.x + box.w / 2));
+    const cy = Math.max(box.y - box.h / 2, Math.min(c.y, box.y + box.h / 2));
+    const dx = c.x - cx, dy = c.y - cy;
+    return dx * dx + dy * dy <= c.r * c.r;
+  }
+
+  // ---- update --------------------------------------------------------
+  function update(dt) {
+    if (state !== "play") return;
+
+    // timers
+    if (player.attack > 0) player.attack -= dt;
+    if (player.attackCd > 0) player.attackCd -= dt;
+    if (player.invuln > 0) player.invuln -= dt;
+    if (shake > 0) shake = Math.max(0, shake - dt);
+
+    // movement
+    let mx = 0, my = 0;
+    if (keys.up) my -= 1;
+    if (keys.down) my += 1;
+    if (keys.left) mx -= 1;
+    if (keys.right) mx += 1;
+    if (mx || my) {
+      const len = Math.hypot(mx, my) || 1;
+      player.x += (mx / len) * player.speed * dt;
+      player.y += (my / len) * player.speed * dt;
+      if (Math.abs(mx) > Math.abs(my)) player.facing = mx < 0 ? "left" : "right";
+      else player.facing = my < 0 ? "up" : "down";
+    }
+    // keep player inside the framed play field
+    const pad = TILE * 0.75;
+    player.x = Math.max(pad, Math.min(canvas.width - pad, player.x));
+    player.y = Math.max(pad, Math.min(canvas.height - pad, player.y));
+
+    // attack
+    if (keys.attack && player.attackCd <= 0) {
+      player.attack = 0.18;
+      player.attackCd = 0.34;
+      AudioEngine.sfx("sword");
+    }
+    const swinging = player.attack > 0;
+    const box = swinging ? swordBox() : null;
+
+    // enemies
+    for (const e of enemies) {
+      if (e.hurt > 0) e.hurt -= dt;
+      e.phase += dt * 4;
+
+      // movement AI per type
+      const dx = player.x - e.x, dy = player.y - e.y;
+      const d = Math.hypot(dx, dy) || 1;
+      if (e.type === "bat") {
+        // erratic, fast, weaving toward player
+        const wob = Math.sin(e.phase) * 0.8;
+        e.x += ((dx / d) + Math.cos(e.phase) * wob) * e.speed * dt;
+        e.y += ((dy / d) + Math.sin(e.phase * 1.3) * wob) * e.speed * dt;
+      } else if (e.type === "ghost") {
+        // slow, steady, drifts straight at the hero
+        e.x += (dx / d) * e.speed * dt;
+        e.y += (dy / d) * e.speed * dt;
+      } else {
+        // goblin: marches toward player
+        e.x += (dx / d) * e.speed * dt;
+        e.y += (dy / d) * e.speed * dt;
+      }
+      e.x = Math.max(TILE * 0.5, Math.min(canvas.width - TILE * 0.5, e.x));
+      e.y = Math.max(TILE * 0.5, Math.min(canvas.height - TILE * 0.5, e.y));
+
+      // sword hit
+      if (box && e.hurt <= 0 && boxHitsCircle(box, e)) {
+        e.hp -= 1;
+        e.hurt = 0.3;
+        AudioEngine.sfx("hit");
+        addParticles(e.x, e.y, e.color, 8);
+        // knockback
+        e.x += (dx / d) * -16;
+        e.y += (dy / d) * -16;
+      }
+
+      // touch damage to player
+      if (player.invuln <= 0 && dist2(player, e) < (player.r + e.r) ** 2) {
+        player.hp -= e.touch;
+        player.invuln = 1.0;
+        shake = 0.25;
+        AudioEngine.sfx("hurt");
+        renderHearts();
+        if (player.hp <= 0) {
+          state = "dead";
+          AudioEngine.stopTrack();
+          showOverlay(deadCard());
+        }
+      }
+    }
+
+    // cull dead enemies
+    const before = enemies.length;
+    enemies = enemies.filter((e) => {
+      if (e.hp <= 0) {
+        addParticles(e.x, e.y, e.color, 16);
+        return false;
+      }
+      return true;
+    });
+    if (before && enemies.length === 0 && !gateOpen) {
+      gateOpen = true;
+      AudioEngine.sfx("door");
+    }
+
+    // particles
+    for (const p of particles) {
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.life -= dt;
+    }
+    particles = particles.filter((p) => p.life > 0);
+
+    // realm transition: when cleared, walk through the gate on the right edge
+    if (gateOpen) {
+      const realm = REALMS[realmIndex];
+      const gateY = canvas.height / 2;
+      const atGate =
+        player.x > canvas.width - TILE * 1.4 &&
+        Math.abs(player.y - gateY) < TILE * 1.2;
+      if (atGate) {
+        if (realm.isFinal) {
+          state = "win";
+          AudioEngine.stopTrack();
+          AudioEngine.sfx("win");
+          showOverlay(winCard());
+        } else {
+          realmIndex++;
+          AudioEngine.sfx("door");
+          spawnRealm(realmIndex);
+        }
+      }
+    }
+  }
+
+  // ---- rendering -----------------------------------------------------
+  function render() {
+    const realm = REALMS[realmIndex];
+    ctx.save();
+    if (shake > 0) {
+      ctx.translate((Math.random() - 0.5) * 6 * shake * 4,
+                    (Math.random() - 0.5) * 6 * shake * 4);
+    }
+
+    drawGround(realm);
+    drawDecor(realm);
+    drawGate(realm);
+    for (const e of enemies) drawEnemy(e);
+    drawParticles();
+    if (state === "play" || state === "win" || state === "dead") drawPlayer();
+
+    ctx.restore();
+
+    if (state === "play" && gateOpen) drawBanner("The way is open →");
+  }
+
+  function drawGround(realm) {
+    for (let y = 0; y < ROWS; y++) {
+      for (let x = 0; x < COLS; x++) {
+        ctx.fillStyle = realm.ground[(x + y) % 2];
+        ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
+      }
+    }
+    // border frame
+    ctx.fillStyle = realm.accent;
+    ctx.fillRect(0, 0, canvas.width, TILE * 0.5);
+    ctx.fillRect(0, canvas.height - TILE * 0.5, canvas.width, TILE * 0.5);
+    ctx.fillRect(0, 0, TILE * 0.5, canvas.height);
+    ctx.fillRect(canvas.width - TILE * 0.5, 0, TILE * 0.5, canvas.height);
+  }
+
+  // deterministic per-realm scatter of biome decorations
+  function decorSpots(realm) {
+    if (realm._spots) return realm._spots;
+    const spots = [];
+    let seed = realm.name.length * 97 + 13;
+    const rnd = () => {
+      seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+      return seed / 0x7fffffff;
+    };
+    for (let i = 0; i < 14; i++) {
+      spots.push({
+        x: TILE * 1.5 + rnd() * (canvas.width - TILE * 4),
+        y: TILE * 1.2 + rnd() * (canvas.height - TILE * 3),
+        s: 0.7 + rnd() * 0.6,
+      });
+    }
+    realm._spots = spots;
+    return spots;
+  }
+
+  function drawDecor(realm) {
+    const spots = decorSpots(realm);
+    for (const s of spots) {
+      const x = s.x, y = s.y, sc = s.s;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(sc, sc);
+      switch (realm.decor) {
+        case "trees":
+          ctx.fillStyle = "#5b3b1f"; ctx.fillRect(-3, 0, 6, 14);
+          ctx.fillStyle = "#1f5c1f";
+          circle(0, -6, 14); ctx.fillStyle = "#2e7a2e"; circle(-6, -2, 9); circle(6, -2, 9);
+          break;
+        case "cacti":
+          ctx.fillStyle = "#3f8a4a";
+          ctx.fillRect(-4, -16, 8, 30);
+          ctx.fillRect(-12, -6, 8, 6); ctx.fillRect(-12, -6, 4, -10);
+          ctx.fillRect(4, -2, 8, 6); ctx.fillRect(8, -2, 4, -12);
+          break;
+        case "ice":
+          ctx.fillStyle = "#ffffff"; ctx.globalAlpha = 0.85;
+          ctx.beginPath(); ctx.moveTo(0, -16); ctx.lineTo(10, 12); ctx.lineTo(-10, 12);
+          ctx.closePath(); ctx.fill();
+          ctx.fillStyle = "#bfe3f5"; ctx.fillRect(-3, -4, 6, 14);
+          break;
+        case "lava":
+          ctx.fillStyle = "#1f0e0c"; circle(0, 4, 13);
+          ctx.fillStyle = "#ff7a2a"; ctx.globalAlpha = 0.9; circle(0, 4, 8);
+          ctx.fillStyle = "#ffd24a"; circle(0, 4, 4);
+          break;
+        case "reeds":
+          ctx.strokeStyle = "#4a6b39"; ctx.lineWidth = 3;
+          for (let k = -2; k <= 2; k++) {
+            ctx.beginPath(); ctx.moveTo(k * 4, 12);
+            ctx.quadraticCurveTo(k * 4 + 4, 0, k * 4 + 2, -14); ctx.stroke();
+          }
+          break;
+        case "shore":
+          ctx.fillStyle = "#cdbf8f"; circle(0, 0, 10);
+          ctx.fillStyle = "#b9a86f"; circle(-3, -2, 4); circle(4, 3, 3);
+          break;
+      }
+      ctx.restore();
+    }
+  }
+
+  function drawGate(realm) {
+    const gx = canvas.width - TILE * 0.5;
+    const gy = canvas.height / 2;
+    ctx.save();
+    if (gateOpen) {
+      // glowing open portal
+      const t = performance.now() / 300;
+      ctx.fillStyle = realm.isFinal ? "#fff0a0" : "#9ad7ff";
+      ctx.globalAlpha = 0.5 + Math.sin(t) * 0.2;
+      ctx.fillRect(gx - 14, gy - TILE, 28, TILE * 2);
+      ctx.globalAlpha = 1;
+      if (realm.isFinal) {
+        // the relic to claim
+        drawRelic(gx - 4, gy);
+      } else {
+        ctx.fillStyle = "#fff";
+        ctx.font = "20px sans-serif";
+        ctx.fillText("→", gx - 8, gy + 7);
+      }
+    } else {
+      // sealed gate
+      ctx.fillStyle = "#2a2030";
+      ctx.fillRect(gx - 10, gy - TILE, 24, TILE * 2);
+      ctx.fillStyle = "#4a3f55";
+      for (let i = -1; i <= 1; i++) ctx.fillRect(gx - 8, gy + i * 16 - 4, 20, 4);
+    }
+    ctx.restore();
+  }
+
+  function drawRelic(x, y) {
+    const t = performance.now() / 500;
+    ctx.save();
+    ctx.translate(x, y + Math.sin(t) * 3);
+    ctx.fillStyle = "#ffe680";
+    ctx.beginPath();
+    ctx.moveTo(0, -14); ctx.lineTo(13, 10); ctx.lineTo(-13, 10);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#fffbe0";
+    ctx.beginPath();
+    ctx.moveTo(0, -6); ctx.lineTo(6, 6); ctx.lineTo(-6, 6);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawPlayer() {
+    const x = player.x, y = player.y;
+    const blink = player.invuln > 0 && Math.floor(player.invuln * 16) % 2 === 0;
+    ctx.save();
+    if (blink) ctx.globalAlpha = 0.4;
+
+    // shadow
+    ctx.fillStyle = "rgba(0,0,0,0.25)";
+    ctx.beginPath(); ctx.ellipse(x, y + 12, 11, 5, 0, 0, Math.PI * 2); ctx.fill();
+
+    // body (green tunic hero)
+    ctx.fillStyle = "#2f9e44"; ctx.fillRect(x - 9, y - 4, 18, 16);
+    ctx.fillStyle = "#1f7a32"; ctx.fillRect(x - 9, y + 8, 18, 4);
+    // head
+    ctx.fillStyle = "#f1c79b"; ctx.fillRect(x - 7, y - 16, 14, 12);
+    // cap
+    ctx.fillStyle = "#1f7a32"; ctx.fillRect(x - 8, y - 19, 16, 5);
+    ctx.fillRect(x - 8, y - 19, 5, 9);
+
+    // sword swing
+    if (player.attack > 0) {
+      ctx.fillStyle = "#e8eef5";
+      const b = swordBox();
+      ctx.fillRect(b.x - b.w / 2, b.y - b.h / 2, b.w, b.h);
+      ctx.fillStyle = "#c9d4e0";
+      ctx.fillRect(b.x - 2, b.y - 2, 4, 4);
+    }
+    ctx.restore();
+  }
+
+  function drawEnemy(e) {
+    const x = e.x, y = e.y;
+    const hurt = e.hurt > 0 && Math.floor(e.hurt * 20) % 2 === 0;
+    ctx.save();
+    // shadow
+    ctx.fillStyle = "rgba(0,0,0,0.22)";
+    ctx.beginPath(); ctx.ellipse(x, y + e.r * 0.7, e.r * 0.8, 4, 0, 0, Math.PI * 2); ctx.fill();
+
+    ctx.fillStyle = hurt ? "#ffffff" : e.color;
+    if (e.type === "goblin") {
+      ctx.fillRect(x - 10, y - 8, 20, 18);
+      ctx.fillStyle = hurt ? "#fff" : "#4f8a32";
+      ctx.fillRect(x - 12, y - 10, 5, 6); ctx.fillRect(x + 7, y - 10, 5, 6); // ears
+      ctx.fillStyle = "#ffec3d"; ctx.fillRect(x - 6, y - 4, 3, 3); ctx.fillRect(x + 3, y - 4, 3, 3);
+      ctx.fillStyle = "#222"; ctx.fillRect(x - 4, y + 4, 8, 2); // mouth
+    } else if (e.type === "bat") {
+      const f = Math.sin(e.phase * 3) * 6;
+      ctx.beginPath(); ctx.arc(x, y, 8, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = hurt ? "#fff" : "#5a3f6a";
+      ctx.beginPath(); ctx.moveTo(x - 6, y);
+      ctx.lineTo(x - 18, y - 6 - f); ctx.lineTo(x - 14, y + 4); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(x + 6, y);
+      ctx.lineTo(x + 18, y - 6 - f); ctx.lineTo(x + 14, y + 4); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#ff5a5a"; ctx.fillRect(x - 4, y - 2, 2, 2); ctx.fillRect(x + 2, y - 2, 2, 2);
+    } else {
+      // ghost
+      ctx.globalAlpha = hurt ? 1 : 0.85;
+      ctx.fillStyle = hurt ? "#fff" : e.color;
+      ctx.beginPath();
+      ctx.arc(x, y - 2, 11, Math.PI, 0);
+      ctx.lineTo(x + 11, y + 8);
+      for (let i = 0; i < 3; i++) {
+        ctx.lineTo(x + 11 - (i * 2 + 1) * (22 / 6), y + (i % 2 ? 8 : 12));
+      }
+      ctx.lineTo(x - 11, y + 8);
+      ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#34354a";
+      ctx.fillRect(x - 5, y - 4, 3, 4); ctx.fillRect(x + 2, y - 4, 3, 4);
+    }
+    ctx.restore();
+  }
+
+  function drawParticles() {
+    for (const p of particles) {
+      ctx.globalAlpha = Math.max(0, p.life * 2);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function circle(x, y, r) {
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function drawBanner(text) {
+    ctx.save();
+    ctx.fillStyle = "rgba(0,0,0,0.55)";
+    ctx.fillRect(canvas.width / 2 - 150, 14, 300, 30);
+    ctx.fillStyle = "#f2d272";
+    ctx.font = "bold 18px 'Trebuchet MS', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(text, canvas.width / 2, 35);
+    ctx.restore();
+  }
+
+  // ---- HUD hearts ----------------------------------------------------
+  function renderHearts() {
+    const el = document.getElementById("hearts");
+    const fullHearts = Math.floor(player.hp / 2);
+    const half = player.hp % 2;
+    const total = MAX_HP / 2;
+    let html = "";
+    for (let i = 0; i < total; i++) {
+      let cls = "empty", ch = "♡";
+      if (i < fullHearts) { cls = "full"; ch = "♥"; }
+      else if (i === fullHearts && half) { cls = "full"; ch = "❤"; }
+      html += `<span class="heart ${cls}">${ch}</span>`;
+    }
+    el.innerHTML = html;
+  }
+
+  // ---- overlays ------------------------------------------------------
+  const overlay = document.getElementById("overlay");
+  function showOverlay(html) {
+    overlay.innerHTML = `<div class="overlay-card">${html}</div>`;
+    overlay.classList.remove("hidden");
+  }
+  function hideOverlay() {
+    overlay.classList.add("hidden");
+  }
+
+  function deadCard() {
+    return `
+      <h1>The Light Fades…</h1>
+      <p class="subtitle">You fell in the ${REALMS[realmIndex].name}.</p>
+      <p>But hope is patient. Rise and try again.</p>
+      <button id="start-btn" type="button">Try Again</button>`;
+  }
+  function winCard() {
+    return `
+      <h1>The Six Realms Restored!</h1>
+      <p class="subtitle">You claimed the Relic of Dawn.</p>
+      <p>Ghosts, goblins, and bats are banished. Light returns to the Earth.
+         Thank you for playing.</p>
+      <button id="start-btn" type="button">Play Again</button>`;
+  }
+
+  function startGame() {
+    AudioEngine.init();
+    AudioEngine.resume();
+    AudioEngine.setEnabled(soundOn);
+    realmIndex = 0;
+    player.hp = MAX_HP;
+    particles = [];
+    state = "play";
+    renderHearts();
+    spawnRealm(0);
+    hideOverlay();
+  }
+
+  // ---- buttons / sound toggle ----------------------------------------
+  let soundOn = true;
+  const soundBtn = document.getElementById("sound-toggle");
+  soundBtn.addEventListener("click", () => {
+    soundOn = !soundOn;
+    soundBtn.textContent = `♪ Music: ${soundOn ? "On" : "Off"}`;
+    if (window.AudioEngine) AudioEngine.setEnabled(soundOn);
+  });
+
+  // Delegated handler so the regenerated start/retry buttons all work.
+  document.addEventListener("click", (e) => {
+    if (e.target && e.target.id === "start-btn") startGame();
+  });
+
+  // ---- main loop -----------------------------------------------------
+  function loop(t) {
+    const dt = Math.min(0.033, (t - lastTime) / 1000 || 0);
+    lastTime = t;
+    update(dt);
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  renderHearts();
+  requestAnimationFrame(loop);
+})();
+
+</script>
+</body>
+</html>

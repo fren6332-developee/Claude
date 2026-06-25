@@ -8,7 +8,12 @@ gentle and quick to finish.
 
 ## ▶ Play right away
 
-**No build, no install.** Just open `index.html` in any modern browser:
+**No build, no install.** The simplest option:
+
+- **Double-click [`play.html`](play.html)** — the entire game in a single
+  self-contained file. Works offline straight from your computer, no server.
+
+Or run the full multi-file version:
 
 - Double-click `index.html`, **or**
 - Run a tiny local server and visit it:
