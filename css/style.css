@@ -1,0 +1,154 @@
+:root {
+  --ink: #e8e6d6;
+  --frame: #2a2438;
+  --frame-light: #4a3f63;
+  --gold: #f2d272;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #11101a;
+  color: var(--ink);
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-font-smoothing: none;
+}
+
+#game-shell {
+  position: relative;
+  width: 768px;
+  max-width: 100vw;
+  border: 6px solid var(--frame-light);
+  border-radius: 10px;
+  box-shadow: 0 0 0 4px var(--frame), 0 18px 50px rgba(0, 0, 0, 0.6);
+  background: #000;
+  overflow: hidden;
+}
+
+#hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  background: linear-gradient(180deg, #3a3252, #221d33);
+  border-bottom: 2px solid var(--frame-light);
+}
+
+#hearts {
+  display: flex;
+  gap: 4px;
+  font-size: 20px;
+  min-height: 24px;
+}
+
+.heart {
+  filter: drop-shadow(0 1px 0 #000);
+}
+.heart.full {
+  color: #ff5a73;
+}
+.heart.empty {
+  color: #5a4a4a;
+}
+
+#realm-name {
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: var(--gold);
+  text-shadow: 0 1px 0 #000;
+}
+
+#sound-toggle {
+  background: var(--frame);
+  color: var(--ink);
+  border: 1px solid var(--frame-light);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+#sound-toggle:hover {
+  background: var(--frame-light);
+}
+
+canvas#screen {
+  display: block;
+  width: 768px;
+  height: 512px;
+  image-rendering: pixelated;
+  background: #1a1a2a;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 7, 18, 0.92);
+  text-align: center;
+  padding: 20px;
+  transition: opacity 0.4s ease;
+}
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.overlay-card {
+  max-width: 480px;
+}
+
+.overlay-card h1 {
+  margin: 0 0 4px;
+  color: var(--gold);
+  font-size: 30px;
+  text-shadow: 0 2px 0 #000;
+}
+
+.subtitle {
+  margin: 0 0 18px;
+  font-style: italic;
+  color: #b9b3d0;
+}
+
+.controls {
+  list-style: none;
+  padding: 0;
+  margin: 18px auto;
+  display: inline-block;
+  text-align: left;
+  line-height: 1.9;
+}
+
+button#start-btn {
+  margin-top: 8px;
+  background: var(--gold);
+  color: #241c0a;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #b89a3f;
+}
+button#start-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #b89a3f;
+}
+
+.hint {
+  margin-top: 14px;
+  font-size: 12px;
+  color: #8a85a0;
+}

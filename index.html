@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Blast from the Past — Claude Created from Scratch</title>
+  <meta name="description" content="A free, instantly playable top-down Zelda-inspired adventure across six Earth biomes." />
+
+  <!-- Installable web app (PWA) -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#11101a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Blast from the Past" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" href="icons/icon-192.png" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="game-shell">
+    <header id="hud">
+      <div id="hearts" aria-label="health"></div>
+      <div id="realm-name">The Six Realms</div>
+      <button id="sound-toggle" type="button" title="Toggle music">♪ Music: On</button>
+    </header>
+
+    <canvas id="screen" width="768" height="512"></canvas>
+
+    <div id="overlay" class="overlay">
+      <div class="overlay-card">
+        <h1>Blast from the Past</h1>
+        <p class="subtitle">Claude Created from Scratch &mdash; a Link to the Past tribute</p>
+        <p>
+          Six realms of Earth have fallen to ghosts, goblins, and bats.
+          Travel from biome to biome, clear each realm, and restore the light.
+        </p>
+        <ul class="controls">
+          <li><b>Move</b> &mdash; Arrow keys or <b>W A S D</b></li>
+          <li><b>Swing sword</b> &mdash; <b>Spacebar</b> or <b>Z</b></li>
+          <li><b>Clear every foe</b> to open the way onward</li>
+        </ul>
+        <button id="start-btn" type="button">Begin the Journey</button>
+        <p class="hint">Click to enable music.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/game.js"></script>
+  <script>
+    // Register the service worker so the game installs and runs offline.
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
