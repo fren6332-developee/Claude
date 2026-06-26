@@ -68,8 +68,8 @@ After the next push the game is live at
 - A **Moves** panel records the whole game in standard algebraic notation
   (captures, castling, check and checkmate), and stays in sync with **Undo**.
 - The **last move** is marked with a soft arrow across the board.
-- Every **capture** makes its square flare with a **neon-yellow glow** that
-  flickers and fades.
+- Every **capture detonates** the square — a white-hot flash, an expanding
+  neon shockwave ring, a burst of glowing embers, a screen shake and a boom.
 - **Resign** and **Offer Draw** (versus the computer, it accepts only when it
   isn't winning), plus **Copy PGN** to put the whole game on your clipboard.
 - Buttons: **New Game**, **Undo**, **Flip Board**, **♪ Music**, **Resign**,

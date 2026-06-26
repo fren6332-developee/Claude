@@ -59,7 +59,13 @@
   const SFX = {
     move() { const t = ctx.currentTime; tone(t, 200, 0.12, "triangle", 0.16, 150); knock(t, 0.05, 0.05, 900); },
     select() { const t = ctx.currentTime; tone(t, 340, 0.06, "sine", 0.08, 300); },
-    capture() { const t = ctx.currentTime; tone(t, 150, 0.18, "triangle", 0.20, 90); knock(t, 0.13, 0.14, 700); },
+    capture() {
+      const t = ctx.currentTime;
+      tone(t, 160, 0.22, "triangle", 0.20, 60);   // impact
+      tone(t, 90, 0.55, "sine", 0.22, 32);          // low boom drop
+      knock(t, 0.30, 0.28, 480);                    // explosion body
+      knock(t + 0.015, 0.16, 0.18, 2600);           // bright crackle
+    },
     castle() { const t = ctx.currentTime; tone(t, 210, 0.1, "triangle", 0.15, 170); tone(t + 0.11, 210, 0.1, "triangle", 0.15, 170); },
     check() { const t = ctx.currentTime; tone(t, 740, 0.12, "square", 0.08); tone(t + 0.12, 988, 0.16, "square", 0.08); },
     promote() { const t = ctx.currentTime; [523, 659, 784, 1047].forEach((f, i) => tone(t + i * 0.09, f, 0.16, "triangle", 0.11)); },
