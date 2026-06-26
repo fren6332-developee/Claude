@@ -240,52 +240,121 @@
     face(ctx, cx, S * 0.35, S, S * 0.04, { smile: false });
   }
 
-  function drawBarret(ctx, cx, S, color) {
-    const lw = S * 0.028;
+  // Rook — a bald, bare-chested warrior monk with a long braid, goatee, chain
+  // necklace, a red sunburst shoulder tattoo, a red waist sash and a bracer.
+  function drawRook(ctx, cx, S, color) {
+    const lw = S * 0.026;
     const baseY = S * 0.86;
     platform(ctx, cx, baseY, S, color);
-    const vest = sideTint("#4f6b3c", color);
-    const vestDk = shade(vest, -0.25);
-    const skin = "#6f4a31";
-    const gun = sideTint("#9aa1ad", color);
+    const skin = sideTint("#c98a57", color);
+    const sash = sideTint("#b83a2e", color);
+    const robe = sideTint("#5a4632", color);
+    const bracer = sideTint("#3a2a1d", color);
+    const hair = "#241a12";
 
-    // very broad fortress-like torso
+    // long braided queue down the left side
     blob(ctx, [
-      [cx - S * 0.22, S * 0.5], [cx + S * 0.22, S * 0.5],
-      [cx + S * 0.24, baseY - S * 0.02], [cx - S * 0.24, baseY - S * 0.02],
-    ], vest, OUTLINE, lw);
-    // vest opening
-    blob(ctx, [
-      [cx - S * 0.06, S * 0.5], [cx + S * 0.06, S * 0.5],
-      [cx + S * 0.03, baseY - S * 0.06], [cx - S * 0.03, baseY - S * 0.06],
-    ], shade(skin, 0.05), null, 0);
-    // big shoulders
-    ellipse(ctx, cx - S * 0.21, S * 0.52, S * 0.08, S * 0.09, skin, OUTLINE, lw);
-    // gun-arm on the right
-    blob(ctx, [
-      [cx + S * 0.16, S * 0.5], [cx + S * 0.28, S * 0.52],
-      [cx + S * 0.28, S * 0.78], [cx + S * 0.16, S * 0.78],
-    ], gun, OUTLINE, lw);
-    ellipse(ctx, cx + S * 0.22, S * 0.8, S * 0.07, S * 0.05, shade(gun, -0.2), OUTLINE, lw); // muzzle
+      [cx - S * 0.07, S * 0.25], [cx - S * 0.2, S * 0.4],
+      [cx - S * 0.17, S * 0.62], [cx - S * 0.1, S * 0.62], [cx - S * 0.03, S * 0.3],
+    ], hair, OUTLINE, lw * 0.8);
+    for (let i = 0; i < 3; i++) {
+      ellipse(ctx, cx - S * 0.155, S * (0.44 + i * 0.06), S * 0.038, S * 0.03, shade(hair, -0.12), OUTLINE, lw * 0.4);
+    }
 
-    // head: dark skin, beard, bandana, shades
-    ellipse(ctx, cx, S * 0.34, S * 0.12, S * 0.125, skin, OUTLINE, lw);
+    // dark robe / skirt below the sash
     blob(ctx, [
-      [cx - S * 0.1, S * 0.36], [cx + S * 0.1, S * 0.36],
-      [cx + S * 0.07, S * 0.48], [cx - S * 0.07, S * 0.48],
-    ], "#241a14", OUTLINE, lw * 0.8); // beard
-    // bandana
+      [cx - S * 0.16, S * 0.66], [cx + S * 0.16, S * 0.66],
+      [cx + S * 0.2, baseY - S * 0.02], [cx - S * 0.2, baseY - S * 0.02],
+    ], robe, OUTLINE, lw);
+
+    // broad bare muscular torso
     blob(ctx, [
-      [cx - S * 0.12, S * 0.28], [cx + S * 0.12, S * 0.28],
-      [cx + S * 0.12, S * 0.22], [cx - S * 0.12, S * 0.22],
-    ], sideTint("#7a4a2a", color), OUTLINE, lw * 0.9);
-    // sunglasses
-    ellipse(ctx, cx - S * 0.05, S * 0.34, S * 0.035, S * 0.03, "#15161c", null, 0);
-    ellipse(ctx, cx + S * 0.05, S * 0.34, S * 0.035, S * 0.03, "#15161c", null, 0);
+      [cx - S * 0.2, S * 0.49], [cx + S * 0.2, S * 0.49],
+      [cx + S * 0.15, S * 0.68], [cx - S * 0.15, S * 0.68],
+    ], skin, OUTLINE, lw);
+    // big deltoids
+    ellipse(ctx, cx - S * 0.2, S * 0.51, S * 0.085, S * 0.08, skin, OUTLINE, lw);
+    ellipse(ctx, cx + S * 0.2, S * 0.51, S * 0.085, S * 0.08, skin, OUTLINE, lw);
+
+    // muscle definition (pecs + abs)
+    ctx.save();
+    ctx.lineWidth = lw * 0.7;
+    ctx.strokeStyle = "rgba(90,50,28,0.55)";
+    ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(cx, S * 0.52); ctx.lineTo(cx, S * 0.63); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx - S * 0.08, S * 0.54, S * 0.055, 0.05 * Math.PI, 0.55 * Math.PI); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx + S * 0.08, S * 0.54, S * 0.055, 0.45 * Math.PI, 0.95 * Math.PI); ctx.stroke();
+    for (let r = 0; r < 3; r++) {
+      const y = S * (0.585 + r * 0.025);
+      ctx.beginPath(); ctx.moveTo(cx - S * 0.055, y); ctx.lineTo(cx - S * 0.012, y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + S * 0.012, y); ctx.lineTo(cx + S * 0.055, y); ctx.stroke();
+    }
+    ctx.restore();
+
+    // arms at the sides, fists by the waist
+    ellipse(ctx, cx - S * 0.21, S * 0.62, S * 0.05, S * 0.1, skin, OUTLINE, lw * 0.8);
+    ellipse(ctx, cx + S * 0.21, S * 0.62, S * 0.05, S * 0.1, skin, OUTLINE, lw * 0.8);
+    // forearm bracer (right)
+    blob(ctx, [
+      [cx + S * 0.16, S * 0.66], [cx + S * 0.26, S * 0.66],
+      [cx + S * 0.25, S * 0.75], [cx + S * 0.17, S * 0.75],
+    ], bracer, OUTLINE, lw * 0.8);
+
+    // red sunburst shoulder tattoo (right deltoid)
+    const tat = sideTint("#cf2a22", color);
+    ctx.save();
+    ctx.fillStyle = tat;
+    const tx = cx + S * 0.19, ty = S * 0.51, tr = S * 0.05;
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(tx + Math.cos(a) * tr, ty + Math.sin(a) * tr);
+      ctx.lineTo(tx + Math.cos(a + 0.18) * tr * 0.45, ty + Math.sin(a + 0.18) * tr * 0.45);
+      ctx.lineTo(tx + Math.cos(a - 0.18) * tr * 0.45, ty + Math.sin(a - 0.18) * tr * 0.45);
+      ctx.closePath(); ctx.fill();
+    }
+    ellipse(ctx, tx, ty, tr * 0.5, tr * 0.5, shade(tat, -0.15), null, 0);
+    ctx.restore();
+
+    // chain necklace
     ctx.beginPath();
-    ctx.moveTo(cx - S * 0.015, S * 0.34); ctx.lineTo(cx + S * 0.015, S * 0.34);
-    ctx.lineWidth = lw * 0.7; ctx.strokeStyle = "#15161c"; ctx.stroke();
-    ellipse(ctx, cx - S * 0.06, S * 0.33, S * 0.012, S * 0.01, "#9fd8ff", null, 0); // glint
+    ctx.arc(cx, S * 0.47, S * 0.085, 0.12 * Math.PI, 0.88 * Math.PI);
+    ctx.lineWidth = lw * 0.9; ctx.strokeStyle = "#8b9099"; ctx.stroke();
+
+    // red waist sash with a hanging knot
+    blob(ctx, [
+      [cx - S * 0.18, S * 0.63], [cx + S * 0.18, S * 0.63],
+      [cx + S * 0.19, S * 0.71], [cx - S * 0.19, S * 0.71],
+    ], sash, OUTLINE, lw);
+    ellipse(ctx, cx - S * 0.04, S * 0.68, S * 0.04, S * 0.045, shade(sash, -0.1), OUTLINE, lw * 0.6);
+    blob(ctx, [
+      [cx - S * 0.08, S * 0.69], [cx - S * 0.01, S * 0.69],
+      [cx - S * 0.03, S * 0.82], [cx - S * 0.1, S * 0.8],
+    ], shade(sash, -0.06), OUTLINE, lw * 0.6);
+
+    // bald, tanned head
+    ellipse(ctx, cx, S * 0.33, S * 0.115, S * 0.13, skin, OUTLINE, lw);
+    // thick stern brows
+    ctx.save();
+    ctx.lineWidth = lw * 1.2; ctx.strokeStyle = "#2a1d12"; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(cx - S * 0.085, S * 0.305); ctx.lineTo(cx - S * 0.025, S * 0.318); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx + S * 0.085, S * 0.305); ctx.lineTo(cx + S * 0.025, S * 0.318); ctx.stroke();
+    ctx.restore();
+    // eyes
+    ellipse(ctx, cx - S * 0.045, S * 0.345, S * 0.014, S * 0.017, "#241c28", null, 0);
+    ellipse(ctx, cx + S * 0.045, S * 0.345, S * 0.014, S * 0.017, "#241c28", null, 0);
+    // moustache
+    ctx.save();
+    ctx.lineWidth = lw; ctx.strokeStyle = "#1e1610"; ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(cx - S * 0.05, S * 0.39); ctx.lineTo(cx, S * 0.405); ctx.lineTo(cx + S * 0.05, S * 0.39);
+    ctx.stroke();
+    ctx.restore();
+    // goatee
+    blob(ctx, [
+      [cx - S * 0.04, S * 0.41], [cx + S * 0.04, S * 0.41],
+      [cx + S * 0.025, S * 0.49], [cx, S * 0.51], [cx - S * 0.025, S * 0.49],
+    ], "#1e1610", OUTLINE, lw * 0.6);
   }
 
   function drawAerith(ctx, cx, S, color) {
@@ -428,7 +497,7 @@
   const DRAW = {
     n: drawCecil,
     b: drawStrago,
-    r: drawBarret,
+    r: drawRook,
     q: drawAerith,
     k: drawNoctis,
     p: drawImp,
@@ -453,7 +522,7 @@
     NAMES: {
       n: "Cecil Harvey",
       b: "Strago",
-      r: "Barret",
+      r: "Warrior Monk",
       q: "Aerith",
       k: "Noctis",
       p: "Imp",
