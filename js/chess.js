@@ -48,6 +48,7 @@
   let game = C.newGame();
   let history = [];          // past states for undo
   let sanList = [];          // algebraic notation of each ply, for the record
+  let result = "*";          // PGN result: "1-0" / "0-1" / "1/2-1/2" / "*"
   let flipped = false;
   let selected = null;       // [r,c] of selected piece
   let legal = [];            // legal moves for the selected piece
@@ -237,6 +238,31 @@
     const box = ppu * PIECE_SCALE;
     P.draw(ctx, type, color, baseX - box / 2, baseY - 0.86 * box, box);
   }
+  // A soft arrow across the board floor showing the last move's from → to.
+  function drawArrow(a, b, ppu, color) {
+    const dx = b[0] - a[0], dy = b[1] - a[1];
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len, uy = dy / len;
+    const head = Math.max(14, ppu * 0.5);
+    const lw = Math.max(5, ppu * 0.13);
+    const sx = a[0] + ux * ppu * 0.22, sy = a[1] + uy * ppu * 0.22;
+    const ex = b[0] - ux * head * 0.7, ey = b[1] - uy * head * 0.7;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = lw;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(ex, ey);
+    ctx.stroke();
+    const px = -uy, py = ux; // perpendicular
+    ctx.beginPath();
+    ctx.moveTo(b[0] - ux * head * 0.15, b[1] - uy * head * 0.15);
+    ctx.lineTo(ex - px * head * 0.5, ey - py * head * 0.5);
+    ctx.lineTo(ex + px * head * 0.5, ey + py * head * 0.5);
+    ctx.closePath();
+    ctx.fill();
+  }
   function drawLabels() {
     ctx.fillStyle = "rgba(40,28,20,0.6)";
     ctx.textAlign = "center";
@@ -292,6 +318,14 @@
     ctx.restore();
 
     drawLabels();
+
+    // last-move arrow on the floor (hidden while dragging to avoid clutter)
+    if (lm && !dragging) {
+      const [ffr, ffc] = cellOf(lm.from[0], lm.from[1]);
+      const [tfr, tfc] = cellOf(lm.to[0], lm.to[1]);
+      const A = CELL[ffr][ffc], B = CELL[tfr][tfc];
+      drawArrow([A.cx, A.cy], [B.cx, B.cy], B.ppu, "rgba(243,201,93,0.55)");
+    }
 
     // legal-move markers on the floor
     for (const m of legal) {
@@ -535,18 +569,22 @@
       const name = winner === "w" ? "White" : "Black";
       statusEl.textContent = `Checkmate — ${name} wins!`;
       gameOver = true;
+      result = winner === "w" ? "1-0" : "0-1";
       showEndgame("Checkmate!", `${name} (${winner === "w" ? "Sunlit" : "Twilight"}) wins`, winner);
     } else if (st === "stalemate") {
       statusEl.textContent = "Stalemate — it's a draw.";
       gameOver = true;
+      result = "1/2-1/2";
       showEndgame("Stalemate", "A draw — no legal moves", null);
     } else if (st === "draw50") {
       statusEl.textContent = "Draw — 50-move rule.";
       gameOver = true;
+      result = "1/2-1/2";
       showEndgame("Draw", "50-move rule", null);
     } else if (st === "insufficient") {
       statusEl.textContent = "Draw — insufficient material.";
       gameOver = true;
+      result = "1/2-1/2";
       showEndgame("Draw", "Insufficient material", null);
     } else if (aiThinking) {
       statusEl.textContent = "Aerith's army is plotting…";
@@ -677,6 +715,91 @@
     endgameEl.classList.add("hidden");
   }
 
+  // ---- resign / draw / PGN ----------------------------------------------
+  function flashStatus(msg) {
+    statusEl.textContent = msg;
+    setTimeout(() => { if (!gameOver) updateStatus(); }, 1700);
+  }
+
+  function resign() {
+    if (gameOver || aiThinking) return;
+    const loser = game.turn;              // the side to move concedes
+    const winner = loser === "w" ? "b" : "w";
+    const name = winner === "w" ? "White" : "Black";
+    result = winner === "w" ? "1-0" : "0-1";
+    gameOver = true;
+    statusEl.textContent = `${name} wins by resignation`;
+    showEndgame("Resignation", `${name} wins`, winner);
+  }
+
+  function acceptDraw(subtitle) {
+    result = "1/2-1/2";
+    gameOver = true;
+    statusEl.textContent = "Draw agreed";
+    if (window.ChessSFX) window.ChessSFX.play("draw");
+    showEndgame("Draw", subtitle, null);
+  }
+
+  function offerDraw() {
+    if (gameOver || aiThinking) return;
+    if (mode !== "ai") { acceptDraw("Agreed between players"); return; }
+    // The computer accepts only when it is not better than roughly level.
+    const evalForAI = (aiColor === "w" ? 1 : -1) * evaluate(game);
+    if (evalForAI <= 60) acceptDraw("The computer accepts your draw");
+    else flashStatus("The computer declines the draw.");
+  }
+
+  function buildPGN() {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    const date = `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
+    let white, black;
+    if (mode === "ai") {
+      const cpu = `Computer (Level ${aiLevel})`;
+      if (aiColor === "w") { white = cpu; black = "Player"; }
+      else { white = "Player"; black = cpu; }
+    } else { white = "Player 1 (White)"; black = "Player 2 (Black)"; }
+    let mt = "";
+    for (let i = 0; i < sanList.length; i += 2) {
+      mt += `${i / 2 + 1}. ${sanList[i]}${sanList[i + 1] ? " " + sanList[i + 1] : ""} `;
+    }
+    mt = (mt + result).trim();
+    return `[Event "Final Fantasy Chess"]\n[Site "Final Fantasy Chess"]\n[Date "${date}"]\n` +
+      `[White "${white}"]\n[Black "${black}"]\n[Result "${result}"]\n\n${mt}\n`;
+  }
+
+  function flashBtn(btn, txt) {
+    const old = btn.dataset.label || btn.textContent;
+    btn.dataset.label = old;
+    btn.textContent = txt;
+    setTimeout(() => { btn.textContent = btn.dataset.label; }, 1400);
+  }
+
+  function copyPGN(btn) {
+    const pgn = buildPGN();
+    const done = () => flashBtn(btn, "Copied!");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(pgn).then(done).catch(() => legacyCopy(pgn, btn));
+    } else {
+      legacyCopy(pgn, btn);
+    }
+  }
+  function legacyCopy(text, btn) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      flashBtn(btn, "Copied!");
+    } catch (e) {
+      flashBtn(btn, "Copy failed");
+    }
+  }
+
   // ---- computer opponent (negamax + alpha-beta) -------------------------
   function evaluate(state) {
     let score = 0;
@@ -765,6 +888,7 @@
     game = C.newGame();
     history = [];
     sanList = [];
+    result = "*";
     renderMoves();
     clearSelection();
     anim = null;
@@ -813,6 +937,9 @@
   document.getElementById("new-game").addEventListener("click", newGame);
   document.getElementById("undo").addEventListener("click", undo);
   document.getElementById("flip").addEventListener("click", () => { flipped = !flipped; invalidate(); });
+  document.getElementById("resign").addEventListener("click", resign);
+  document.getElementById("draw").addEventListener("click", offerDraw);
+  document.getElementById("pgn").addEventListener("click", (e) => copyPGN(e.currentTarget));
 
   const modeSel = document.getElementById("mode");
   const sideSel = document.getElementById("side");

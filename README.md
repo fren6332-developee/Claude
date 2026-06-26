@@ -65,7 +65,11 @@ After the next push the game is live at
   and a one-tap rematch.
 - A **Moves** panel records the whole game in standard algebraic notation
   (captures, castling, check and checkmate), and stays in sync with **Undo**.
-- Buttons: **New Game**, **Undo**, **Flip Board**, and a **♪ Music** toggle.
+- The **last move** is marked with a soft arrow across the board.
+- **Resign** and **Offer Draw** (versus the computer, it accepts only when it
+  isn't winning), plus **Copy PGN** to put the whole game on your clipboard.
+- Buttons: **New Game**, **Undo**, **Flip Board**, **♪ Music**, **Resign**,
+  **Offer Draw**, **Copy PGN**.
 
 ## 🧠 Opponent & difficulty
 
