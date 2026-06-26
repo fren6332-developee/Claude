@@ -441,12 +441,22 @@
     ctx.restore();
   }
 
-  window.Pieces = { draw, NAMES: {
-    n: "Cecil Harvey",
-    b: "Strago",
-    r: "Barret",
-    q: "Aerith",
-    k: "Noctis",
-    p: "Imp",
-  }};
+  // A representative clay colour per piece, used for shattered debris.
+  const BODY = { p: "#8a63c4", n: "#cdd6e2", b: "#3f6fb0", r: "#4f6b3c", q: "#e88aa6", k: "#23242f" };
+  function bodyColor(type, color) { return sideTint(BODY[type] || "#9a8a7a", color); }
+  function shadeColor(hex, amt) { return shade(hex, amt); }
+
+  window.Pieces = {
+    draw,
+    bodyColor,
+    shade: shadeColor,
+    NAMES: {
+      n: "Cecil Harvey",
+      b: "Strago",
+      r: "Barret",
+      q: "Aerith",
+      k: "Noctis",
+      p: "Imp",
+    },
+  };
 })();

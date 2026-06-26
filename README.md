@@ -69,7 +69,9 @@ After the next push the game is live at
   (captures, castling, check and checkmate), and stays in sync with **Undo**.
 - The **last move** is marked with a soft arrow across the board.
 - Every **capture detonates** the square — a white-hot flash, an expanding
-  neon shockwave ring, a burst of glowing embers, a screen shake and a boom.
+  neon shockwave ring, a burst of glowing embers, a screen shake and a boom —
+  in a brief **slow-motion** beat, leaving **shattered clay chunks** (in the
+  eliminated piece's colour) resting on the board for a couple of seconds.
 - **Resign** and **Offer Draw** (versus the computer, it accepts only when it
   isn't winning), plus **Copy PGN** to put the whole game on your clipboard.
 - Buttons: **New Game**, **Undo**, **Flip Board**, **♪ Music**, **Resign**,

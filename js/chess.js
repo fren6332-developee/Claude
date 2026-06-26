@@ -54,7 +54,12 @@
   let legal = [];            // legal moves for the selected piece
   let dragging = null;       // { from:[r,c], piece, x, y, moved }
   let anim = null;           // { piece, from:[x,y], to:[x,y], t0, dur }
-  let captureFlashes = [];   // { sq:[r,c], t0, dur } neon glow where a capture happened
+  let captureFlashes = [];   // active capture explosions
+  let debris = [];           // shattered clay chunks resting on the board
+  let vTime = 0;             // virtual clock (ms) that slows during slow-motion
+  let lastReal = 0;
+  let slowmoStart = -1;      // real-time ms when a slow-motion beat began
+  let lastCapture = false;   // did the move just played capture? (delays the AI)
   let pendingPromotion = null; // { from, to, candidates }
   let mode = "ai";          // 'ai' | 'hotseat'
   let aiColor = "b";
@@ -291,7 +296,106 @@
         streak: Math.random() < 0.55,
       });
     }
-    return { sq, t0: performance.now(), dur: EXPLODE_MS, ox, oy, fx: cell.cx, fy: cell.cy, ppu, parts };
+    return { sq, t0: vTime, dur: EXPLODE_MS, ox, oy, fx: cell.cx, fy: cell.cy, ppu, parts };
+  }
+
+  // ---- slow motion ------------------------------------------------------
+  function timeScale() {
+    if (slowmoStart < 0) return 1;
+    const el = performance.now() - slowmoStart;
+    const SLOW = 0.28, HOLD = 430, RAMP = 360;
+    if (el < HOLD) return SLOW;
+    if (el < HOLD + RAMP) return SLOW + (1 - SLOW) * ((el - HOLD) / RAMP);
+    slowmoStart = -1;
+    return 1;
+  }
+
+  // ---- shattered clay debris (lingers ~2.5s) ----------------------------
+  function spawnDebris(sq, victim) {
+    const [fr, fc] = cellOf(sq[0], sq[1]);
+    const cell = CELL[fr][fc];
+    const ppu = cell.ppu;
+    const base = victim ? P.bodyColor(victim.t, victim.c) : "#9a8a7a";
+    const cols = [base, P.shade(base, 0.18), P.shade(base, -0.22)];
+    const N = 13;
+    for (let i = 0; i < N; i++) {
+      const ang = Math.random() * Math.PI * 2;
+      const spd = ppu * (1.4 + Math.random() * 3.2);
+      debris.push({
+        x: cell.cx + (Math.random() - 0.5) * ppu * 0.3,
+        y: cell.cy - ppu * (0.2 + Math.random() * 0.5),
+        vx: Math.cos(ang) * spd * 0.7,
+        vy: Math.sin(ang) * spd - ppu * (1.5 + Math.random() * 2.5),
+        landY: cell.cy + (Math.random() - 0.3) * ppu * 0.18,
+        size: ppu * (0.10 + Math.random() * 0.12),
+        color: cols[(Math.random() * cols.length) | 0],
+        rot: Math.random() * Math.PI,
+        vrot: (Math.random() - 0.5) * 10,
+        shape: (Math.random() * 3) | 0,
+        landed: false,
+        life: 2600 + Math.random() * 600, // ms of resting before fully gone
+        ppu,
+      });
+    }
+    if (debris.length > 90) debris.splice(0, debris.length - 90); // cap
+  }
+
+  function updateDebris(sdt) {
+    if (!debris.length) return;
+    const dts = sdt / 1000;
+    for (const d of debris) {
+      if (!d.landed) {
+        const GRAV = d.ppu * 24;
+        d.vy += GRAV * dts;
+        d.x += d.vx * dts;
+        d.y += d.vy * dts;
+        d.rot += d.vrot * dts;
+        if (d.y >= d.landY) {
+          d.y = d.landY;
+          d.landed = true;
+          d.vx = 0; d.vy = 0; d.vrot = 0;
+        }
+      } else {
+        d.life -= sdt; // count down only once settled
+      }
+    }
+    debris = debris.filter((d) => d.life > 0);
+  }
+
+  function drawDebris() {
+    for (const d of debris) {
+      const a = d.landed ? Math.min(1, d.life / 600) : 1; // fade in the last 600ms
+      ctx.save();
+      ctx.translate(d.x, d.y);
+      ctx.rotate(d.rot);
+      ctx.globalAlpha = a;
+      // a little ground shadow once settled
+      if (d.landed) {
+        ctx.globalAlpha = a * 0.3;
+        ctx.fillStyle = "rgba(20,14,24,1)";
+        ctx.beginPath();
+        ctx.ellipse(0, d.size * 0.5, d.size * 1.1, d.size * 0.45, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = a;
+      }
+      ctx.fillStyle = d.color;
+      ctx.strokeStyle = P.shade(d.color, -0.4);
+      ctx.lineWidth = Math.max(0.5, d.size * 0.18);
+      ctx.beginPath();
+      const s = d.size;
+      if (d.shape === 0) { // shard triangle
+        ctx.moveTo(-s, s * 0.6); ctx.lineTo(s * 0.2, -s); ctx.lineTo(s, s * 0.4);
+      } else if (d.shape === 1) { // chunk quad
+        ctx.moveTo(-s, -s * 0.5); ctx.lineTo(s * 0.7, -s); ctx.lineTo(s, s * 0.6); ctx.lineTo(-s * 0.5, s);
+      } else { // small lump
+        ctx.moveTo(-s * 0.8, 0); ctx.lineTo(0, -s); ctx.lineTo(s * 0.9, -s * 0.2); ctx.lineTo(s * 0.3, s);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
   }
 
   // pass 1 (under the pieces): the panel itself flares neon yellow
@@ -370,12 +474,11 @@
     ctx.restore();
   }
 
-  // brief screen shake while any explosion is fresh
+  // brief screen shake while any explosion is fresh (virtual-time based)
   function captureShake() {
     let mx = 0, my = 0;
-    const now = performance.now();
     for (const f of captureFlashes) {
-      const el = now - f.t0;
+      const el = vTime - f.t0;
       if (el < 280) {
         const m = (1 - el / 280) * 9;
         mx += (Math.random() - 0.5) * m;
@@ -482,7 +585,7 @@
 
     // sliding animation with a little hop
     if (anim) {
-      const t = Math.min(1, (performance.now() - anim.t0) / anim.dur);
+      const t = Math.min(1, (vTime - anim.t0) / anim.dur);
       const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
       const a = squareCenterScreen(anim.from[0], anim.from[1]);
       const b = squareCenterScreen(anim.to[0], anim.to[1]);
@@ -502,22 +605,33 @@
       drawFigure(dragging.piece.t, dragging.piece.c, dragging.x, dragging.y + ppu * 0.25, ppu);
     }
 
+    // shattered clay chunks resting on the board
+    if (debris.length) drawDebris();
+
     // capture explosions — flash, shockwave and embers over the pieces
     if (captureFlashes.length) {
-      const now = performance.now();
-      for (const f of captureFlashes) drawExplosion(f, now);
-      captureFlashes = captureFlashes.filter((f) => now - f.t0 < f.dur);
+      for (const f of captureFlashes) drawExplosion(f, vTime);
+      captureFlashes = captureFlashes.filter((f) => vTime - f.t0 < f.dur);
     }
 
     ctx.restore(); // end screen-shake transform
   }
 
   function loop() {
-    // Repaint only when needed: on a change, or while dragging/animating/flaring.
-    const flaring = captureFlashes.length > 0;
-    if (dirty || dragging || anim || flaring) {
+    // Advance a virtual clock that slows down during a slow-motion beat.
+    const real = performance.now();
+    const dt = Math.min(50, real - (lastReal || real));
+    lastReal = real;
+    const ts = timeScale();
+    const sdt = dt * ts;
+    vTime += sdt;
+    updateDebris(sdt);
+
+    // Repaint only when needed: on a change, or while something is animating.
+    const busy = captureFlashes.length > 0 || debris.length > 0 || slowmoStart >= 0;
+    if (dirty || dragging || anim || busy) {
       drawBoard();
-      if (!dragging && !anim && captureFlashes.length === 0) dirty = false;
+      if (!dragging && !anim && !busy) dirty = false;
     }
     requestAnimationFrame(loop);
   }
@@ -617,6 +731,9 @@
   function finishMove(move, animate) {
     const piece = game.board[move.from[0]][move.from[1]];
     const willCapture = !!game.board[move.to[0]][move.to[1]] || move.enpassant;
+    // Identify the eliminated piece (for clay-coloured debris) before it is gone.
+    let victim = game.board[move.to[0]][move.to[1]];
+    if (!victim && move.enpassant) victim = { t: "p", c: piece.c === "w" ? "b" : "w" };
     const san = sanOf(game, move);
     history.push(C.cloneState(game));
     sanList.push(san);
@@ -625,13 +742,16 @@
         piece,
         from: [move.from[0], move.from[1]],
         to: [move.to[0], move.to[1]],
-        t0: performance.now(),
+        t0: vTime,
         dur: 200,
       };
     }
     game = C.applyMove(game, move);
+    lastCapture = willCapture;
     if (willCapture) {
       captureFlashes.push(makeExplosion([move.to[0], move.to[1]]));
+      spawnDebris([move.to[0], move.to[1]], victim);
+      slowmoStart = performance.now(); // brief slow-motion beat
     }
     invalidate();
     renderMoves();
@@ -699,7 +819,8 @@
     if (!gameOver && mode === "ai" && game.turn === aiColor) {
       aiThinking = true;
       updateStatus();
-      setTimeout(runAI, 60);
+      // let the slow-motion capture beat play out before the computer replies
+      setTimeout(runAI, lastCapture ? 950 : 60);
     }
   }
 
@@ -1040,6 +1161,9 @@
     clearSelection();
     anim = null;
     captureFlashes = [];
+    debris = [];
+    slowmoStart = -1;
+    lastCapture = false;
     pendingPromotion = null;
     promoEl.classList.add("hidden");
     hideEndgame();
@@ -1076,6 +1200,8 @@
     clearSelection();
     anim = null;
     captureFlashes = [];
+    debris = [];
+    slowmoStart = -1;
     invalidate();
     renderMoves();
     updateStatus();
