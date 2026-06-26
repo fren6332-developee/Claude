@@ -13,14 +13,16 @@
   // ---- canvas + geometry ------------------------------------------------
   const canvas = document.getElementById("board");
   const ctx = canvas.getContext("2d");
-  const BOARD = 560;
-  const SQ = BOARD / 8;
+  // Logical canvas size. It is taller than wide so the tall pieces standing at
+  // the far edge have headroom and the angled board fits below them.
+  const VIEW_W = 560;
+  const VIEW_H = 600;
   const DPR = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
-  canvas.width = BOARD * DPR;
-  canvas.height = BOARD * DPR;
+  canvas.width = VIEW_W * DPR;
+  canvas.height = VIEW_H * DPR;
   // Let CSS scale the display size (responsive on phones/iOS); the canvas keeps
-  // its square aspect from the width/height attributes. Pointer math reads the
-  // live displayed size, so any scale works.
+  // its aspect from the width/height attributes. Pointer math reads the live
+  // displayed size, so any scale works.
   ctx.scale(DPR, DPR);
 
   const LIGHT = "#f1e3c4";
@@ -73,134 +75,250 @@
   const music = window.ChessMusic;
   let musicWanted = true;
 
-  // ---- coordinate mapping ----------------------------------------------
-  function boardToScreen(r, c) {
-    return flipped ? [7 - r, 7 - c] : [r, c];
+  // ---- 3D camera & board geometry --------------------------------------
+  // A single, static three-quarter camera looks down at a board lying on the
+  // ground plane (y = 0). Files run along X (−3.5 … 3.5), ranks along Z, with
+  // larger Z nearer the camera. Pieces are drawn as upright billboards whose
+  // size follows the perspective, so they stand up and the near ones are
+  // bigger than the far ones.
+  const CAM_EYE = [0, 8.6, 9.9];
+  const CAM_TGT = [0, 0.2, 0.4];
+  const CAM_FOV = 36 * Math.PI / 180;
+  const SLAB = 0.62;        // board thickness (world units)
+  const FRAME = 0.42;       // border beyond the 8×8 squares
+  const PIECE_SCALE = 1.95; // billboard height as a multiple of one square
+
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const norm = (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+  function lookAt(eye, c, up) {
+    const z = norm(sub(eye, c)), x = norm(cross(up, z)), y = cross(z, x);
+    return [x[0], x[1], x[2], -dot3(x, eye), y[0], y[1], y[2], -dot3(y, eye), z[0], z[1], z[2], -dot3(z, eye), 0, 0, 0, 1];
   }
-  function screenToBoard(sr, sc) {
-    return flipped ? [7 - sr, 7 - sc] : [sr, sc];
+  function persp(f, a, n, fa) {
+    const t = 1 / Math.tan(f / 2);
+    return [t / a, 0, 0, 0, 0, t, 0, 0, 0, 0, (fa + n) / (n - fa), (2 * fa * n) / (n - fa), 0, 0, -1, 0];
   }
-  function squareTopLeft(r, c) {
-    const [sr, sc] = boardToScreen(r, c);
-    return [sc * SQ, sr * SQ];
+  function mul(A, B) {
+    const o = new Array(16);
+    for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) {
+      let s = 0; for (let k = 0; k < 4; k++) s += A[i * 4 + k] * B[k * 4 + j]; o[i * 4 + j] = s;
+    }
+    return o;
   }
-  function eventToSquare(e) {
+  const VP = mul(persp(CAM_FOV, VIEW_W / VIEW_H, 0.1, 100), lookAt(CAM_EYE, CAM_TGT, [0, 1, 0]));
+  function project(x, y, z) {
+    const cx = VP[0] * x + VP[1] * y + VP[2] * z + VP[3];
+    const cy = VP[4] * x + VP[5] * y + VP[6] * z + VP[7];
+    const cw = VP[12] * x + VP[13] * y + VP[14] * z + VP[15];
+    return [(cx / cw * 0.5 + 0.5) * VIEW_W, (1 - (cy / cw * 0.5 + 0.5)) * VIEW_H, cw];
+  }
+
+  // Precomputed projected geometry (the camera never moves).
+  let GRID = [];      // [9][9] corner points
+  let CELL = [];      // [fr][fc] -> { quad, cx, cy, ppu }
+  let SLAB_FACES = [], FRAME_TOP = [], FRAME_BBOX = [0, 0, 0, 0];
+  function precompute() {
+    GRID = [];
+    for (let gi = 0; gi <= 8; gi++) {
+      GRID[gi] = [];
+      for (let gj = 0; gj <= 8; gj++) { const p = project(gj - 4, 0, gi - 4); GRID[gi][gj] = [p[0], p[1]]; }
+    }
+    CELL = [];
+    for (let fr = 0; fr < 8; fr++) {
+      CELL[fr] = [];
+      for (let fc = 0; fc < 8; fc++) {
+        const quad = [GRID[fr][fc], GRID[fr][fc + 1], GRID[fr + 1][fc + 1], GRID[fr + 1][fc]];
+        const base = project(fc - 3.5, 0, fr - 3.5);
+        const top = project(fc - 3.5, 1, fr - 3.5);
+        CELL[fr][fc] = { quad, cx: base[0], cy: base[1], ppu: base[1] - top[1] };
+      }
+    }
+    const B = 4 + FRAME;
+    const TLt = project(-B, 0, -B), TRt = project(B, 0, -B), NRt = project(B, 0, B), NLt = project(-B, 0, B);
+    const TLb = project(-B, -SLAB, -B), TRb = project(B, -SLAB, -B), NRb = project(B, -SLAB, B), NLb = project(-B, -SLAB, B);
+    FRAME_TOP = [TLt, TRt, NRt, NLt];
+    SLAB_FACES = [
+      { pts: [NLt, TLt, TLb, NLb], style: "#5b4430" }, // left face
+      { pts: [TRt, NRt, NRb, TRb], style: "#5b4430" }, // right face
+      { pts: [NLt, NRt, NRb, NLb], style: "#74502f" }, // near (front) face
+    ];
+    let minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
+    for (const p of FRAME_TOP) { minx = Math.min(minx, p[0]); maxx = Math.max(maxx, p[0]); miny = Math.min(miny, p[1]); maxy = Math.max(maxy, p[1]); }
+    FRAME_BBOX = [minx, miny, maxx - minx, maxy - miny];
+  }
+
+  // board square (r,c) <-> world cell (fr = rank from far, fc = file)
+  const cellOf = (r, c) => (flipped ? [7 - r, 7 - c] : [r, c]);
+  const boardOf = (fr, fc) => (flipped ? [7 - fr, 7 - fc] : [fr, fc]);
+  function squareCenterScreen(r, c) {
+    const [fr, fc] = cellOf(r, c);
+    const cell = CELL[fr][fc];
+    return [cell.cx, cell.cy, cell.ppu];
+  }
+
+  function eventXY(e) {
     const rect = canvas.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * BOARD;
-    const y = ((e.clientY - rect.top) / rect.height) * BOARD;
-    if (x < 0 || y < 0 || x >= BOARD || y >= BOARD) return null;
-    const sc = Math.floor(x / SQ);
-    const sr = Math.floor(y / SQ);
-    return { sq: screenToBoard(sr, sc), x, y };
+    return [((e.clientX - rect.left) / rect.width) * VIEW_W, ((e.clientY - rect.top) / rect.height) * VIEW_H];
+  }
+  const triSign = (px, py, a, b) => (px - b[0]) * (a[1] - b[1]) - (a[0] - b[0]) * (py - b[1]);
+  function inTri(px, py, a, b, c) {
+    const d1 = triSign(px, py, a, b), d2 = triSign(px, py, b, c), d3 = triSign(px, py, c, a);
+    const neg = d1 < 0 || d2 < 0 || d3 < 0, pos = d1 > 0 || d2 > 0 || d3 > 0;
+    return !(neg && pos);
+  }
+  const inQuad = (px, py, q) => inTri(px, py, q[0], q[1], q[2]) || inTri(px, py, q[0], q[2], q[3]);
+
+  // Which square's floor is under the cursor (near rows tested first).
+  function squareAt(x, y) {
+    for (let fr = 7; fr >= 0; fr--) for (let fc = 0; fc < 8; fc++) {
+      if (inQuad(x, y, CELL[fr][fc].quad)) return boardOf(fr, fc);
+    }
+    return null;
+  }
+  // Which standing piece's body is under the cursor (near rows first, so a near
+  // figure wins over a far square it overlaps).
+  function pieceAt(x, y) {
+    for (let fr = 7; fr >= 0; fr--) for (let fc = 0; fc < 8; fc++) {
+      const [r, c] = boardOf(fr, fc);
+      const p = game.board[r][c];
+      if (!p) continue;
+      const cell = CELL[fr][fc], box = cell.ppu * PIECE_SCALE;
+      if (x >= cell.cx - box * 0.42 && x <= cell.cx + box * 0.42 &&
+          y >= cell.cy - box * 0.82 && y <= cell.cy + box * 0.08) return [r, c];
+    }
+    return null;
   }
 
   // ---- rendering --------------------------------------------------------
+  function beginPoly(pts) {
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.closePath();
+  }
+  function fillPoly(pts, style) { beginPoly(pts); ctx.fillStyle = style; ctx.fill(); }
+  function strokePoly(pts, style, lw) {
+    beginPoly(pts); ctx.lineWidth = lw; ctx.strokeStyle = style; ctx.lineJoin = "round"; ctx.stroke();
+  }
+  function bevelTile(q) {
+    const xs = q.map((p) => p[0]), ys = q.map((p) => p[1]);
+    const g = ctx.createLinearGradient(Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys));
+    g.addColorStop(0, "rgba(255,255,255,0.13)");
+    g.addColorStop(0.5, "rgba(255,255,255,0)");
+    g.addColorStop(1, "rgba(0,0,0,0.16)");
+    fillPoly(q, g);
+  }
+  // A move marker lying flat on a square's floor (a foreshortened ellipse).
+  function markerAt(cell, capture) {
+    ctx.beginPath();
+    const rr = capture ? cell.ppu * 0.42 : cell.ppu * 0.16;
+    ctx.ellipse(cell.cx, cell.cy - cell.ppu * 0.02, rr, rr * 0.52, 0, 0, Math.PI * 2);
+    if (capture) { ctx.lineWidth = cell.ppu * 0.08; ctx.strokeStyle = "rgba(40,60,30,0.40)"; ctx.stroke(); }
+    else { ctx.fillStyle = "rgba(40,60,30,0.34)"; ctx.fill(); }
+  }
+  // An upright clay figure standing with its feet at (baseX, baseY).
+  function drawFigure(type, color, baseX, baseY, ppu) {
+    const box = ppu * PIECE_SCALE;
+    P.draw(ctx, type, color, baseX - box / 2, baseY - 0.86 * box, box);
+  }
+  function drawLabels() {
+    ctx.fillStyle = "rgba(40,28,20,0.6)";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "bold 13px 'Trebuchet MS', sans-serif";
+    for (let fc = 0; fc < 8; fc++) {
+      const [, c] = boardOf(7, fc);
+      const p = project(fc - 3.5, 0, 4 + FRAME * 0.55);
+      ctx.fillText("abcdefgh"[c], p[0], p[1]);
+    }
+    for (let fr = 0; fr < 8; fr++) {
+      const [r] = boardOf(fr, 0);
+      const p = project(-4 - FRAME * 0.55, 0, fr - 3.5);
+      ctx.fillText(String(8 - r), p[0], p[1]);
+    }
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+  }
+
   function drawBoard() {
-    ctx.clearRect(0, 0, BOARD, BOARD);
+    ctx.clearRect(0, 0, VIEW_W, VIEW_H);
 
     const kingPos = C.inCheck(game, game.turn) ? C.findKing(game.board, game.turn) : null;
     const lm = game.lastMove;
 
-    for (let sr = 0; sr < 8; sr++) {
-      for (let sc = 0; sc < 8; sc++) {
-        const x = sc * SQ, y = sr * SQ;
-        ctx.fillStyle = (sr + sc) % 2 === 0 ? LIGHT : DARK;
-        ctx.fillRect(x, y, SQ, SQ);
+    // the board as a thick 3D slab: side faces, then the framed top
+    for (const f of SLAB_FACES) fillPoly(f.pts, f.style);
+    fillPoly(FRAME_TOP, "#a9794d");
+    strokePoly(FRAME_TOP, "rgba(40,26,16,0.5)", 2);
 
-        // pressed-clay tile bevel: lit on the top-left, shaded on the bottom-right
-        const bev = ctx.createLinearGradient(x, y, x + SQ, y + SQ);
-        bev.addColorStop(0, "rgba(255,255,255,0.13)");
-        bev.addColorStop(0.5, "rgba(255,255,255,0)");
-        bev.addColorStop(1, "rgba(0,0,0,0.16)");
-        ctx.fillStyle = bev;
-        ctx.fillRect(x, y, SQ, SQ);
-        // grout seam between tiles
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = "rgba(60,38,28,0.30)";
-        ctx.strokeRect(x + 0.5, y + 0.5, SQ - 1, SQ - 1);
-
-        const [r, c] = screenToBoard(sr, sc);
-
-        // last-move tint
-        if (lm && ((lm.from[0] === r && lm.from[1] === c) || (lm.to[0] === r && lm.to[1] === c))) {
-          ctx.fillStyle = "rgba(120,180,90,0.35)";
-          ctx.fillRect(x, y, SQ, SQ);
-        }
-        // selected square
-        if (selected && selected[0] === r && selected[1] === c) {
-          ctx.fillStyle = "rgba(255,221,120,0.55)";
-          ctx.fillRect(x, y, SQ, SQ);
-        }
-        // king in check
-        if (kingPos && kingPos[0] === r && kingPos[1] === c) {
-          ctx.fillStyle = "rgba(220,70,70,0.45)";
-          ctx.fillRect(x, y, SQ, SQ);
-        }
-
-        // coordinate labels
-        if (sc === 0) label(x + 3, y + 12, 8 - r);
-        if (sr === 7) label(x + SQ - 10, y + SQ - 5, "abcdefgh"[c]);
+    // tiles, drawn far → near
+    for (let fr = 0; fr < 8; fr++) {
+      for (let fc = 0; fc < 8; fc++) {
+        const cell = CELL[fr][fc], q = cell.quad;
+        const [r, c] = boardOf(fr, fc);
+        fillPoly(q, (r + c) % 2 === 0 ? LIGHT : DARK);
+        bevelTile(q);
+        strokePoly(q, "rgba(60,38,28,0.30)", 1);
+        if (lm && ((lm.from[0] === r && lm.from[1] === c) || (lm.to[0] === r && lm.to[1] === c)))
+          fillPoly(q, "rgba(120,180,90,0.35)");
+        if (selected && selected[0] === r && selected[1] === c) fillPoly(q, "rgba(255,221,120,0.55)");
+        if (kingPos && kingPos[0] === r && kingPos[1] === c) fillPoly(q, "rgba(220,70,70,0.45)");
       }
     }
 
-    // matte clay grain across the whole board surface
+    // matte clay grain, clipped to the board surface
     ctx.save();
+    beginPoly(FRAME_TOP);
+    ctx.clip();
     ctx.globalAlpha = 0.5;
     ctx.globalCompositeOperation = "overlay";
-    ctx.drawImage(noiseCanvas, 0, 0, BOARD, BOARD);
+    ctx.drawImage(noiseCanvas, FRAME_BBOX[0], FRAME_BBOX[1], FRAME_BBOX[2], FRAME_BBOX[3]);
     ctx.restore();
 
-    // legal-move markers for the selected/dragged piece
+    drawLabels();
+
+    // legal-move markers on the floor
     for (const m of legal) {
-      const [x, y] = squareTopLeft(m.to[0], m.to[1]);
-      const cx = x + SQ / 2, cy = y + SQ / 2;
-      ctx.fillStyle = "rgba(40,60,30,0.30)";
-      if (m.capture) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, SQ * 0.42, 0, Math.PI * 2);
-        ctx.lineWidth = SQ * 0.08;
-        ctx.strokeStyle = "rgba(40,60,30,0.35)";
-        ctx.stroke();
-      } else {
-        ctx.beginPath();
-        ctx.arc(cx, cy, SQ * 0.14, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      const [fr, fc] = cellOf(m.to[0], m.to[1]);
+      markerAt(CELL[fr][fc], m.capture);
     }
 
-    // pieces
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
+    // standing pieces, drawn far → near so nearer figures overlap farther ones
+    for (let fr = 0; fr < 8; fr++) {
+      for (let fc = 0; fc < 8; fc++) {
+        const [r, c] = boardOf(fr, fc);
         const p = game.board[r][c];
         if (!p) continue;
         if (dragging && dragging.from[0] === r && dragging.from[1] === c) continue; // lifted
         if (anim && anim.to[0] === r && anim.to[1] === c) continue; // animating in
-        const [x, y] = squareTopLeft(r, c);
-        P.draw(ctx, p.t, p.c, x, y, SQ);
+        const cell = CELL[fr][fc];
+        drawFigure(p.t, p.c, cell.cx, cell.cy, cell.ppu);
       }
     }
 
-    // sliding animation
+    // sliding animation with a little hop
     if (anim) {
       const t = Math.min(1, (performance.now() - anim.t0) / anim.dur);
-      const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // ease
-      const x = anim.fromXY[0] + (anim.toXY[0] - anim.fromXY[0]) * e;
-      const y = anim.fromXY[1] + (anim.toXY[1] - anim.fromXY[1]) * e;
-      P.draw(ctx, anim.piece.t, anim.piece.c, x, y, SQ);
-      if (t >= 1) { anim = null; }
+      const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      const a = squareCenterScreen(anim.from[0], anim.from[1]);
+      const b = squareCenterScreen(anim.to[0], anim.to[1]);
+      const x = a[0] + (b[0] - a[0]) * e;
+      const y = a[1] + (b[1] - a[1]) * e;
+      const ppu = a[2] + (b[2] - a[2]) * e;
+      drawFigure(anim.piece.t, anim.piece.c, x, y - Math.sin(e * Math.PI) * ppu * 0.25, ppu);
+      if (t >= 1) anim = null;
     }
 
-    // dragged piece follows the cursor, lifted slightly
+    // the dragged piece follows the cursor, sized for the square it hovers
     if (dragging) {
-      P.draw(ctx, dragging.piece.t, dragging.piece.c,
-        dragging.x - SQ / 2, dragging.y - SQ / 2 - SQ * 0.08, SQ);
+      const [ffr, ffc] = cellOf(dragging.from[0], dragging.from[1]);
+      let ppu = CELL[ffr][ffc].ppu;
+      const sq = squareAt(dragging.x, dragging.y);
+      if (sq) { const [hr, hc] = cellOf(sq[0], sq[1]); ppu = CELL[hr][hc].ppu; }
+      drawFigure(dragging.piece.t, dragging.piece.c, dragging.x, dragging.y + ppu * 0.25, ppu);
     }
-  }
-
-  function label(x, y, text) {
-    ctx.fillStyle = "rgba(40,28,20,0.55)";
-    ctx.font = `bold ${SQ * 0.16}px "Trebuchet MS", sans-serif`;
-    ctx.fillText(text, x, y);
   }
 
   function loop() {
@@ -223,34 +341,38 @@
     // A real user gesture — a good moment to (re)start audio if wanted.
     updateMusic();
     if (pendingPromotion) return;
-    const hit = eventToSquare(e);
-    if (!hit) return;
-    const [r, c] = hit.sq;
+    const [x, y] = eventXY(e);
+    const tile = squareAt(x, y);
 
-    // If a piece is already selected and this is a legal destination → move.
-    if (selected) {
-      const m = legal.find((mm) => mm.to[0] === r && mm.to[1] === c);
-      if (m) { commitMove(selected, [r, c]); clearSelection(); return; }
+    // If a piece is already selected and a legal destination is clicked → move.
+    if (selected && tile) {
+      const m = legal.find((mm) => mm.to[0] === tile[0] && mm.to[1] === tile[1]);
+      if (m) { commitMove(selected, tile); clearSelection(); return; }
     }
 
     if (!humanToMove()) { clearSelection(); return; }
-    const p = game.board[r][c];
-    if (p && p.c === game.turn) {
-      selected = [r, c];
-      legal = C.legalMoves(game, [r, c]);
-      dragging = { from: [r, c], piece: p, x: hit.x, y: hit.y, moved: false };
-      canvas.classList.add("grabbing");
-      invalidate();
-    } else {
-      clearSelection();
+
+    // Pick up the standing figure under the cursor (falls back to its tile).
+    const pk = pieceAt(x, y) || tile;
+    if (pk) {
+      const p = game.board[pk[0]][pk[1]];
+      if (p && p.c === game.turn) {
+        selected = pk;
+        legal = C.legalMoves(game, pk);
+        dragging = { from: pk, piece: p, x, y, moved: false };
+        canvas.classList.add("grabbing");
+        invalidate();
+        return;
+      }
     }
+    clearSelection();
   }
 
   function onMove(e) {
     if (!dragging) return;
-    const rect = canvas.getBoundingClientRect();
-    dragging.x = ((e.clientX - rect.left) / rect.width) * BOARD;
-    dragging.y = ((e.clientY - rect.top) / rect.height) * BOARD;
+    const [x, y] = eventXY(e);
+    dragging.x = x;
+    dragging.y = y;
     dragging.moved = true;
   }
 
@@ -260,18 +382,17 @@
     const drag = dragging;
     dragging = null;
     invalidate(); // the lifted piece must be repainted onto a square again
-    const hit = eventToSquare(e);
-    if (hit) {
-      const [r, c] = hit.sq;
-      const m = legal.find((mm) => mm.to[0] === r && mm.to[1] === c);
+    const tile = squareAt(...eventXY(e));
+    if (tile) {
+      const m = legal.find((mm) => mm.to[0] === tile[0] && mm.to[1] === tile[1]);
       if (m) {
         // A drag drop: move with no slide animation (piece is already there).
-        commitMove(drag.from, [r, c], { animate: !drag.moved });
+        commitMove(drag.from, tile, { animate: !drag.moved });
         clearSelection();
         return;
       }
       // Dropped on its own square → keep it selected (click-to-move mode).
-      if (drag.from[0] === r && drag.from[1] === c && drag.moved === false) {
+      if (drag.from[0] === tile[0] && drag.from[1] === tile[1] && drag.moved === false) {
         return; // selection stays
       }
     }
@@ -304,9 +425,13 @@
     const piece = game.board[move.from[0]][move.from[1]];
     history.push(C.cloneState(game));
     if (animate) {
-      const [fx, fy] = squareTopLeft(move.from[0], move.from[1]);
-      const [tx, ty] = squareTopLeft(move.to[0], move.to[1]);
-      anim = { piece, to: [move.to[0], move.to[1]], fromXY: [fx, fy], toXY: [tx, ty], t0: performance.now(), dur: 180 };
+      anim = {
+        piece,
+        from: [move.from[0], move.from[1]],
+        to: [move.to[0], move.to[1]],
+        t0: performance.now(),
+        dur: 200,
+      };
     }
     game = C.applyMove(game, move);
     invalidate();
@@ -591,6 +716,7 @@
   canvas.addEventListener("contextmenu", (e) => e.preventDefault());
 
   // ---- start ------------------------------------------------------------
+  precompute();
   syncOptions();
   newGame();
   loop();

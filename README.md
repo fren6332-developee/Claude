@@ -1,10 +1,11 @@
 # Final Fantasy Chess
 
 A free, instantly playable game of chess where every piece is a beloved
-**Final Fantasy** character, sculpted to look like a **claymation** figure on
-a tactile **three-dimensional** board, with a soft Studio Ghibli warmth.
-Drag pieces with your mouse or finger, choose from **five difficulty levels**
-against the computer, and play to a wistful adventuring theme.
+**Final Fantasy** character, sculpted like a **claymation** figure that
+**stands up on a three-dimensional board** viewed at an angle, with a soft
+Studio Ghibli warmth. Drag pieces with your mouse or finger, choose from
+**five difficulty levels** against the computer, and play to a wistful
+adventuring theme.
 
 ## ♟ The cast
 
@@ -21,10 +22,12 @@ Both armies use the same heroes. You can tell the sides apart by the little
 platform each figure stands on — **sunlit cream** for White, **twilight
 indigo** for Black — and by a gentle warm-vs-cool shift in their colours.
 
-> The artwork is original vector painting drawn live on an HTML5 canvas:
-> every figure is modelled with a single soft light source, a glossy sheen
-> and a grounding shadow so it reads like a moulded **clay sculpture**, set on
-> a grained, bevelled board for a hand-made, three-dimensional diorama feel.
+> The artwork is original vector painting drawn live on an HTML5 canvas.
+> The scene is rendered through a real perspective camera: the board is a
+> thick, angled clay slab and every figure **stands upright** on its square as
+> a depth-scaled sculpt — nearer pieces are larger and overlap the ones
+> behind. Each figure is modelled with a single soft light source, a glossy
+> sheen and a grounding shadow so it reads like a moulded **clay sculpture**.
 > It's an affectionate *interpretation* of these characters, not copied
 > sprites.
 
