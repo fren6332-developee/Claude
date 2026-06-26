@@ -3,54 +3,122 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Blast from the Past — Claude Created from Scratch</title>
-  <meta name="description" content="A free, instantly playable top-down Zelda-inspired adventure across six Earth biomes." />
+  <title>Final Fantasy Chess</title>
+  <meta name="description" content="Play chess with Final Fantasy heroes — Cecil, Strago, Barret, Aerith, Noctis and imps — drawn in a soft Studio Ghibli style. Drag-and-drop pieces, five difficulty levels, and a wistful adventuring theme." />
 
   <!-- Installable web app (PWA) -->
   <link rel="manifest" href="manifest.webmanifest" />
-  <meta name="theme-color" content="#11101a" />
+  <meta name="theme-color" content="#1d1630" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Blast from the Past" />
+  <meta name="apple-mobile-web-app-title" content="FF Chess" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="icon" href="icons/icon-192.png" />
 
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/chess.css" />
 </head>
 <body>
-  <div id="game-shell">
-    <header id="hud">
-      <div id="hearts" aria-label="health"></div>
-      <div id="realm-name">The Six Realms</div>
-      <button id="sound-toggle" type="button" title="Toggle music">♪ Music: On</button>
+  <main id="shell">
+    <header id="title">
+      <h1>Final Fantasy Chess</h1>
+      <p class="tagline">A Studio Ghibli–styled board of crystal heroes</p>
     </header>
 
-    <canvas id="screen" width="768" height="512"></canvas>
+    <div id="layout">
+      <section id="board-area">
+        <div class="tray-row">
+          <span class="tray-label">Fallen Black</span>
+          <canvas id="captB" width="300" height="26"></canvas>
+        </div>
 
-    <div id="overlay" class="overlay">
-      <div class="overlay-card">
-        <h1>Blast from the Past</h1>
-        <p class="subtitle">Claude Created from Scratch &mdash; a Link to the Past tribute</p>
-        <p>
-          Six realms of Earth have fallen to ghosts, goblins, and bats.
-          Travel from biome to biome, clear each realm, and restore the light.
-        </p>
-        <ul class="controls">
-          <li><b>Move</b> &mdash; Arrow keys or <b>W A S D</b></li>
-          <li><b>Swing sword</b> &mdash; <b>Spacebar</b> or <b>Z</b></li>
-          <li><b>Clear every foe</b> to open the way onward</li>
-        </ul>
-        <button id="start-btn" type="button">Begin the Journey</button>
-        <p class="hint">Click to enable music.</p>
-      </div>
+        <div id="board-wrap">
+          <canvas id="board"></canvas>
+          <div id="promotion" class="hidden"></div>
+          <div id="endgame" class="hidden"></div>
+        </div>
+
+        <div class="tray-row">
+          <span class="tray-label">Fallen White</span>
+          <canvas id="captW" width="300" height="26"></canvas>
+        </div>
+      </section>
+
+      <aside id="panel">
+        <div id="status-box">
+          <span id="turn-dot" class="dot white"></span>
+          <span id="status">White to move</span>
+        </div>
+
+        <div class="control-group">
+          <button id="new-game" class="primary">New Game</button>
+          <button id="undo">Undo</button>
+          <button id="flip">Flip Board</button>
+          <button id="music">♪ Music: On</button>
+        </div>
+
+        <div class="control-group">
+          <button id="resign">Resign</button>
+          <button id="draw">Offer Draw</button>
+          <button id="pgn">Copy PGN</button>
+        </div>
+
+        <div class="control-group options">
+          <label>
+            <span>Opponent</span>
+            <select id="mode">
+              <option value="ai" selected>vs Computer</option>
+              <option value="hotseat">Two Players</option>
+            </select>
+          </label>
+          <label id="side-wrap">
+            <span>Play as</span>
+            <select id="side">
+              <option value="w" selected>White (Sunlit)</option>
+              <option value="b">Black (Twilight)</option>
+            </select>
+          </label>
+          <label id="diff-wrap">
+            <span>Difficulty</span>
+            <select id="difficulty">
+              <option value="1">Level 1 — Super easy</option>
+              <option value="2">Level 2 — Low–medium</option>
+              <option value="3" selected>Level 3 — Medium</option>
+              <option value="4">Level 4 — Medium–high</option>
+              <option value="5">Level 5 — Hardest</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="moves-box">
+          <h2>Moves</h2>
+          <div id="moves" class="moves"><div class="moves-empty">No moves yet</div></div>
+        </div>
+
+        <div class="legend">
+          <h2>The Cast</h2>
+          <ul>
+            <li><b>King</b> — Noctis <span>(FF XV)</span></li>
+            <li><b>Queen</b> — Aerith <span>(FF VII)</span></li>
+            <li><b>Rook</b> — Barret <span>(FF VII)</span></li>
+            <li><b>Bishop</b> — Strago <span>(FF VI)</span></li>
+            <li><b>Knight</b> — Cecil Harvey <span>(FF IV)</span></li>
+            <li><b>Pawn</b> — Imp <span>(FF IV)</span></li>
+          </ul>
+        </div>
+
+        <p class="hint">Drag a piece to move it, or tap a piece then its
+          destination. Music plays while you face the computer.</p>
+      </aside>
     </div>
-  </div>
+  </main>
 
-  <script src="js/audio.js"></script>
-  <script src="js/game.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/pieces.js"></script>
+  <script src="js/music.js"></script>
+  <script src="js/sfx.js"></script>
+  <script src="js/chess.js"></script>
   <script>
-    // Register the service worker so the game installs and runs offline.
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("sw.js").catch(() => {});

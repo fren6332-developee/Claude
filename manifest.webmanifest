@@ -1,14 +1,14 @@
 {
-  "name": "Blast from the Past — Claude Created from Scratch",
-  "short_name": "Blast from the Past",
-  "description": "A free, instantly playable top-down Zelda-inspired adventure across six Earth biomes, with Final Fantasy VI-inspired music.",
+  "name": "Final Fantasy Chess",
+  "short_name": "FF Chess",
+  "description": "Chess with Final Fantasy heroes drawn in a soft Studio Ghibli style — drag-and-drop pieces, five difficulty levels, and a wistful adventuring theme.",
   "start_url": "./index.html",
   "scope": "./",
-  "display": "fullscreen",
-  "orientation": "landscape",
-  "background_color": "#11101a",
-  "theme_color": "#11101a",
-  "categories": ["games", "entertainment"],
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#100b1d",
+  "theme_color": "#1d1630",
+  "categories": ["games", "entertainment", "board"],
   "icons": [
     {
       "src": "icons/icon-192.png",

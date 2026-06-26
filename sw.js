@@ -1,15 +1,18 @@
 /*
- * Service worker for "Blast from the Past".
+ * Service worker for "Final Fantasy Chess".
  * Caches the full app shell so the game is installable and fully playable
  * offline once it has been opened a single time.
  */
-const CACHE = "blast-from-the-past-v1";
+const CACHE = "ff-chess-v2";
 const ASSETS = [
   "./",
   "./index.html",
-  "./css/style.css",
-  "./js/audio.js",
-  "./js/game.js",
+  "./css/chess.css",
+  "./js/engine.js",
+  "./js/pieces.js",
+  "./js/music.js",
+  "./js/sfx.js",
+  "./js/chess.js",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
