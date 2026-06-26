@@ -111,10 +111,25 @@ css/chess.css           # responsive, iOS-friendly UI
 js/engine.js            # chess rules: move generation, check/mate, castling…
 js/pieces.js            # Ghibli-styled Final Fantasy piece artwork
 js/music.js             # Web Audio adventuring theme (vs-computer only)
-js/chess.js             # board, drag-and-drop, AI, controls
+js/chess.js             # 3D board, drag-and-drop, AI, controls
 manifest.webmanifest    # PWA manifest
 sw.js                   # service worker (offline play)
 icons/                  # app icons
+tests/                  # standard-chess rule checks (Node, no deps)
+```
+
+## ✅ Verifying the rules
+
+The move rules are exercised by two dependency-free Node tests so each piece
+behaves exactly like standard chess:
+
+```bash
+node tests/rules.test.cjs   # 25 per-piece checks: knight L-jumps, bishop/
+                            # rook/queen rays + blocking, king steps & castling,
+                            # pawn push/double/capture/en-passant/promotion,
+                            # pins, checkmate and stalemate
+node tests/perft.test.cjs   # legal-move counts from the start position match
+                            # the reference values 20 / 400 / 8902 / 197281
 ```
 
 > An earlier Zelda-style game still lives in the self-contained
