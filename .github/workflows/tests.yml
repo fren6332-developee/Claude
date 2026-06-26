@@ -1,0 +1,27 @@
+name: Chess rule tests
+
+# Runs the standard-chess rule checks on every push and pull request so a
+# change to the engine that breaks how a piece moves fails CI immediately.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Per-piece rule checks
+        run: node tests/rules.test.cjs
+
+      - name: Perft move-count checks
+        run: node tests/perft.test.cjs
