@@ -1,26 +1,42 @@
-# Blast from the Past — Claude Created from Scratch
+# Final Fantasy Chess
 
-A free, instantly playable top-down action game inspired by **The Legend of
-Zelda: A Link to the Past**. Travel through **six** single-screen realms — one
-for each Earth biome — clearing out **ghosts, goblins, and bats**, with
-chiptune music written in the spirit of **Final Fantasy VI**. Tuned to be
-gentle and quick to finish.
+A free, instantly playable game of chess where every piece is a beloved
+**Final Fantasy** character, sculpted to look like a **claymation** figure on
+a tactile **three-dimensional** board, with a soft Studio Ghibli warmth.
+Drag pieces with your mouse or finger, choose from **five difficulty levels**
+against the computer, and play to a wistful adventuring theme.
+
+## ♟ The cast
+
+| Piece  | Character        | Series          |
+| ------ | ---------------- | --------------- |
+| King   | **Noctis**       | Final Fantasy XV |
+| Queen  | **Aerith**       | Final Fantasy VII |
+| Rook   | **Barret**       | Final Fantasy VII |
+| Bishop | **Strago**       | Final Fantasy VI |
+| Knight | **Cecil Harvey** | Final Fantasy IV |
+| Pawn   | **Imp**          | Final Fantasy IV |
+
+Both armies use the same heroes. You can tell the sides apart by the little
+platform each figure stands on — **sunlit cream** for White, **twilight
+indigo** for Black — and by a gentle warm-vs-cool shift in their colours.
+
+> The artwork is original vector painting drawn live on an HTML5 canvas:
+> every figure is modelled with a single soft light source, a glossy sheen
+> and a grounding shadow so it reads like a moulded **clay sculpture**, set on
+> a grained, bevelled board for a hand-made, three-dimensional diorama feel.
+> It's an affectionate *interpretation* of these characters, not copied
+> sprites.
 
 ## ▶ Play right away
 
-**No build, no install.** The simplest option:
+**No build, no install.** Double-click **`index.html`**, or run a tiny local
+server and open it:
 
-- **Double-click [`play.html`](play.html)** — the entire game in a single
-  self-contained file. Works offline straight from your computer, no server.
-
-Or run the full multi-file version:
-
-- Double-click `index.html`, **or**
-- Run a tiny local server and visit it:
-  ```bash
-  python3 -m http.server 8000
-  # then open http://localhost:8000
-  ```
+```bash
+python3 -m http.server 8000
+# then open http://localhost:8000
+```
 
 ### Play online (one-time setup)
 
@@ -29,61 +45,74 @@ This repo ships a GitHub Pages workflow. To get a public, always-on URL:
 1. In the repository, open **Settings → Pages**.
 2. Under **Build and deployment → Source**, choose **GitHub Actions**.
 
-After the next push, the game is live at
-`https://<your-username>.github.io/<repo>/` — shareable and playable instantly.
+After the next push the game is live at
+`https://<your-username>.github.io/<repo>/`.
 
-## 📱 Install it like an app (free)
+## 🎮 How to play
 
-The game is a **Progressive Web App (PWA)**, so it can be installed to your
-phone or desktop and run full-screen and offline — no fees, no stores:
+- **Move a piece** by **dragging** it with the mouse (or your finger on a
+  touch screen). You can also **tap/click a piece, then tap its
+  destination**. Legal moves are shown as dots; captures are ringed.
+- All standard chess rules are implemented: **castling, en passant, pawn
+  promotion, check, checkmate and stalemate**, plus draw detection.
+- **Promotion** lets you crown your imp as Aerith, Barret, Cecil or Strago.
+- Buttons: **New Game**, **Undo**, **Flip Board**, and a **♪ Music** toggle.
+
+## 🧠 Opponent & difficulty
+
+Choose **vs Computer** or **Two Players** (same device). Against the computer,
+pick which side you play and one of five levels:
+
+| Level | Strength        | Behaviour                                  |
+| ----- | --------------- | ------------------------------------------ |
+| 1     | Super easy      | Very shallow, frequently plays random moves |
+| 2     | Low–medium      | Looks one move ahead, fairly loose          |
+| 3     | Medium          | Looks ahead, mostly sensible                |
+| 4     | Medium–high     | Deeper search, plays its best move          |
+| 5     | Hardest         | Deepest search, no mistakes on purpose      |
+
+## 🎵 Music
+
+While you face the computer, a gentle, lilting **adventuring theme** plays in
+the background — written live with the Web Audio API in the wistful,
+folk-hero spirit of **Locke's theme from Final Fantasy VI** (an original tune,
+not a transcription). Toggle it any time with the **♪ Music** button. It does
+not play in Two-Player mode.
+
+## 📱 iPhone / iPad (and installing as an app)
+
+The game is built to work on **iOS Safari**:
+
+- The board uses pointer/touch events with `touch-action: none`, so dragging a
+  piece won't scroll or zoom the page.
+- The layout is responsive — the board scales to fit the screen and stacks
+  above the controls on phones, with comfortably sized tap targets.
+- Background music starts on your first tap (iOS requires a user gesture
+  before audio can play — that's handled automatically).
+
+It's also a **Progressive Web App**, so you can install it to your home
+screen and play offline:
 
 - **iPhone/iPad (Safari):** open the site → Share → **Add to Home Screen**.
 - **Android (Chrome):** open the site → menu → **Install app**.
 - **Desktop (Chrome/Edge):** click the **Install** icon in the address bar.
 
-It then behaves just like a downloaded app, with its own icon and offline play.
-
-> **About the Apple App Store / Google Play:** I can't publish to those stores
-> for you — Apple requires a paid Apple Developer Program membership ($99/year)
-> plus a native build and an app-review process, and Google Play charges a
-> one-time developer fee. None of that can be done from a code repository
-> alone. The **PWA install above is the genuinely free, instant equivalent**:
-> a real installable app on the home screen with offline support. If you later
-> want it wrapped as a native store submission, that can be done with a tool
-> like [PWABuilder](https://www.pwabuilder.com/) once you have the developer
-> accounts.
-
-## 🎮 Controls
-
-| Action      | Keys                          |
-| ----------- | ----------------------------- |
-| Move        | Arrow keys or **W A S D**     |
-| Swing sword | **Spacebar** or **Z**         |
-| Toggle music| **♪ Music** button (top-right)|
-
-Clear every foe in a realm to open the gate, then step through it to advance.
-Reach the **Relic of Dawn** in the sixth realm to win.
-
-## 🗺 The six realms
-
-1. **Verdant Wood** — forest
-2. **Sun-Scoured Desert** — desert
-3. **Frostpeak Tundra** — snow/ice
-4. **Emberreach Volcano** — volcanic
-5. **Mistmire Swamp** — wetland
-6. **Lumin Coast** — coastline (final realm)
-
 ## 🛠 Tech
 
-Plain HTML5 Canvas + vanilla JavaScript. Music and sound effects are
-synthesized live with the Web Audio API — no audio files, no dependencies.
+Plain HTML5 Canvas + vanilla JavaScript, no dependencies. Pieces and music are
+generated entirely in code — no image or audio files.
 
 ```
 index.html              # app shell + PWA wiring
-css/style.css           # framed retro UI
-js/audio.js             # Web Audio chiptune engine + biome themes
-js/game.js              # game loop, combat, enemies, realms
+css/chess.css           # responsive, iOS-friendly UI
+js/engine.js            # chess rules: move generation, check/mate, castling…
+js/pieces.js            # Ghibli-styled Final Fantasy piece artwork
+js/music.js             # Web Audio adventuring theme (vs-computer only)
+js/chess.js             # board, drag-and-drop, AI, controls
 manifest.webmanifest    # PWA manifest
 sw.js                   # service worker (offline play)
 icons/                  # app icons
 ```
+
+> An earlier Zelda-style game still lives in the self-contained
+> [`play.html`](play.html) if you'd like to revisit it.
