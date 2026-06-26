@@ -15,7 +15,7 @@ adventuring theme.
 | ------ | ---------------- | --------------- |
 | King   | **Noctis**       | Final Fantasy XV |
 | Queen  | **Aerith**       | Final Fantasy VII |
-| Rook   | **Barret**       | Final Fantasy VII |
+| Rook   | **Warrior Monk** | custom character  |
 | Bishop | **Strago**       | Final Fantasy VI |
 | Knight | **Cecil Harvey** | Final Fantasy IV |
 | Pawn   | **Imp**          | Final Fantasy IV |
