@@ -54,6 +54,7 @@
   let legal = [];            // legal moves for the selected piece
   let dragging = null;       // { from:[r,c], piece, x, y, moved }
   let anim = null;           // { piece, from:[x,y], to:[x,y], t0, dur }
+  let captureFlashes = [];   // { sq:[r,c], t0, dur } neon glow where a capture happened
   let pendingPromotion = null; // { from, to, candidates }
   let mode = "ai";          // 'ai' | 'hotseat'
   let aiColor = "b";
@@ -263,6 +264,29 @@
     ctx.closePath();
     ctx.fill();
   }
+  // A neon-yellow flare on a square where a capture just happened. Drawn in two
+  // passes: the panel lights up under the piece, and a flickering bloom radiates
+  // over everything, so the square clearly glows. Both fade out as k → 0.
+  const glowFlicker = () => 0.7 + 0.3 * Math.sin(performance.now() / 40);
+  function drawGlowPanel(cell, k) {
+    fillPoly(cell.quad, `rgba(238,255,0,${0.72 * k})`);
+    fillPoly(cell.quad, `rgba(255,255,200,${0.40 * k})`);
+  }
+  function drawGlowBloom(cell, k) {
+    const flick = glowFlicker();
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    const R = cell.ppu * 1.7;
+    const g = ctx.createRadialGradient(cell.cx, cell.cy - cell.ppu * 0.3, 1, cell.cx, cell.cy - cell.ppu * 0.3, R);
+    g.addColorStop(0, `rgba(255,255,200,${0.85 * k * flick})`);
+    g.addColorStop(0.35, `rgba(240,255,0,${0.55 * k * flick})`);
+    g.addColorStop(1, "rgba(240,255,0,0)");
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.ellipse(cell.cx, cell.cy - cell.ppu * 0.3, R, R * 0.85, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
   function drawLabels() {
     ctx.fillStyle = "rgba(40,28,20,0.6)";
     ctx.textAlign = "center";
@@ -327,6 +351,14 @@
       drawArrow([A.cx, A.cy], [B.cx, B.cy], B.ppu, "rgba(243,201,93,0.55)");
     }
 
+    // neon capture flares — panel glow under the pieces (bloom drawn later)
+    for (const f of captureFlashes) {
+      const k = 1 - (performance.now() - f.t0) / f.dur;
+      if (k <= 0) continue;
+      const [fr, fc] = cellOf(f.sq[0], f.sq[1]);
+      drawGlowPanel(CELL[fr][fc], k);
+    }
+
     // legal-move markers on the floor
     for (const m of legal) {
       const [fr, fc] = cellOf(m.to[0], m.to[1]);
@@ -367,13 +399,26 @@
       if (sq) { const [hr, hc] = cellOf(sq[0], sq[1]); ppu = CELL[hr][hc].ppu; }
       drawFigure(dragging.piece.t, dragging.piece.c, dragging.x, dragging.y + ppu * 0.25, ppu);
     }
+
+    // neon capture bloom — radiates over the pieces, then prune finished flares
+    if (captureFlashes.length) {
+      const now = performance.now();
+      for (const f of captureFlashes) {
+        const k = 1 - (now - f.t0) / f.dur;
+        if (k <= 0) continue;
+        const [fr, fc] = cellOf(f.sq[0], f.sq[1]);
+        drawGlowBloom(CELL[fr][fc], k);
+      }
+      captureFlashes = captureFlashes.filter((f) => now - f.t0 < f.dur);
+    }
   }
 
   function loop() {
-    // Repaint only when needed: on a change, or while dragging/animating.
-    if (dirty || dragging || anim) {
+    // Repaint only when needed: on a change, or while dragging/animating/flaring.
+    const flaring = captureFlashes.length > 0;
+    if (dirty || dragging || anim || flaring) {
       drawBoard();
-      if (!dragging && !anim) dirty = false;
+      if (!dragging && !anim && captureFlashes.length === 0) dirty = false;
     }
     requestAnimationFrame(loop);
   }
@@ -486,6 +531,9 @@
       };
     }
     game = C.applyMove(game, move);
+    if (willCapture) {
+      captureFlashes.push({ sq: [move.to[0], move.to[1]], t0: performance.now(), dur: 750 });
+    }
     invalidate();
     renderMoves();
     playMoveSound(move, willCapture);
@@ -892,6 +940,7 @@
     renderMoves();
     clearSelection();
     anim = null;
+    captureFlashes = [];
     pendingPromotion = null;
     promoEl.classList.add("hidden");
     hideEndgame();
@@ -927,6 +976,7 @@
     aiThinking = false;
     clearSelection();
     anim = null;
+    captureFlashes = [];
     invalidate();
     renderMoves();
     updateStatus();
