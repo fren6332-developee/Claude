@@ -120,8 +120,20 @@
   <script src="js/chess.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
+      // If a page was already controlled by an old worker, reload once when the
+      // new worker takes over so updates appear without a manual cache clear.
+      const hadController = !!navigator.serviceWorker.controller;
+      let reloaded = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (reloaded || !hadController) return;
+        reloaded = true;
+        window.location.reload();
+      });
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("sw.js").catch(() => {});
+        navigator.serviceWorker.register("sw.js").then((reg) => {
+          // proactively check for a newer worker on each load
+          reg.update().catch(() => {});
+        }).catch(() => {});
       });
     }
   </script>
