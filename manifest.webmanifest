@@ -1,7 +1,7 @@
 {
-  "name": "Final Fantasy Chess",
-  "short_name": "FF Chess",
-  "description": "Chess with Final Fantasy heroes drawn in a soft Studio Ghibli style — drag-and-drop pieces, five difficulty levels, and a wistful adventuring theme.",
+  "name": "Curt Frenzel's First Masterpiece Chess Game",
+  "short_name": "Masterpiece Chess",
+  "description": "Curt Frenzel's First Masterpiece Chess Game — chess with Final Fantasy heroes as claymation figures on a 3D board, with drag-and-drop, five difficulty levels, and a wistful adventuring theme.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
