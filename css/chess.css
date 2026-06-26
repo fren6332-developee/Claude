@@ -232,6 +232,45 @@ button.off { opacity: 0.6; }
 .promo-btn span { font-size: 11px; color: var(--ink); }
 .promo-btn:hover { background: var(--edge); }
 
+/* ---- end-game overlay ---- */
+#endgame {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(12, 9, 24, 0.82);
+  border-radius: 12px;
+  z-index: 6;
+}
+#endgame.hidden { display: none; }
+.end-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 22px 30px;
+  background: linear-gradient(160deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--edge);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+  text-align: center;
+  animation: end-pop 0.35s ease;
+}
+@keyframes end-pop {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.end-card canvas { width: 96px; height: 96px; }
+.end-title {
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--gold);
+  text-shadow: 0 2px 0 #00000055;
+}
+.end-sub { color: var(--muted); font-size: 14px; margin-bottom: 6px; }
+.end-card button { padding: 12px 26px; font-size: 16px; }
+
 @media (max-width: 720px) {
   #layout { gap: 12px; }
   #panel { max-width: 560px; width: min(560px, 92vw); }

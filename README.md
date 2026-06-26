@@ -59,6 +59,10 @@ After the next push the game is live at
 - All standard chess rules are implemented: **castling, en passant, pawn
   promotion, check, checkmate and stalemate**, plus draw detection.
 - **Promotion** lets you crown your imp as Aerith, Barret, Cecil or Strago.
+- **Sound effects** — soft, clay-toned cues for moving, capturing, castling,
+  check and promotion (in both modes), plus a little fanfare on checkmate.
+- A **checkmate / draw screen** announces the result with the victorious hero
+  and a one-tap rematch.
 - Buttons: **New Game**, **Undo**, **Flip Board**, and a **♪ Music** toggle.
 
 ## 🧠 Opponent & difficulty
@@ -111,6 +115,7 @@ css/chess.css           # responsive, iOS-friendly UI
 js/engine.js            # chess rules: move generation, check/mate, castling…
 js/pieces.js            # Ghibli-styled Final Fantasy piece artwork
 js/music.js             # Web Audio adventuring theme (vs-computer only)
+js/sfx.js               # Web Audio move / capture / check sound effects
 js/chess.js             # 3D board, drag-and-drop, AI, controls
 manifest.webmanifest    # PWA manifest
 sw.js                   # service worker (offline play)

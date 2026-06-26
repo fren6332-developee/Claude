@@ -374,6 +374,7 @@
         legal = C.legalMoves(game, pk);
         dragging = { from: pk, piece: p, x, y, moved: false };
         canvas.classList.add("grabbing");
+        if (window.ChessSFX) window.ChessSFX.play("select");
         invalidate();
         return;
       }
@@ -436,6 +437,7 @@
 
   function finishMove(move, animate) {
     const piece = game.board[move.from[0]][move.from[1]];
+    const willCapture = !!game.board[move.to[0]][move.to[1]] || move.enpassant;
     history.push(C.cloneState(game));
     if (animate) {
       anim = {
@@ -448,7 +450,22 @@
     }
     game = C.applyMove(game, move);
     invalidate();
+    playMoveSound(move, willCapture);
     afterMove();
+  }
+
+  function playMoveSound(move, willCapture) {
+    const sfx = window.ChessSFX;
+    if (!sfx) return;
+    if (move.castle) sfx.play("castle");
+    else if (move.promotion) sfx.play("promote");
+    else if (willCapture) sfx.play("capture");
+    else sfx.play("move");
+    // an end-of-move flourish, layered just after the placement sound
+    const st = C.status(game);
+    if (st === "checkmate") setTimeout(() => sfx.play("win"), 140);
+    else if (st === "stalemate" || st === "draw50" || st === "insufficient") setTimeout(() => sfx.play("draw"), 140);
+    else if (st === "check") setTimeout(() => sfx.play("check"), 90);
   }
 
   function afterMove() {
@@ -470,18 +487,23 @@
     const mover = game.turn === "w" ? "White" : "Black";
     turnDot.className = "dot " + (game.turn === "w" ? "white" : "black");
     if (st === "checkmate") {
-      const winner = game.turn === "w" ? "Black" : "White";
-      statusEl.textContent = `Checkmate — ${winner} wins!`;
+      const winner = game.turn === "w" ? "b" : "w";
+      const name = winner === "w" ? "White" : "Black";
+      statusEl.textContent = `Checkmate — ${name} wins!`;
       gameOver = true;
+      showEndgame("Checkmate!", `${name} (${winner === "w" ? "Sunlit" : "Twilight"}) wins`, winner);
     } else if (st === "stalemate") {
       statusEl.textContent = "Stalemate — it's a draw.";
       gameOver = true;
+      showEndgame("Stalemate", "A draw — no legal moves", null);
     } else if (st === "draw50") {
       statusEl.textContent = "Draw — 50-move rule.";
       gameOver = true;
+      showEndgame("Draw", "50-move rule", null);
     } else if (st === "insufficient") {
       statusEl.textContent = "Draw — insufficient material.";
       gameOver = true;
+      showEndgame("Draw", "Insufficient material", null);
     } else if (aiThinking) {
       statusEl.textContent = "Aerith's army is plotting…";
     } else if (st === "check") {
@@ -550,6 +572,40 @@
       promoEl.appendChild(btn);
     }
     promoEl.classList.remove("hidden");
+  }
+
+  // ---- end-game overlay -------------------------------------------------
+  const endgameEl = document.getElementById("endgame");
+  let endgameShown = false;
+  function showEndgame(title, subtitle, winnerColor) {
+    if (endgameShown) return;
+    endgameShown = true;
+    endgameEl.innerHTML = "";
+    const card = document.createElement("div");
+    card.className = "end-card";
+    if (winnerColor) {
+      const cv = document.createElement("canvas");
+      cv.width = cv.height = 110;
+      P.draw(cv.getContext("2d"), "k", winnerColor, 0, 0, 110); // the victorious Noctis
+      card.appendChild(cv);
+    }
+    const h = document.createElement("div");
+    h.className = "end-title";
+    h.textContent = title;
+    const s = document.createElement("div");
+    s.className = "end-sub";
+    s.textContent = subtitle;
+    const btn = document.createElement("button");
+    btn.className = "primary";
+    btn.textContent = "New Game";
+    btn.addEventListener("click", newGame);
+    card.append(h, s, btn);
+    endgameEl.appendChild(card);
+    endgameEl.classList.remove("hidden");
+  }
+  function hideEndgame() {
+    endgameShown = false;
+    endgameEl.classList.add("hidden");
   }
 
   // ---- computer opponent (negamax + alpha-beta) -------------------------
@@ -643,6 +699,7 @@
     anim = null;
     pendingPromotion = null;
     promoEl.classList.add("hidden");
+    hideEndgame();
     gameOver = false;
     aiThinking = false;
     invalidate();

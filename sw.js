@@ -3,7 +3,7 @@
  * Caches the full app shell so the game is installable and fully playable
  * offline once it has been opened a single time.
  */
-const CACHE = "ff-chess-v1";
+const CACHE = "ff-chess-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -11,6 +11,7 @@ const ASSETS = [
   "./js/engine.js",
   "./js/pieces.js",
   "./js/music.js",
+  "./js/sfx.js",
   "./js/chess.js",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
