@@ -1,4 +1,6 @@
-# Final Fantasy Chess
+# Curt Frenzel's First Masterpiece Chess Game
+
+**▶ Play it live: https://fren6332-developee.github.io/Claude/**
 
 A free, instantly playable game of chess where every piece is a beloved
 **Final Fantasy** character, sculpted like a **claymation** figure that
