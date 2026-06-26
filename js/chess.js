@@ -177,18 +177,31 @@
     }
     return null;
   }
-  // Which standing piece's body is under the cursor (near rows first, so a near
-  // figure wins over a far square it overlaps).
-  function pieceAt(x, y) {
+  // Pick which of the side-to-move's pieces the cursor is choosing. A standing
+  // figure's body rises into the rank behind it, so picking purely by billboard
+  // bounds would let a tall near piece "cover" the square behind it. Instead we
+  // prefer the piece on the floor tile directly under the cursor, and only fall
+  // back to body-overlap (choosing the figure whose base is just below the
+  // cursor) when that tile is empty — e.g. when clicking a piece's upper body.
+  function pickSquare(x, y) {
+    const floor = squareAt(x, y);
+    if (floor) {
+      const p = game.board[floor[0]][floor[1]];
+      if (p && p.c === game.turn) return floor;
+    }
+    let best = null, bestDy = Infinity;
     for (let fr = 7; fr >= 0; fr--) for (let fc = 0; fc < 8; fc++) {
       const [r, c] = boardOf(fr, fc);
       const p = game.board[r][c];
-      if (!p) continue;
+      if (!p || p.c !== game.turn) continue;
       const cell = CELL[fr][fc], box = cell.ppu * PIECE_SCALE;
-      if (x >= cell.cx - box * 0.42 && x <= cell.cx + box * 0.42 &&
-          y >= cell.cy - box * 0.82 && y <= cell.cy + box * 0.08) return [r, c];
+      if (x >= cell.cx - box * 0.40 && x <= cell.cx + box * 0.40 &&
+          y >= cell.cy - box * 0.80 && y <= cell.cy + box * 0.06) {
+        const dy = cell.cy - y; // how far the cursor sits above this base
+        if (dy >= 0 && dy < bestDy) { bestDy = dy; best = [r, c]; }
+      }
     }
-    return null;
+    return best || floor;
   }
 
   // ---- rendering --------------------------------------------------------
@@ -352,8 +365,8 @@
 
     if (!humanToMove()) { clearSelection(); return; }
 
-    // Pick up the standing figure under the cursor (falls back to its tile).
-    const pk = pieceAt(x, y) || tile;
+    // Pick up the standing figure under the cursor.
+    const pk = pickSquare(x, y);
     if (pk) {
       const p = game.board[pk[0]][pk[1]];
       if (p && p.c === game.turn) {
