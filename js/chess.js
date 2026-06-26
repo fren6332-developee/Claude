@@ -264,28 +264,125 @@
     ctx.closePath();
     ctx.fill();
   }
-  // A neon-yellow flare on a square where a capture just happened. Drawn in two
-  // passes: the panel lights up under the piece, and a flickering bloom radiates
-  // over everything, so the square clearly glows. Both fade out as k → 0.
-  const glowFlicker = () => 0.7 + 0.3 * Math.sin(performance.now() / 40);
+  // ---- capture explosion ------------------------------------------------
+  // A capture detonates the square: a neon panel flash, a white-hot core, an
+  // expanding shockwave ring, a burst of glowing embers under gravity, and a
+  // short screen shake.
+  const EXPLODE_MS = 1000;
+  const EMBER_COLORS = ["#ffffff", "#fff7a0", "#ffe14d", "#ffb020", "#ff6a1f", "#ff3b30"];
+  function makeExplosion(sq) {
+    const [fr, fc] = cellOf(sq[0], sq[1]);
+    const cell = CELL[fr][fc];
+    const ppu = cell.ppu;
+    const ox = cell.cx, oy = cell.cy - ppu * 0.45; // burst from mid-body height
+    const parts = [];
+    const N = 42;
+    for (let i = 0; i < N; i++) {
+      const ang = Math.random() * Math.PI * 2;
+      const spd = ppu * (3.0 + Math.random() * 8.5);
+      const up = ppu * (2.5 + Math.random() * 5.0); // launch upward
+      parts.push({
+        x: ox + (Math.random() - 0.5) * ppu * 0.3,
+        y: oy + (Math.random() - 0.5) * ppu * 0.3,
+        vx: Math.cos(ang) * spd,
+        vy: Math.sin(ang) * spd - up,
+        size: ppu * (0.05 + Math.random() * 0.11),
+        color: EMBER_COLORS[(Math.random() * EMBER_COLORS.length) | 0],
+        streak: Math.random() < 0.55,
+      });
+    }
+    return { sq, t0: performance.now(), dur: EXPLODE_MS, ox, oy, fx: cell.cx, fy: cell.cy, ppu, parts };
+  }
+
+  // pass 1 (under the pieces): the panel itself flares neon yellow
   function drawGlowPanel(cell, k) {
     fillPoly(cell.quad, `rgba(238,255,0,${0.72 * k})`);
-    fillPoly(cell.quad, `rgba(255,255,200,${0.40 * k})`);
+    fillPoly(cell.quad, `rgba(255,255,200,${0.42 * k})`);
   }
-  function drawGlowBloom(cell, k) {
-    const flick = glowFlicker();
+
+  // pass 2 (over the pieces): flash + shockwave + embers
+  function drawExplosion(exp, now) {
+    const el = now - exp.t0;
+    const k = 1 - el / exp.dur;
+    if (k <= 0) return;
+    const t = el / 1000; // seconds
+    const ppu = exp.ppu;
+    const GRAV = ppu * 22;
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
-    const R = cell.ppu * 1.7;
-    const g = ctx.createRadialGradient(cell.cx, cell.cy - cell.ppu * 0.3, 1, cell.cx, cell.cy - cell.ppu * 0.3, R);
-    g.addColorStop(0, `rgba(255,255,200,${0.85 * k * flick})`);
-    g.addColorStop(0.35, `rgba(240,255,0,${0.55 * k * flick})`);
-    g.addColorStop(1, "rgba(240,255,0,0)");
-    ctx.fillStyle = g;
+
+    // white-hot core flash (very brief)
+    const fa = Math.max(0, 1 - el / 150);
+    if (fa > 0) {
+      const fg = ctx.createRadialGradient(exp.ox, exp.oy, 1, exp.ox, exp.oy, ppu * 2.4);
+      fg.addColorStop(0, `rgba(255,255,255,${0.95 * fa})`);
+      fg.addColorStop(0.4, `rgba(255,235,130,${0.7 * fa})`);
+      fg.addColorStop(1, "rgba(255,200,0,0)");
+      ctx.fillStyle = fg;
+      ctx.beginPath();
+      ctx.ellipse(exp.ox, exp.oy, ppu * 2.4, ppu * 1.8, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // lingering neon bloom
+    const flick = 0.7 + 0.3 * Math.sin(now / 35);
+    const bg = ctx.createRadialGradient(exp.ox, exp.oy, 1, exp.ox, exp.oy, ppu * 1.7);
+    bg.addColorStop(0, `rgba(255,255,200,${0.7 * k * flick})`);
+    bg.addColorStop(0.4, `rgba(240,255,0,${0.5 * k * flick})`);
+    bg.addColorStop(1, "rgba(240,255,0,0)");
+    ctx.fillStyle = bg;
     ctx.beginPath();
-    ctx.ellipse(cell.cx, cell.cy - cell.ppu * 0.3, R, R * 0.85, 0, 0, Math.PI * 2);
+    ctx.ellipse(exp.ox, exp.oy, ppu * 1.7, ppu * 1.4, 0, 0, Math.PI * 2);
     ctx.fill();
+
+    // expanding shockwave ring on the floor (foreshortened)
+    const rt = Math.min(1, el / 480);
+    if (rt < 1) {
+      const rr = ppu * (0.3 + rt * 2.4);
+      ctx.strokeStyle = `rgba(255,240,150,${(1 - rt) * 0.8})`;
+      ctx.lineWidth = Math.max(1.5, ppu * 0.16 * (1 - rt));
+      ctx.beginPath();
+      ctx.ellipse(exp.fx, exp.fy, rr, rr * 0.5, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // glowing embers, launched outward and falling under gravity
+    for (const p of exp.parts) {
+      const px = p.x + p.vx * t;
+      const py = p.y + p.vy * t + 0.5 * GRAV * t * t;
+      ctx.globalAlpha = Math.max(0, k);
+      ctx.strokeStyle = p.color;
+      ctx.fillStyle = p.color;
+      if (p.streak) {
+        ctx.lineWidth = p.size;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.lineTo(px - p.vx * 0.035, py - (p.vy + GRAV * t) * 0.035);
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.arc(px, py, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
     ctx.restore();
+  }
+
+  // brief screen shake while any explosion is fresh
+  function captureShake() {
+    let mx = 0, my = 0;
+    const now = performance.now();
+    for (const f of captureFlashes) {
+      const el = now - f.t0;
+      if (el < 280) {
+        const m = (1 - el / 280) * 9;
+        mx += (Math.random() - 0.5) * m;
+        my += (Math.random() - 0.5) * m;
+      }
+    }
+    return [mx, my];
   }
   function drawLabels() {
     ctx.fillStyle = "rgba(40,28,20,0.6)";
@@ -308,6 +405,11 @@
 
   function drawBoard() {
     ctx.clearRect(0, 0, VIEW_W, VIEW_H);
+
+    // screen shake on a fresh capture (transform restored at the end)
+    const [shx, shy] = captureShake();
+    ctx.save();
+    if (shx || shy) ctx.translate(shx, shy);
 
     const kingPos = C.inCheck(game, game.turn) ? C.findKing(game.board, game.turn) : null;
     const lm = game.lastMove;
@@ -400,17 +502,14 @@
       drawFigure(dragging.piece.t, dragging.piece.c, dragging.x, dragging.y + ppu * 0.25, ppu);
     }
 
-    // neon capture bloom — radiates over the pieces, then prune finished flares
+    // capture explosions — flash, shockwave and embers over the pieces
     if (captureFlashes.length) {
       const now = performance.now();
-      for (const f of captureFlashes) {
-        const k = 1 - (now - f.t0) / f.dur;
-        if (k <= 0) continue;
-        const [fr, fc] = cellOf(f.sq[0], f.sq[1]);
-        drawGlowBloom(CELL[fr][fc], k);
-      }
+      for (const f of captureFlashes) drawExplosion(f, now);
       captureFlashes = captureFlashes.filter((f) => now - f.t0 < f.dur);
     }
+
+    ctx.restore(); // end screen-shake transform
   }
 
   function loop() {
@@ -532,7 +631,7 @@
     }
     game = C.applyMove(game, move);
     if (willCapture) {
-      captureFlashes.push({ sq: [move.to[0], move.to[1]], t0: performance.now(), dur: 750 });
+      captureFlashes.push(makeExplosion([move.to[0], move.to[1]]));
     }
     invalidate();
     renderMoves();
