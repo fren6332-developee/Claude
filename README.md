@@ -63,6 +63,8 @@ After the next push the game is live at
   check and promotion (in both modes), plus a little fanfare on checkmate.
 - A **checkmate / draw screen** announces the result with the victorious hero
   and a one-tap rematch.
+- A **Moves** panel records the whole game in standard algebraic notation
+  (captures, castling, check and checkmate), and stays in sync with **Undo**.
 - Buttons: **New Game**, **Undo**, **Flip Board**, and a **♪ Music** toggle.
 
 ## 🧠 Opponent & difficulty

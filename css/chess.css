@@ -173,6 +173,35 @@ button.off { opacity: 0.6; }
   min-height: 44px;
 }
 
+.moves-box {
+  border-top: 1px solid var(--edge);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+.moves-box h2 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.moves {
+  max-height: 150px;
+  overflow-y: auto;
+  background: #1b1530;
+  border: 1px solid var(--edge);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-family: "DejaVu Sans Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.moves-empty { color: var(--muted); font-style: italic; }
+.move-row { display: flex; gap: 8px; }
+.move-no { color: var(--muted); min-width: 26px; text-align: right; }
+.move-row .ply { flex: 1 1 0; color: var(--ink); }
+.move-row .ply.current { color: var(--gold); font-weight: bold; }
+
 .legend {
   border-top: 1px solid var(--edge);
   padding-top: 12px;

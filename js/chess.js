@@ -47,6 +47,7 @@
   // ---- game state -------------------------------------------------------
   let game = C.newGame();
   let history = [];          // past states for undo
+  let sanList = [];          // algebraic notation of each ply, for the record
   let flipped = false;
   let selected = null;       // [r,c] of selected piece
   let legal = [];            // legal moves for the selected piece
@@ -438,7 +439,9 @@
   function finishMove(move, animate) {
     const piece = game.board[move.from[0]][move.from[1]];
     const willCapture = !!game.board[move.to[0]][move.to[1]] || move.enpassant;
+    const san = sanOf(game, move);
     history.push(C.cloneState(game));
+    sanList.push(san);
     if (animate) {
       anim = {
         piece,
@@ -450,8 +453,49 @@
     }
     game = C.applyMove(game, move);
     invalidate();
+    renderMoves();
     playMoveSound(move, willCapture);
     afterMove();
+  }
+
+  // Standard algebraic notation for a move, evaluated against the position
+  // *before* it is played (so disambiguation and capture detection are correct).
+  function sanOf(state, move) {
+    let s;
+    if (move.castle === "K") s = "O-O";
+    else if (move.castle === "Q") s = "O-O-O";
+    else {
+      const board = state.board;
+      const piece = board[move.from[0]][move.from[1]];
+      const capture = !!board[move.to[0]][move.to[1]] || move.enpassant;
+      const dest = C.algebraic(move.to);
+      if (piece.t === "p") {
+        s = (capture ? "abcdefgh"[move.from[1]] + "x" : "") + dest;
+        if (move.promotion) s += "=" + move.promotion.toUpperCase();
+      } else {
+        s = piece.t.toUpperCase();
+        // disambiguate when another identical piece can also reach the square
+        const others = C.legalMoves(state).filter((m) => {
+          const pp = state.board[m.from[0]][m.from[1]];
+          return pp && pp.t === piece.t && pp.c === piece.c &&
+            m.to[0] === move.to[0] && m.to[1] === move.to[1] &&
+            !(m.from[0] === move.from[0] && m.from[1] === move.from[1]);
+        });
+        if (others.length) {
+          const sameFile = others.some((m) => m.from[1] === move.from[1]);
+          const sameRank = others.some((m) => m.from[0] === move.from[0]);
+          if (!sameFile) s += "abcdefgh"[move.from[1]];
+          else if (!sameRank) s += String(8 - move.from[0]);
+          else s += "abcdefgh"[move.from[1]] + String(8 - move.from[0]);
+        }
+        if (capture) s += "x";
+        s += dest;
+      }
+    }
+    const next = C.applyMove(state, move);
+    if (C.status(next) === "checkmate") s += "#";
+    else if (C.inCheck(next, next.turn)) s += "+";
+    return s;
   }
 
   function playMoveSound(move, willCapture) {
@@ -544,6 +588,31 @@
       }
     }
     return score;
+  }
+
+  // ---- move list --------------------------------------------------------
+  const movesEl = document.getElementById("moves");
+  function renderMoves() {
+    if (!movesEl) return;
+    if (sanList.length === 0) {
+      movesEl.innerHTML = '<div class="moves-empty">No moves yet</div>';
+      return;
+    }
+    let html = "";
+    for (let i = 0; i < sanList.length; i += 2) {
+      const n = i / 2 + 1;
+      const w = sanList[i];
+      const b = sanList[i + 1] || "";
+      const last = i + 1 >= sanList.length - 1;
+      html += `<div class="move-row">
+        <span class="move-no">${n}.</span>
+        <span class="ply${i === sanList.length - 1 ? " current" : ""}">${w}</span>
+        <span class="ply${i + 1 === sanList.length - 1 ? " current" : ""}">${b}</span>
+      </div>`;
+      void last;
+    }
+    movesEl.innerHTML = html;
+    movesEl.scrollTop = movesEl.scrollHeight;
   }
 
   // ---- promotion picker -------------------------------------------------
@@ -695,6 +764,8 @@
   function newGame() {
     game = C.newGame();
     history = [];
+    sanList = [];
+    renderMoves();
     clearSelection();
     anim = null;
     pendingPromotion = null;
@@ -725,12 +796,15 @@
     let steps = mode === "ai" && !aiThinking ? 2 : 1;
     while (steps-- > 0 && history.length > 0) {
       game = history.pop();
+      sanList.pop();
     }
+    hideEndgame();
     gameOver = false;
     aiThinking = false;
     clearSelection();
     anim = null;
     invalidate();
+    renderMoves();
     updateStatus();
     updateCaptured();
   }
