@@ -75,7 +75,13 @@
     }
 
     function stop() {
-      if (player) { player.pause(); player.src = ""; player = null; }
+      if (player) {
+        // Null `player` before tearing down so the audio element's teardown
+        // 'error' event (from removing src) is ignored by the guard below.
+        const a = player; player = null;
+        a.pause();
+        try { a.removeAttribute("src"); a.load(); } catch (e) { /* noop */ }
+      }
       if (speechSupported) window.speechSynthesis.cancel();
       reset();
     }
@@ -108,7 +114,9 @@
       audio.addEventListener("playing", function () { setBtnState(btn, true); setToggle(true, "Playing…"); });
       audio.addEventListener("ended",  function () { if (currentBtn === btn) reset(); player = null; });
       audio.addEventListener("error", function () {
-        // File missing/unreachable — gracefully fall back to live narration.
+        // Ignore spurious errors raised while tearing this element down in stop().
+        if (player !== audio) return;
+        // File genuinely missing/unreachable — gracefully fall back to live narration.
         player = null;
         setToggle(true, "Narrating…");
         speak(fallbackText, btn);

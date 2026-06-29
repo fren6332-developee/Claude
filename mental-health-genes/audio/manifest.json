@@ -1,0 +1,115 @@
+{
+  "voice": "am_michael",
+  "engine": "Kokoro v1.0",
+  "speed": 0.94,
+  "genes": {
+    "CYP1A2": {
+      "file": "audio/CYP1A2.mp3",
+      "seconds": 60.0
+    },
+    "CYP2B6": {
+      "file": "audio/CYP2B6.mp3",
+      "seconds": 52.0
+    },
+    "CYP2C9": {
+      "file": "audio/CYP2C9.mp3",
+      "seconds": 49.0
+    },
+    "CYP2C19": {
+      "file": "audio/CYP2C19.mp3",
+      "seconds": 60.0
+    },
+    "CYP2D6": {
+      "file": "audio/CYP2D6.mp3",
+      "seconds": 58.2
+    },
+    "CYP3A4": {
+      "file": "audio/CYP3A4.mp3",
+      "seconds": 50.2
+    },
+    "CYP3A5": {
+      "file": "audio/CYP3A5.mp3",
+      "seconds": 54.5
+    },
+    "UGT1A4": {
+      "file": "audio/UGT1A4.mp3",
+      "seconds": 48.9
+    },
+    "UGT2B15": {
+      "file": "audio/UGT2B15.mp3",
+      "seconds": 45.3
+    },
+    "ABCB1": {
+      "file": "audio/ABCB1.mp3",
+      "seconds": 53.3
+    },
+    "ABCG2": {
+      "file": "audio/ABCG2.mp3",
+      "seconds": 47.5
+    },
+    "SLCO1B1": {
+      "file": "audio/SLCO1B1.mp3",
+      "seconds": 50.9
+    },
+    "SLC6A4": {
+      "file": "audio/SLC6A4.mp3",
+      "seconds": 54.3
+    },
+    "HTR2A": {
+      "file": "audio/HTR2A.mp3",
+      "seconds": 47.7
+    },
+    "HTR2C": {
+      "file": "audio/HTR2C.mp3",
+      "seconds": 45.0
+    },
+    "COMT": {
+      "file": "audio/COMT.mp3",
+      "seconds": 53.8
+    },
+    "DRD2": {
+      "file": "audio/DRD2.mp3",
+      "seconds": 46.8
+    },
+    "ADRA2A": {
+      "file": "audio/ADRA2A.mp3",
+      "seconds": 50.7
+    },
+    "BDNF": {
+      "file": "audio/BDNF.mp3",
+      "seconds": 53.0
+    },
+    "ANK3": {
+      "file": "audio/ANK3.mp3",
+      "seconds": 47.9
+    },
+    "CACNA1C": {
+      "file": "audio/CACNA1C.mp3",
+      "seconds": 51.5
+    },
+    "GRIK1": {
+      "file": "audio/GRIK1.mp3",
+      "seconds": 47.4
+    },
+    "OPRM1": {
+      "file": "audio/OPRM1.mp3",
+      "seconds": 53.1
+    },
+    "MC4R": {
+      "file": "audio/MC4R.mp3",
+      "seconds": 47.9
+    },
+    "MTHFR": {
+      "file": "audio/MTHFR.mp3",
+      "seconds": 55.1
+    },
+    "HLA-A": {
+      "file": "audio/HLA-A.mp3",
+      "seconds": 52.3
+    },
+    "HLA-B": {
+      "file": "audio/HLA-B.mp3",
+      "seconds": 54.1
+    }
+  }
+}
