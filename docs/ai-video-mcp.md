@@ -36,12 +36,33 @@ The `claude mcp add` CLI is for desktop. On iOS you add a hosted MCP as a
 paste `https://mcp.higgsfield.ai/mcp`, then complete the Higgsfield OAuth login.
 Once added to your account it follows you across the iOS and web apps.
 
+## Also a default: HeyGen (set up)
+
+[HeyGen MCP](https://www.heygen.com/model-context-protocol) is hosted (iOS-OK)
+and specializes in **avatar + synthetic-voice "talking head"** videos — scripting,
+avatar selection, voice, and rendering using your HeyGen plan.
+
+**Endpoint:** `https://mcp.heygen.com/mcp/v1/` · **Transport:** HTTP · **Auth:** OAuth
+
+### Desktop / Claude Code CLI
+
+```bash
+claude mcp add --transport http --scope user heygen https://mcp.heygen.com/mcp/v1/
+```
+
+### iOS / Claude app
+
+**Settings → Connectors → Add custom connector →** paste
+`https://mcp.heygen.com/mcp/v1/`, then complete the HeyGen OAuth login.
+
+> Use **Higgsfield** for general text/image-to-video across many models, and
+> **HeyGen** when you want a presenter/avatar speaking a script.
+
 ## Other hosted options (all iOS-friendly)
 
 | Server | Best for |
 |---|---|
 | [Runway connector](https://www.theslidefactory.com/post/generate-ai-videos-directly-in-claude-how-the-runway-mcp-changes-creative-production) | Polished image/video generation, official Runway models |
-| HeyGen MCP | Avatar + synthetic-voice "talking head" videos |
 | Pexo | Auto-routes each shot to the best model; full pipeline (music, lip-sync) |
 | Reap MCP | Clip/caption/dub existing videos (e.g. YouTube → shorts) |
 
@@ -50,5 +71,6 @@ Once added to your account it follows you across the iOS and web apps.
 | Server | Type | Works on iOS | Role |
 |---|---|---|---|
 | Higgsfield | Hosted (OAuth) | ✅ | **Default** — many models, generation |
-| Runway / HeyGen / Pexo / Reap | Hosted | ✅ | Specialized generation/editing |
+| HeyGen | Hosted (OAuth) | ✅ | **Default** — avatar / talking-head videos |
+| Runway / Pexo / Reap | Hosted | ✅ | Specialized generation/editing |
 | Palmier Pro | Local (macOS) | ❌ | Mac-only timeline editor |
