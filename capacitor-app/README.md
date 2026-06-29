@@ -36,11 +36,11 @@ npx cap add android       # optional, for Google Play
 # 4. Copy web assets + native config into the platforms
 npx cap sync
 
-# 5. Generate app icons & splash screens from the source icon
-#    (uses the app's existing icon; tweak as you like first)
+# 5. Generate app icons & splash screens from assets/icon.png (the 1024 master)
 npx @capacitor/assets generate --iconBackgroundColor '#6C63FF' \
-  --iconBackgroundColorDark '#6C63FF' \
-  --assetPath ../mental-health-genes/icons
+  --iconBackgroundColorDark '#6C63FF'
+#    (Pre-generated icon sets are also in ../mental-health-genes/store/icons/ if
+#     you'd rather place them by hand.)
 
 # 6. Open in the native IDE to run / archive / submit
 npx cap open ios          # → Xcode: set your Team, bundle id, then Product > Archive

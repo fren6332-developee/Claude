@@ -1,6 +1,6 @@
 /* NutriGene Mind service worker — network-first so updates are never stale,
    with a cache fallback for offline use. */
-const CACHE = "nutrigene-mind-v3";
+const CACHE = "nutrigene-mind-v4";
 const ASSETS = [
   "./",
   "./index.html",

@@ -1,0 +1,1 @@
+Adaptive icon background: solid color #6C63FF (or use a 108dp gradient). Foreground = ic_launcher_foreground.png.

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="NutriGene Mind">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6C63FF"/>
+      <stop offset="1" stop-color="#00B8A9"/>
+    </linearGradient>
+    <radialGradient id="hl" cx="28%" cy="22%" r="80%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Full-bleed background (no rounded corners — the OS applies the mask) -->
+  <rect width="512" height="512" fill="url(#g)"/>
+  <rect width="512" height="512" fill="url(#hl)"/>
+
+  <!-- Centered, enlarged DNA helix + nutrition leaf -->
+  <g transform="translate(256 262) scale(1.28) translate(-256 -256)">
+    <g stroke="#ffffff" stroke-width="20" stroke-linecap="round" fill="none">
+      <path d="M188 120 C 300 180, 300 332, 188 392"/>
+      <path d="M324 120 C 212 180, 212 332, 324 392"/>
+      <line x1="196" y1="158" x2="316" y2="158"/>
+      <line x1="220" y1="214" x2="292" y2="214"/>
+      <line x1="220" y1="298" x2="292" y2="298"/>
+      <line x1="196" y1="354" x2="316" y2="354"/>
+    </g>
+    <!-- leaf accent -->
+    <path d="M258 226 c 36 -36 92 -32 92 -32 s 4 56 -32 92 c -24 24 -54 22 -54 22 s -2 -30 22 -54 c 16 -16 38 -20 38 -20 -20 7 -44 18 -58 32 -11 11 -18 26 -21 41 -1 -18 5 -37 14 -50 z" fill="#FFE27A"/>
+  </g>
+</svg>
