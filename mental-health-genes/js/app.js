@@ -25,46 +25,36 @@
   let activeCategory = "all";
   let searchTerm = "";
 
-  /* ---------------- Audio narration ---------------- */
+  /* ---------------- Audio narration ----------------
+     Primary: fixed, studio-rendered MP3 per gene (warm, calm, confident male
+     voice — Kokoro "am_michael"). Fallback: the browser's Web Speech API if a
+     file can't be loaded (e.g., truly offline before the cache is warm).      */
   const Narrator = (function () {
-    const supported = "speechSynthesis" in window;
-    let chosenVoice = null;
+    const AUDIO_DIR = "audio/";
+    const speechSupported = "speechSynthesis" in window;
     let currentBtn = null;
+    let player = null;       // active HTMLAudioElement
+    let speechVoice = null;  // chosen fallback voice
 
-    // Preference order for a confident, calm, male English voice across platforms.
+    /* ---- fallback voice selection (Web Speech) ---- */
     const MALE_HINTS = [
       "Daniel", "Google UK English Male", "Microsoft Guy", "Microsoft David",
-      "Microsoft Mark", "Microsoft Ryan", "Alex", "Fred", "Rishi", "Aaron",
-      "Arthur", "male"
+      "Microsoft Mark", "Microsoft Ryan", "Alex", "Fred", "Rishi", "Arthur", "male"
     ];
-
     function pickVoice() {
-      if (!supported) return;
+      if (!speechSupported) return;
       const voices = window.speechSynthesis.getVoices();
       if (!voices.length) return;
       const en = voices.filter(v => /^en(-|_|$)/i.test(v.lang));
       const pool = en.length ? en : voices;
       for (const hint of MALE_HINTS) {
         const m = pool.find(v => v.name.toLowerCase().includes(hint.toLowerCase()));
-        if (m) { chosenVoice = m; return; }
+        if (m) { speechVoice = m; return; }
       }
-      // Fall back to a UK/US English voice; avoid obviously female-named voices.
       const femaleNames = ["female","samantha","victoria","karen","moira","tessa","zira","susan","fiona","serena","amelie"];
-      const notFemale = pool.find(v => !femaleNames.some(f => v.name.toLowerCase().includes(f)));
-      chosenVoice = notFemale || pool[0];
+      speechVoice = pool.find(v => !femaleNames.some(f => v.name.toLowerCase().includes(f))) || pool[0];
     }
-
-    if (supported) {
-      pickVoice();
-      window.speechSynthesis.onvoiceschanged = pickVoice;
-    }
-
-    function stop() {
-      if (!supported) return;
-      window.speechSynthesis.cancel();
-      if (currentBtn) { setBtnState(currentBtn, false); currentBtn = null; }
-      setToggle(false, supported ? "Audio ready" : "Audio unavailable");
-    }
+    if (speechSupported) { pickVoice(); window.speechSynthesis.onvoiceschanged = pickVoice; }
 
     function setBtnState(btn, playing) {
       if (!btn) return;
@@ -74,47 +64,62 @@
       if (lbl) lbl.textContent = playing ? "Stop narration" : "Listen — plain-language explanation";
       if (ic)  ic.textContent  = playing ? "⏹" : "🔊";
     }
-
-    function speak(text, btn) {
-      if (!supported) {
-        setToggle(false, "Audio unavailable on this device");
-        return;
-      }
-      // Toggle off if the same button is already playing.
-      if (currentBtn === btn && window.speechSynthesis.speaking) { stop(); return; }
-      window.speechSynthesis.cancel();
-
-      const u = new SpeechSynthesisUtterance(text);
-      if (chosenVoice) u.voice = chosenVoice;
-      u.lang = (chosenVoice && chosenVoice.lang) || "en-US";
-      u.rate  = 0.92;  // unhurried, calming
-      u.pitch = 0.92;  // slightly lower = confident, grounded
-      u.volume = 1;
-
-      u.onstart = function () {
-        currentBtn = btn; setBtnState(btn, true);
-        setToggle(true, "Speaking…");
-      };
-      u.onend = u.onerror = function () {
-        if (currentBtn === btn) currentBtn = null;
-        setBtnState(btn, false);
-        setToggle(false, "Audio ready");
-      };
-      window.speechSynthesis.speak(u);
-    }
-
     function setToggle(active, label) {
       if (!el.audioToggle) return;
       el.audioToggle.setAttribute("aria-pressed", active ? "true" : "false");
       if (el.audioLabel) el.audioLabel.textContent = label;
     }
-
-    if (el.audioToggle) {
-      el.audioToggle.addEventListener("click", stop);
-      setToggle(false, supported ? "Audio ready" : "Audio unavailable");
+    function reset() {
+      if (currentBtn) { setBtnState(currentBtn, false); currentBtn = null; }
+      setToggle(false, "Audio ready");
     }
 
-    return { speak, stop, supported };
+    function stop() {
+      if (player) { player.pause(); player.src = ""; player = null; }
+      if (speechSupported) window.speechSynthesis.cancel();
+      reset();
+    }
+
+    /* fallback: speak the text live */
+    function speak(text, btn) {
+      if (!speechSupported) { setToggle(false, "Audio unavailable on this device"); return; }
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      if (speechVoice) u.voice = speechVoice;
+      u.lang = (speechVoice && speechVoice.lang) || "en-US";
+      u.rate = 0.92; u.pitch = 0.92; u.volume = 1;
+      u.onstart = function () { currentBtn = btn; setBtnState(btn, true); setToggle(true, "Speaking…"); };
+      u.onend = u.onerror = function () { if (currentBtn === btn) reset(); };
+      window.speechSynthesis.speak(u);
+    }
+
+    /* primary entry point: play the fixed MP3, fall back to speech on error */
+    function play(symbol, fallbackText, btn) {
+      // Toggle off if this same button is already the active one.
+      const isActive = currentBtn === btn && (player || (speechSupported && window.speechSynthesis.speaking));
+      stop();
+      if (isActive) return;
+
+      const audio = new Audio(AUDIO_DIR + encodeURIComponent(symbol) + ".mp3");
+      audio.preload = "auto";
+      player = audio;
+      currentBtn = btn;
+
+      audio.addEventListener("playing", function () { setBtnState(btn, true); setToggle(true, "Playing…"); });
+      audio.addEventListener("ended",  function () { if (currentBtn === btn) reset(); player = null; });
+      audio.addEventListener("error", function () {
+        // File missing/unreachable — gracefully fall back to live narration.
+        player = null;
+        setToggle(true, "Narrating…");
+        speak(fallbackText, btn);
+      });
+      const p = audio.play();
+      if (p && p.catch) p.catch(function () { /* autoplay/error handled by 'error' */ });
+    }
+
+    if (el.audioToggle) { el.audioToggle.addEventListener("click", stop); setToggle(false, "Audio ready"); }
+
+    return { play, speak, stop };
   })();
 
   /* ---------------- Helpers ---------------- */
@@ -295,7 +300,7 @@
 
     document.getElementById("backBtn").addEventListener("click", showHome);
     document.getElementById("listenBtn").addEventListener("click", function () {
-      Narrator.speak(buildNarration(gene), this);
+      Narrator.play(gene.symbol, buildNarration(gene), this);
     });
 
     el.home.hidden = true;

@@ -1,6 +1,6 @@
 /* NutriGene Mind service worker — network-first so updates are never stale,
    with a cache fallback for offline use. */
-const CACHE = "nutrigene-mind-v1";
+const CACHE = "nutrigene-mind-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -8,8 +8,11 @@ const ASSETS = [
   "./js/data.js",
   "./js/app.js",
   "./manifest.webmanifest",
-  "./icons/icon.svg"
+  "./icons/icon.svg",
+  "./audio/manifest.json"
 ];
+// Narration MP3s (audio/<SYMBOL>.mp3) are cached on first play by the
+// network-first fetch handler below, so they work offline thereafter.
 
 self.addEventListener("install", (e) => {
   self.skipWaiting();

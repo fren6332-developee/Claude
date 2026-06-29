@@ -31,15 +31,27 @@ other/safety).
 
 ## Audio narration
 
-The "Listen" feature uses the **Web Speech API** built into modern browsers, so
-no audio files are bundled and nothing is sent to a server. The app prefers a
-male English voice and lowers the rate and pitch slightly for a calm, grounded
-delivery. Available voices vary by device/browser; if a device has no suitable
-voice, the button reports "Audio unavailable."
+Each gene has a **fixed, studio-rendered MP3** narration in `audio/<SYMBOL>.mp3`,
+spoken in a **warm, calm, confident male voice**. These sound identical on every
+device — no dependence on whatever voices a phone or browser happens to have.
 
-> To ship fixed, studio-style narration instead of on-device TTS, pre-render an
-> MP3 per gene from the `plain` text in `js/data.js` and swap the `Narrator`
-> module to play the audio files. The script text is already written for it.
+The "Listen" button plays the MP3. If a file can't be loaded (e.g., truly
+offline before the cache is warm), the app gracefully **falls back** to the
+browser's Web Speech API reading the same script.
+
+**How the MP3s were generated** (re-runnable): the build script
+`scripts/generate_audio.py` synthesizes each narration with **Kokoro v1.0**
+(neural TTS, voice `am_michael`) and encodes to MP3. The spoken script is the
+gene's `plain` explanation plus its population note and a short disclaimer — the
+exact text in `js/data.js`. To regenerate after editing content:
+
+```bash
+pip install kokoro-onnx soundfile imageio-ffmpeg
+# download the model + voices (see scripts/generate_audio.py header), then:
+python scripts/generate_audio.py
+```
+
+`audio/manifest.json` records the voice, engine, and duration of each clip.
 
 ## Evidence base & cross-referencing
 
@@ -78,5 +90,7 @@ mental-health-genes/
 ├── js/app.js               # rendering, search/filter, audio narration
 ├── manifest.webmanifest    # PWA manifest
 ├── sw.js                   # network-first service worker (offline support)
+├── audio/                  # fixed MP3 narration per gene + manifest.json
+├── scripts/generate_audio.py  # re-render the narration MP3s
 └── icons/                  # app icons
 ```

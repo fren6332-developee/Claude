@@ -309,7 +309,7 @@ const GENES = [
     symbol: "SLC6A4", name: "Serotonin Transporter (5-HTT / SERT)", locus: "17q11.2",
     category: "serotonergic",
     population: "The 'short' (S) version of the 5-HTTLPR promoter is common — roughly 40% of people carry at least one short allele — and is linked to SSRI response and stress sensitivity.",
-    plain: "SLC6A4 builds the serotonin transporter — the exact target that SSRImedicines block. Serotonin is a 'feel-steady' chemical messenger, and this transporter recycles it back into nerve cells. Some people have a version that recycles serotonin more aggressively, which can affect mood and how well an SSRI works. It's one of the most studied genes in all of psychiatry.",
+    plain: "SLC6A4 builds the serotonin transporter — the exact target that SSRI medicines block. Serotonin is a 'feel-steady' chemical messenger, and this transporter recycles it back into nerve cells. Some people have a version that recycles serotonin more aggressively, which can affect mood and how well an SSRI works. It's one of the most studied genes in all of psychiatry.",
     illnesses: ["Major depressive disorder", "Anxiety disorders", "PTSD", "OCD", "Heightened stress reactivity"],
     drugs: [
       { name: "Sertraline", cls: "SSRI antidepressant", note: "Directly blocks the SERT this gene builds; short-allele carriers may respond less or slower." },
