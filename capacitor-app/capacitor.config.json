@@ -1,0 +1,11 @@
+{
+  "appId": "com.nutrigenemind.app",
+  "appName": "NutriGene Mind",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "contentInset": "always"
+  }
+}
