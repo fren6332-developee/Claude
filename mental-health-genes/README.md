@@ -8,6 +8,26 @@ gene to the medicines it affects and the **foods that support that pathway**.
 It's a static Progressive Web App — no build step, no server required, and it
 works offline once loaded.
 
+## Safety & App Store readiness
+
+To support distribution as a health/medical app (e.g., Apple App Store
+Guidelines 1.4.1, 4.2, 5.1), the app includes:
+
+- A **one-time acknowledgment gate** (educational-only, not medical advice, talk
+  to your prescriber, crisis line) shown before first use.
+- A **caution banner, drug-safety note, and per-gene source line** on every gene page.
+- A **Safety, Sources & Methodology** screen (header "⚕️ Safety & Sources") with a
+  full medical disclaimer, **crisis resources** (988, Crisis Text Line, 911, Find A
+  Helpline), the build **methodology**, cited **references** (APA, NIMH, ISNPR, Food
+  & Mood Centre, ASN, GBHI, plus CPIC, PharmGKB, NIH GTR, FDA), a **privacy**
+  statement (no data collected), and an **honest clinical-review status**.
+
+> **Clinical review is marked "pending" on purpose.** The app does not claim a
+> clinician has signed off, because none has yet. When a licensed reviewer
+> verifies the content, fill in `APP_INFO.reviewerSignoff` in `js/data.js`
+> (reviewer name, credentials, date) and the status flips to "independently
+> reviewed." Do not ship a "reviewed" claim before that is true.
+
 ## What's inside each gene page
 
 For all 27 genes the app shows:

@@ -14,6 +14,7 @@
   const el = {
     home:   document.getElementById("homeView"),
     detail: document.getElementById("detailView"),
+    about:  document.getElementById("aboutView"),
     grid:   document.getElementById("geneGrid"),
     search: document.getElementById("searchInput"),
     filter: document.getElementById("filterBar"),
@@ -240,6 +241,13 @@
     el.detail.innerHTML = `
       <button class="back-btn" id="backBtn" type="button">← All genes</button>
 
+      <div class="caution-banner">
+        <span class="cb-ic" aria-hidden="true">⚕️</span>
+        <span><strong>Educational reference — not medical advice.</strong> Never start,
+        stop, or change a medication, supplement, or diet based on this page. Talk to your
+        prescriber, and remember a genetic result must be interpreted by a clinician.</span>
+      </div>
+
       <div class="detail-head" style="--cat-color:${color}">
         <div class="row1">
           <h2>${esc(gene.symbol)}</h2>
@@ -274,6 +282,9 @@
       <div class="section">
         <p class="section-eyebrow">💊 Most-prescribed related medications</p>
         <h3>Top 3 drugs &amp; how this gene affects them</h3>
+        <div class="drug-safety-note">⚠️ Listed for education only. Which medication is
+        right for you — and at what dose — is decided by a licensed clinician based on your
+        full history. This is not a recommendation to take, avoid, or change any drug.</div>
         <div class="drug-list">${drugItems}</div>
       </div>
 
@@ -291,9 +302,12 @@
       </div>
 
       <div class="mimic-card">
-        <p class="section-eyebrow">✨ Foods that mimic drug efficacy</p>
+        <p class="section-eyebrow">✨ Foods that support the same pathway</p>
         <h3>Working the same pathway, gently</h3>
         <p>${esc(gene.foodMimic)}</p>
+        <p style="margin-top:12px;font-size:0.9rem;opacity:0.95;"><strong>To be clear:</strong>
+        “mimic” means a food nudges the <em>same biological pathway</em> — it does <strong>not</strong>
+        match a drug's strength and is <strong>not</strong> a substitute for medication or a treatment claim.</p>
       </div>
 
       <div class="consensus-note">
@@ -304,6 +318,8 @@
         Brain Health Institute. These are <em>complements</em> to care — never a replacement for
         prescribed medication or your clinician's advice.
       </div>
+
+      <p class="detail-source-note">${esc(window.PER_GENE_SOURCE || "")}</p>
     `;
 
     document.getElementById("backBtn").addEventListener("click", showHome);
@@ -312,6 +328,7 @@
     });
 
     el.home.hidden = true;
+    el.about.hidden = true;
     el.detail.hidden = false;
     window.scrollTo({ top: 0, behavior: "smooth" });
     el.detail.querySelector(".back-btn").focus();
@@ -335,9 +352,128 @@
   function showHome() {
     Narrator.stop();
     el.detail.hidden = true;
+    el.about.hidden = true;
     el.home.hidden = false;
     el.detail.innerHTML = "";
+    el.about.innerHTML = "";
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------------- Safety / Sources view ---------------- */
+  function showAbout() {
+    Narrator.stop();
+    const info = window.APP_INFO || {};
+    const method = window.METHODOLOGY || [];
+    const refs = window.REFERENCES || [];
+    const crisis = window.CRISIS_RESOURCES || [];
+    const rv = info.review || {};
+    const signoff = info.reviewerSignoff || {};
+
+    const reviewLine = (signoff && signoff.reviewer)
+      ? `Independently reviewed by ${esc(signoff.reviewer)}${signoff.credentials ? ", " + esc(signoff.credentials) : ""}${signoff.date ? " (" + esc(signoff.date) + ")" : ""}.`
+      : esc(rv.detail || "");
+
+    const crisisItems = crisis.map(c => `
+      <li>
+        <div class="cr-name">${esc(c.name)} <span style="color:#999">· ${esc(c.region)}</span></div>
+        <div class="cr-contact">${esc(c.contact)}</div>
+        ${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.url.replace(/^https?:\/\//,""))}</a>` : ""}
+      </li>`).join("");
+
+    const methodItems = method.map(m => `<li>${esc(m)}</li>`).join("");
+
+    const refGroups = refs.map(g => `
+      <div class="ref-group">
+        <h4>${esc(g.group)}</h4>
+        <ul class="ref-list">
+          ${g.items.map(it => `<li><span class="ref-name">${esc(it.name)}</span><br>
+            <span class="ref-note">${esc(it.note)}</span></li>`).join("")}
+        </ul>
+      </div>`).join("");
+
+    el.about.innerHTML = `
+      <button class="back-btn" id="aboutBack" type="button">← All genes</button>
+
+      <div class="about-card">
+        <h2>Safety, Sources &amp; Methodology</h2>
+        <p style="color:var(--ink-soft)">${esc(info.name || "NutriGene Mind")} ·
+        v${esc(info.version || "")} · Updated ${esc(info.updated || "")}</p>
+      </div>
+
+      <div class="about-card">
+        <h3>⚕️ Medical disclaimer</h3>
+        <p><strong>This app provides educational information only. It is not medical advice,
+        a diagnosis, or a treatment, and it is not a medical device.</strong></p>
+        <ul>
+          <li>It does not replace your physician, pharmacist, a genetic test, or the official Genomind report.</li>
+          <li>Never start, stop, or change any medication, supplement, or diet based on this app — consult your prescriber first.</li>
+          <li>Drug listings are educational; medication and dosing decisions belong to a licensed clinician.</li>
+          <li>“Foods that support the same pathway” are complements, not substitutes for medication, and are not treatment claims.</li>
+          <li>Genetic and pharmacogenomic results must be interpreted by a qualified professional in the context of your health.</li>
+        </ul>
+      </div>
+
+      <div class="crisis-box">
+        <h3>🆘 If you are in crisis</h3>
+        <p>If you or someone else may be in danger, or you are thinking about suicide or self-harm,
+        get help now — you deserve support.</p>
+        <ul class="crisis-list">${crisisItems}</ul>
+      </div>
+
+      <div class="about-card">
+        <h3>🔬 How this app is built (methodology)</h3>
+        <ul>${methodItems}</ul>
+      </div>
+
+      <div class="about-card">
+        <h3>🩺 Clinical review status</h3>
+        <span class="review-badge">${esc(rv.label || "Pending independent clinical review")}</span>
+        <p>${reviewLine}</p>
+      </div>
+
+      <div class="about-card">
+        <h3>📚 Sources &amp; references</h3>
+        ${refGroups}
+      </div>
+
+      <div class="about-card">
+        <h3>🔒 Your privacy</h3>
+        <p>NutriGene Mind runs entirely on your device. It does <strong>not</strong> collect,
+        store, or transmit any personal information, health data, or analytics. There are no
+        accounts and no tracking. Audio narration plays from files bundled with the app.</p>
+      </div>
+    `;
+
+    document.getElementById("aboutBack").addEventListener("click", showHome);
+    el.home.hidden = true;
+    el.detail.hidden = true;
+    el.about.hidden = false;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    el.about.querySelector(".back-btn").focus();
+  }
+
+  /* ---------------- First-run acknowledgment gate ---------------- */
+  const ACK_KEY = "nutrigene_ack_v1";
+  function initAckGate() {
+    const gate = document.getElementById("ackGate");
+    if (!gate) return;
+    let acknowledged = false;
+    try { acknowledged = localStorage.getItem(ACK_KEY) === "1"; } catch (e) {}
+    function dismiss() {
+      try { localStorage.setItem(ACK_KEY, "1"); } catch (e) {}
+      gate.hidden = true;
+      document.body.style.overflow = "";
+    }
+    if (!acknowledged) {
+      gate.hidden = false;
+      document.body.style.overflow = "hidden";
+      const agree = document.getElementById("ackAgree");
+      agree.addEventListener("click", dismiss);
+      document.getElementById("ackSources").addEventListener("click", function () {
+        dismiss(); showAbout();
+      });
+      agree.focus();
+    }
   }
 
   /* ---------------- Search ---------------- */
@@ -353,6 +489,13 @@
   /* ---------------- Init ---------------- */
   buildFilters();
   renderGrid();
+  initAckGate();
+
+  // Safety & Sources entry points.
+  const safetyBtn = document.getElementById("safetyBtn");
+  if (safetyBtn) safetyBtn.addEventListener("click", showAbout);
+  const footerSafety = document.getElementById("footerSafetyLink");
+  if (footerSafety) footerSafety.addEventListener("click", showAbout);
 
   // Register service worker for offline / installable use.
   if ("serviceWorker" in navigator) {

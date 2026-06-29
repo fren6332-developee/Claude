@@ -14,6 +14,30 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <!-- ===================== FIRST-RUN ACKNOWLEDGMENT GATE ===================== -->
+  <div id="ackGate" class="ack-overlay" role="dialog" aria-modal="true"
+       aria-labelledby="ackTitle" aria-describedby="ackBody" hidden>
+    <div class="ack-card">
+      <div class="ack-icon" aria-hidden="true">⚕️</div>
+      <h2 id="ackTitle">Before you begin — please read</h2>
+      <div id="ackBody" class="ack-body">
+        <p><strong>NutriGene Mind is educational information only. It is not medical
+        advice, not a diagnosis, and not a treatment.</strong></p>
+        <ul>
+          <li>It does <strong>not</strong> replace your doctor, pharmacist, genetic test, or the official Genomind report.</li>
+          <li><strong>Never start, stop, or change any medication, supplement, or diet</strong> based on this app — talk to your prescriber first.</li>
+          <li>Foods here <em>support</em> the same biological pathways as some drugs; they do <strong>not</strong> replace medication and are not treatment claims.</li>
+          <li>Content is compiled from cited sources and is <strong>pending independent clinical review</strong>.</li>
+        </ul>
+        <p class="ack-crisis">In crisis or thinking about harming yourself? In the U.S.,
+        call or text <strong>988</strong> (Suicide &amp; Crisis Lifeline), or call
+        <strong>911</strong> for emergencies.</p>
+      </div>
+      <button id="ackAgree" class="ack-btn" type="button">I understand &amp; agree</button>
+      <button id="ackSources" class="ack-link" type="button">Read full Safety &amp; Sources first</button>
+    </div>
+  </div>
+
   <header class="site-header">
     <div class="header-inner">
       <div class="brand">
@@ -23,10 +47,15 @@
           <p class="tagline">How your genes, your medicines, and your food work together</p>
         </div>
       </div>
-      <button id="audioToggle" class="audio-pill" type="button" aria-pressed="false" title="Stop narration">
-        <span class="audio-dot" aria-hidden="true"></span>
-        <span id="audioLabel">Audio ready</span>
-      </button>
+      <div class="header-actions">
+        <button id="safetyBtn" class="safety-pill" type="button" title="Safety, sources & methodology">
+          <span aria-hidden="true">⚕️</span><span class="safety-pill-label">Safety &amp; Sources</span>
+        </button>
+        <button id="audioToggle" class="audio-pill" type="button" aria-pressed="false" title="Stop narration">
+          <span class="audio-dot" aria-hidden="true"></span>
+          <span id="audioLabel">Audio ready</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -54,18 +83,25 @@
 
     <!-- ===================== DETAIL VIEW ===================== -->
     <section id="detailView" class="view" hidden></section>
+
+    <!-- ===================== SAFETY / ABOUT VIEW ===================== -->
+    <section id="aboutView" class="view" hidden></section>
   </main>
 
   <footer class="site-footer">
     <p class="footer-disclaimer">
-      <strong>Educational information only — not medical advice.</strong>
-      Foods support, but never replace, prescribed treatment. Always work with your
-      clinician before changing medications or diet. Content is cross-referenced with the
+      <strong>Educational information only — not medical advice, diagnosis, or treatment.</strong>
+      Foods support, but never replace, prescribed treatment. Never start, stop, or change a
+      medication, supplement, or diet without your clinician. Content is cross-referenced with the
       American Psychiatric Association, National Institute of Mental Health, International
       Society for Nutritional Psychiatry Research, the Food &amp; Mood Centre, the American
-      Society for Nutrition, and the Global Brain Health Institute.
+      Society for Nutrition, and the Global Brain Health Institute, and is
+      <strong>pending independent clinical review</strong>.
     </p>
-    <p class="footer-meta">Gene list: Genomind Pharmacogenetic Report · NIH GTR000523653 (Oct 2025).</p>
+    <p class="footer-meta">
+      Gene list: Genomind Pharmacogenetic Report · NIH GTR000523653 (Oct 2025). ·
+      <button id="footerSafetyLink" class="link-btn" type="button">Safety, Sources &amp; Methodology</button>
+    </p>
   </footer>
 
   <script src="js/data.js"></script>

@@ -628,10 +628,90 @@ const GENES = [
   }
 ];
 
+/* ============================================================
+   App metadata, safety, sourcing & review status
+   Added to support App Store medical-app review (Guidelines 1.4.1,
+   4.2, 5.1) and to give users transparent sourcing.
+   ============================================================ */
+
+const APP_INFO = {
+  name: "NutriGene Mind",
+  version: "1.1.0",
+  updated: "June 2026",
+  // Honest editorial standing. We do NOT claim a clinician has signed off
+  // unless/until one actually has — falsely claiming review would itself be
+  // grounds for rejection and a consumer-protection problem.
+  review: {
+    state: "pending",
+    label: "Pending independent clinical review",
+    detail:
+      "This content was compiled from the published guidance and consensus " +
+      "statements of the organizations listed under Sources, and cross-checked " +
+      "for agreement among them. It has NOT yet been independently verified by a " +
+      "licensed clinician for this application. A board-certified psychiatrist or " +
+      "clinical pharmacist review is planned before any clinical or commercial use. " +
+      "Until that sign-off is published here, treat every item as general education only."
+  },
+  reviewerSignoff: {
+    // Filled in only when a named, credentialed clinician actually reviews.
+    reviewer: null,      // e.g., "Jane Smith, MD, Psychiatry"
+    credentials: null,
+    date: null
+  }
+};
+
+/* Plain-English methodology shown on the Safety & Sources screen. */
+const METHODOLOGY = [
+  "Gene list: taken verbatim from the Genomind Pharmacogenetic Report as cataloged in the NIH Genetic Testing Registry (GTR000523653, last updated October 2025).",
+  "Gene function & drug relationships: described to be consistent with the Clinical Pharmacogenetics Implementation Consortium (CPIC) guidelines and PharmGKB, the primary clinical pharmacogenomics knowledge bases.",
+  "Mental-health associations: framed to align with the American Psychiatric Association (APA) and the National Institute of Mental Health (NIMH).",
+  "Nutrition guidance: reflects WHOLE-DIET patterns (e.g., Mediterranean / 'SMILES'-style diets) with the strongest evidence, as summarized by the International Society for Nutritional Psychiatry Research (ISNPR), the Food & Mood Centre (Deakin University), and the American Society for Nutrition (ASN). Where societies differ, we present the conservative, consensus position and label emerging items as such.",
+  "Foods are presented as COMPLEMENTS that influence the same biological pathway — never as replacements for medication, and never as treatment claims.",
+  "Population-frequency figures are approximate ranges that vary by ancestry and study; they are for education, not personal risk estimation."
+];
+
+/* Authoritative sources (real, verifiable organizations & key literature). */
+const REFERENCES = [
+  { group: "Cross-referenced societies", items: [
+    { name: "American Psychiatric Association (APA)", note: "Practice guidelines & resources — psychiatry.org" },
+    { name: "National Institute of Mental Health (NIMH)", note: "Mental-health topics & statistics — nimh.nih.gov" },
+    { name: "International Society for Nutritional Psychiatry Research (ISNPR)", note: "Position statement: Sarris J, et al. 'Nutritional medicine as mainstream in psychiatry.' Lancet Psychiatry, 2015." },
+    { name: "Food & Mood Centre, Deakin University", note: "SMILES trial: Jacka FN, et al. 'A randomised controlled trial of dietary improvement for adults with major depression.' BMC Medicine, 2017." },
+    { name: "American Society for Nutrition (ASN)", note: "Advances in Nutrition & The American Journal of Clinical Nutrition — nutrition.org" },
+    { name: "Global Brain Health Institute (GBHI)", note: "Brain-health research & education — gbhi.org" }
+  ]},
+  { group: "Pharmacogenomics knowledge bases", items: [
+    { name: "Clinical Pharmacogenetics Implementation Consortium (CPIC)", note: "Peer-reviewed gene–drug dosing guidelines (e.g., CYP2D6, CYP2C19, SLCO1B1, HLA-A, HLA-B) — cpicpgx.org" },
+    { name: "PharmGKB", note: "NIH-funded pharmacogenomics knowledge resource — pharmgkb.org" },
+    { name: "NIH Genetic Testing Registry (GTR)", note: "Panel/gene reference — ncbi.nlm.nih.gov/gtr" },
+    { name: "U.S. FDA — Table of Pharmacogenomic Associations", note: "Drug-label pharmacogenomic information — fda.gov" }
+  ]},
+  { group: "Panel source", items: [
+    { name: "Genomind Pharmacogenetic Report", note: "Source of the 27-gene list (report tier/composition may vary by revision)." }
+  ]}
+];
+
+/* Crisis resources — required-quality content for a mental-health app. */
+const CRISIS_RESOURCES = [
+  { region: "US", name: "988 Suicide & Crisis Lifeline", contact: "Call or text 988", url: "https://988lifeline.org" },
+  { region: "US", name: "Crisis Text Line", contact: "Text HOME to 741741", url: "https://www.crisistextline.org" },
+  { region: "US", name: "Emergency services", contact: "Call 911 if you or someone else is in immediate danger", url: null },
+  { region: "International", name: "Find A Helpline", contact: "findahelpline.com — local crisis lines worldwide", url: "https://findahelpline.com" }
+];
+
+/* One accurate sourcing line shown on every gene page. */
+const PER_GENE_SOURCE =
+  "Sources: gene function and gene–drug relationships are described to be consistent with CPIC guidelines, PharmGKB, and the NIH Genetic Testing Registry; mental-health associations align with the APA and NIMH; nutrition guidance reflects whole-diet evidence summarized by the ISNPR, the Food & Mood Centre, and the American Society for Nutrition. See “Safety & Sources” for full references. This is general education, not a personalized recommendation.";
+
 /* Expose for the app */
 if (typeof window !== "undefined") {
   window.GENE_DATA = GENES;
   window.GENE_CATEGORIES = GENE_CATEGORIES;
   window.FOOD_ACTIONS = FOOD_ACTIONS;
   window.CONSENSUS_BODIES = CONSENSUS_BODIES;
+  window.APP_INFO = APP_INFO;
+  window.METHODOLOGY = METHODOLOGY;
+  window.REFERENCES = REFERENCES;
+  window.CRISIS_RESOURCES = CRISIS_RESOURCES;
+  window.PER_GENE_SOURCE = PER_GENE_SOURCE;
 }
