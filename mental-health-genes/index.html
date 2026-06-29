@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6C63FF" />
+  <meta name="description" content="NutriGene Mind — an educational guide to 27 mental-health genes, the medications they affect, and the foods that support each pathway. Cross-referenced with APA, NIMH, ISNPR, the Food & Mood Centre, ASN, and GBHI." />
+  <title>NutriGene Mind · Genes, Mood & Food</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">🧬</span>
+        <div class="brand-text">
+          <h1>NutriGene&nbsp;Mind</h1>
+          <p class="tagline">How your genes, your medicines, and your food work together</p>
+        </div>
+      </div>
+      <button id="audioToggle" class="audio-pill" type="button" aria-pressed="false" title="Stop narration">
+        <span class="audio-dot" aria-hidden="true"></span>
+        <span id="audioLabel">Audio ready</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===================== HOME / LIST VIEW ===================== -->
+    <section id="homeView" class="view">
+      <div class="hero">
+        <h2>27 mental-health genes, explained simply</h2>
+        <p class="hero-sub">
+          Tap any gene to hear a calm, plain-language explanation, see the medicines it
+          affects, and discover five foods that <strong>amplify</strong>, <strong>modulate</strong>,
+          or <strong>protect</strong> that pathway.
+        </p>
+        <div class="search-wrap">
+          <input id="searchInput" type="search" placeholder="Search a gene, illness, drug, or food…"
+                 aria-label="Search genes, illnesses, drugs, or foods" autocomplete="off" />
+          <span class="search-icon" aria-hidden="true">🔍</span>
+        </div>
+        <div id="filterBar" class="filter-bar" role="group" aria-label="Filter by pathway"></div>
+      </div>
+
+      <div id="geneGrid" class="gene-grid" aria-live="polite"></div>
+      <p id="noResults" class="no-results" hidden>No genes match your search. Try another term.</p>
+    </section>
+
+    <!-- ===================== DETAIL VIEW ===================== -->
+    <section id="detailView" class="view" hidden></section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-disclaimer">
+      <strong>Educational information only — not medical advice.</strong>
+      Foods support, but never replace, prescribed treatment. Always work with your
+      clinician before changing medications or diet. Content is cross-referenced with the
+      American Psychiatric Association, National Institute of Mental Health, International
+      Society for Nutritional Psychiatry Research, the Food &amp; Mood Centre, the American
+      Society for Nutrition, and the Global Brain Health Institute.
+    </p>
+    <p class="footer-meta">Gene list: Genomind Pharmacogenetic Report · NIH GTR000523653 (Oct 2025).</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
