@@ -10,6 +10,10 @@ on:
     branches:
       - main
       - claude/zelda-2d-game-prototype-e66bni
+      # Live-preview deploy for the NutriGene Mind app (served at
+      # /Claude/mental-health-genes/). The whole repo is uploaded, so the
+      # game at the site root is unaffected.
+      - claude/mental-health-genes-nutrition-gr15xb
   workflow_dispatch:
 
 permissions:
