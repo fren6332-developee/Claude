@@ -1,6 +1,6 @@
 {
-  "name": "NutriGene Mind — Genes, Mood & Food",
-  "short_name": "NutriGene Mind",
+  "name": "GeneNutrition Atlas — Genes, Mood & Food",
+  "short_name": "Gene Atlas",
   "description": "An educational guide to 27 mental-health genes, the medications they affect, and the foods that support each pathway.",
   "start_url": "./",
   "scope": "./",

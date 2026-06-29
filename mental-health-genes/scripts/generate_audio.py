@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Regenerate the fixed narration MP3s for NutriGene Mind.
+Regenerate the fixed narration MP3s for GeneNutrition Atlas.
 
 Each gene's narration = its `plain` explanation + population note + a short
 disclaimer (the same text the app shows). Audio is synthesized with Kokoro v1.0

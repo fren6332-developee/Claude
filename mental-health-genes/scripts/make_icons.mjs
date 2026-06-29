@@ -58,7 +58,7 @@ const iosImages = [
   ['ios-marketing','1024x1024','1x',1024]
 ].map(([idiom,size,scale,px]) => ({ idiom, size, scale, filename:`AppIcon-${px}.png` }));
 writeFileSync(join(dirs.ios, 'Contents.json'),
-  JSON.stringify({ images: iosImages, info:{ version:1, author:'nutrigene' } }, null, 2));
+  JSON.stringify({ images: iosImages, info:{ version:1, author:'genenutrition' } }, null, 2));
 
 /* ---------- Android mipmaps ---------- */
 const androidDens = { mdpi:48, hdpi:72, xhdpi:96, xxhdpi:144, xxxhdpi:192 };

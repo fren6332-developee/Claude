@@ -1,6 +1,6 @@
-# NutriGene Mind — native app wrapper (Capacitor)
+# GeneNutrition Atlas — native app wrapper (Capacitor)
 
-This folder turns the NutriGene Mind web app (in `../mental-health-genes/`) into a
+This folder turns the GeneNutrition Atlas web app (in `../mental-health-genes/`) into a
 native **iOS** and **Android** app using [Capacitor](https://capacitorjs.com), so
 it can be submitted to the App Store and Google Play.
 
@@ -38,7 +38,8 @@ npx cap sync
 
 # 5. Generate app icons & splash screens from assets/icon.png (the 1024 master)
 npx @capacitor/assets generate --iconBackgroundColor '#6C63FF' \
-  --iconBackgroundColorDark '#6C63FF'
+  --iconBackgroundColorDark '#6C63FF' \
+  --splashBackgroundColor '#6C63FF' --splashBackgroundColorDark '#0e1018'
 #    (Pre-generated icon sets are also in ../mental-health-genes/store/icons/ if
 #     you'd rather place them by hand.)
 
@@ -53,10 +54,10 @@ npx cap open android      # → Android Studio
 ## Configuration
 
 `capacitor.config.json`:
-- `appId`: **`com.nutrigenemind.app`** — change to a reverse-DNS id you control
+- `appId`: **`com.genenutritionatlas.app`** — change to a reverse-DNS id you control
   before your first submission (it can't be changed after the app is created in
   App Store Connect).
-- `appName`: **NutriGene Mind**
+- `appName`: **GeneNutrition Atlas**
 - `webDir`: **www** (populated by `npm run copy:web`)
 
 ## App Store / Play submission

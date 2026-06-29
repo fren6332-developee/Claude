@@ -1,4 +1,4 @@
-# NutriGene Mind — App Preview video storyboard
+# GeneNutrition Atlas — App Preview video storyboard
 
 A shot-by-shot plan for the 15–30s App Preview shown on your App Store page.
 Target length: **~24 seconds**. Built from real app footage (Apple requires App
@@ -30,12 +30,12 @@ title/end cards and text overlays are added in editing).
 
 | # | Time | Visual (real app) | Action / motion | On-screen caption | VO (optional) | Transition |
 |---|------|-------------------|-----------------|-------------------|---------------|-----------|
-| 1 | 0:00–0:03 | **Home grid** (poster frame) | App opens; the title settles, grid of gene cards fades in | “Your mind, your genes,\nyour food.” | “Meet NutriGene Mind.” | Cut |
+| 1 | 0:00–0:03 | **Home grid** (poster frame) | App opens; the title settles, grid of gene cards fades in | “Your mind, your genes,\nyour food.” | “Meet GeneNutrition Atlas.” | Cut |
 | 2 | 0:03–0:07 | **Home grid** | Gentle scroll through colorful gene cards; tap a card | “27 mental-health genes,\nexplained simply.” | “Twenty-seven genes, in plain language.” | Push left |
 | 3 | 0:07–0:13 | **Gene detail (BDNF)** | Detail opens; finger taps **Listen**; show the button switch to “Playing,” brief calm narration plays | “Plain-language guides\n+ calm audio.” | (let ~2 s of the real narration play) | Cross-dissolve |
 | 4 | 0:13–0:17 | **Foods section** | Scroll reveals Amplify / Modulate / Protect food cards | “Foods that support\neach gene’s pathway.” | “And foods that support the same pathways.” | Push left |
 | 5 | 0:17–0:21 | **Safety & Sources** | Scroll past disclaimer → sources list → privacy line | “Trusted sources.\nPrivate by design.” | “Sourced, transparent, and private.” | Cross-dissolve |
-| 6 | 0:21–0:24 | **End card** (brand gradient + icon) | Icon scales in; tagline | “NutriGene Mind” / “Understand your mind.” | “NutriGene Mind.” | Fade out |
+| 6 | 0:21–0:24 | **End card** (brand gradient + icon) | Icon scales in; tagline | “GeneNutrition Atlas” / “Understand your mind.” | “GeneNutrition Atlas.” | Fade out |
 
 ---
 
@@ -44,13 +44,13 @@ title/end cards and text overlays are added in editing).
 > Total ≈ 18 s of speech across 24 s; leave room for the live audio in Shot 3.
 
 ```
-Meet NutriGene Mind.
+Meet GeneNutrition Atlas.
 Twenty-seven mental-health genes — explained in plain language,
 with calm audio you can listen to anywhere.
 Discover the medications each gene affects…
 and the foods that support the same pathways.
 All sourced, transparent, and private by design.
-NutriGene Mind. Understand your mind.
+GeneNutrition Atlas. Understand your mind.
 ```
 
 *If you skip VO:* keep the on-screen captions and let soft music carry it. Captions
@@ -76,7 +76,7 @@ alone are fully acceptable and often perform better for accessibility.
 3. Plain-language guides + calm audio.
 4. Foods that support each gene’s pathway.
 5. Trusted sources. Private by design.
-6. NutriGene Mind — Understand your mind.
+6. GeneNutrition Atlas — Understand your mind.
 
 Style: large, bold, white, with a soft drop shadow; same brand purple→teal as the
 screenshots. Keep each caption on screen ≥1.5 s and within the safe area (avoid the

@@ -1,4 +1,4 @@
-# NutriGene Mind — App Store submission kit
+# GeneNutrition Atlas — App Store submission kit
 
 Copy-paste-ready metadata for **App Store Connect**, plus **App Review notes**
 written to pre-empt the medical-app guidelines (1.4.1, 4.2, 5.1). Character
@@ -16,11 +16,11 @@ reject the entry. Counts shown are approximate; verify in the form.
 
 | Field | Value |
 |---|---|
-| **App Name** (≤30 chars) | `NutriGene Mind` |
+| **App Name** (≤30 chars) | `GeneNutrition Atlas` |
 | **Subtitle** (≤30 chars) | `Mental-health genes & food` |
 | **Primary category** | Medical *(see note below)* |
 | **Secondary category** | Reference |
-| **Bundle display name** | NutriGene Mind |
+| **Bundle display name** | GeneNutrition Atlas |
 
 **Category note:** *Medical* reaches the right audience but draws the most review
 scrutiny — which is exactly why the disclaimer gate, Safety & Sources screen, and
@@ -44,7 +44,7 @@ Understand 27 mental-health genes in plain language: the medicines they affect a
 ## 3. Description (≤4000 chars)
 
 ```
-NutriGene Mind turns complex pharmacogenomics into clear, calm, everyday language.
+GeneNutrition Atlas turns complex pharmacogenomics into clear, calm, everyday language.
 Explore 27 mental-health-related genes — the same panel used in clinical
 pharmacogenetic testing — and understand how each one shapes the way the brain,
 medications, and food work together.
@@ -75,12 +75,12 @@ aligned with CPIC and PharmGKB pharmacogenomics resources. A full source list an
 methodology are inside the app under "Safety & Sources."
 
 PRIVATE BY DESIGN
-NutriGene Mind runs entirely on your device. No account, no sign-in, no tracking,
+GeneNutrition Atlas runs entirely on your device. No account, no sign-in, no tracking,
 and no personal or health data is collected, stored, or shared. The app works
 offline once loaded.
 
 IMPORTANT — PLEASE READ
-NutriGene Mind provides educational information only. It is not medical advice, a
+GeneNutrition Atlas provides educational information only. It is not medical advice, a
 diagnosis, a treatment, or a medical device, and it is not a substitute for your
 physician, pharmacist, a genetic test, or the official lab report. Never start,
 stop, or change any medication, supplement, or diet based on this app — always
@@ -127,7 +127,7 @@ App Name/Subtitle; Apple already indexes those.)*
 | Field | Value |
 |---|---|
 | **Support URL** (required) | A page where users can reach you (e.g., a simple site or a mailto-style contact page). |
-| **Marketing URL** (optional) | `https://fren6332-developee.github.io/Claude/mental-health-genes/` (or your standalone nutrigene-mind URL) |
+| **Marketing URL** (optional) | `https://fren6332-developee.github.io/Claude/mental-health-genes/` (or your standalone genenutrition-mind URL) |
 | **Privacy Policy URL** (required) | Host the privacy text below at a public URL and link it here. |
 
 > You need a real **Support URL** and **Privacy Policy URL** before you can submit.
@@ -164,10 +164,10 @@ Answer the App Privacy section as **Data Not Collected**:
 > guidelines reviewers apply to health apps.
 
 ```
-Thank you for reviewing NutriGene Mind.
+Thank you for reviewing GeneNutrition Atlas.
 
 WHAT THIS APP IS
-NutriGene Mind is an EDUCATIONAL REFERENCE about 27 pharmacogenomic
+GeneNutrition Atlas is an EDUCATIONAL REFERENCE about 27 pharmacogenomic
 ("mental-health") genes — the medications they influence and dietary patterns that
 support the same biological pathways. It is presented in plain language with
 optional audio narration.
@@ -213,10 +213,10 @@ documentation and clinical-review materials on request.
 ## 10. Privacy Policy text (host at a public URL, link in §6)
 
 ```
-NutriGene Mind — Privacy Policy
+GeneNutrition Atlas — Privacy Policy
 Last updated: [DATE]
 
-NutriGene Mind ("the app") is an educational reference that runs entirely on your
+GeneNutrition Atlas ("the app") is an educational reference that runs entirely on your
 device. We designed it to be private by default.
 
 Information we collect: None. The app does not collect, store, transmit, or share
@@ -241,7 +241,7 @@ with a new "last updated" date.
 
 Contact: [your email]
 
-Medical disclaimer: NutriGene Mind provides educational information only and is not
+Medical disclaimer: GeneNutrition Atlas provides educational information only and is not
 medical advice, a diagnosis, a treatment, or a medical device. Always consult a
 qualified clinician before making medical or dietary decisions.
 ```

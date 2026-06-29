@@ -1,5 +1,5 @@
 /*
- * Copy the NutriGene Mind web app into ./www so Capacitor can bundle it.
+ * Copy the GeneNutrition Atlas web app into ./www so Capacitor can bundle it.
  * Only ships what the app needs at runtime — not the build scripts, the
  * reviewer packet, or the store copy.
  *

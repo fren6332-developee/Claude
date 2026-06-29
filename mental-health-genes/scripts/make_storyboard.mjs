@@ -9,7 +9,7 @@ const OUT = process.argv[4];   // output dir
 // Shot 6 is a generated end card (data URI not needed — inline gradient div).
 const SHOTS = [
   { n:1, t:'0:00–0:03', img:'phone-home.png',   cap:'Your mind, your genes, your food.',
-    action:'App opens; gene grid fades in. (Poster frame.)', vo:'“Meet NutriGene Mind.”', trans:'Cut' },
+    action:'App opens; gene grid fades in. (Poster frame.)', vo:'“Meet GeneNutrition Atlas.”', trans:'Cut' },
   { n:2, t:'0:03–0:07', img:'phone-home.png',   cap:'27 mental-health genes, explained simply.',
     action:'Gentle scroll through cards; tap a gene.', vo:'“Twenty-seven genes, in plain language.”', trans:'Push left' },
   { n:3, t:'0:07–0:13', img:'phone-detail.png', cap:'Plain-language guides + calm audio.',
@@ -18,13 +18,13 @@ const SHOTS = [
     action:'Scroll reveals Amplify / Modulate / Protect.', vo:'“…and foods that support the same pathways.”', trans:'Push left' },
   { n:5, t:'0:17–0:21', img:'phone-safety.png', cap:'Trusted sources. Private by design.',
     action:'Scroll disclaimer → sources → privacy.', vo:'“Sourced, transparent, and private.”', trans:'Cross-dissolve' },
-  { n:6, t:'0:21–0:24', img:'__endcard__',      cap:'NutriGene Mind — Understand your mind.',
-    action:'Brand end card; icon scales in.', vo:'“NutriGene Mind.”', trans:'Fade out' }
+  { n:6, t:'0:21–0:24', img:'__endcard__',      cap:'GeneNutrition Atlas — Understand your mind.',
+    action:'Brand end card; icon scales in.', vo:'“GeneNutrition Atlas.”', trans:'Fade out' }
 ];
 
 function cell(s) {
   const thumb = s.img === '__endcard__'
-    ? `<div class="thumb endcard"><div class="ec-ic">🧬</div><div class="ec-name">NutriGene&nbsp;Mind</div><div class="ec-tag">Understand your mind.</div></div>`
+    ? `<div class="thumb endcard"><div class="ec-ic">🧬</div><div class="ec-name">GeneNutrition&nbsp;Atlas</div><div class="ec-tag">Understand your mind.</div></div>`
     : `<div class="thumb"><img src="${s.img}"></div>`;
   return `<div class="cell">
     <div class="cap-bar"><span class="num">${s.n}</span><span class="time">${s.t}</span><span class="trans">${s.trans} ▸</span></div>
@@ -62,7 +62,7 @@ const html = `<!DOCTYPE html><html><head><meta charset="utf8"><style>
   .meta.vo{color:#6C63FF;padding-bottom:14px;}
   .foot{margin-top:26px;color:#5a6079;font-size:14px;}
 </style></head><body><div class="wrap">
-  <h1>NutriGene Mind — App Preview storyboard</h1>
+  <h1>GeneNutrition Atlas — App Preview storyboard</h1>
   <div class="sub">~24-second App Store preview · 6 beats · real app footage + captions</div>
   <div class="specs">Export: portrait 1080×1920 · H.264 · 30 fps · ≤30 s · poster frame = Shot 1 (Home).
     Full shot notes, VO script, music direction &amp; recording guide: store/app-preview-storyboard.md</div>

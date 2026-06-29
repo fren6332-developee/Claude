@@ -1,5 +1,5 @@
 /*
- * NutriGene Mind — gene database
+ * GeneNutrition Atlas — gene database
  * -----------------------------------------------------------------------------
  * Educational content compiled and cross-referenced against guidance and reviews
  * from the American Psychiatric Association (APA), National Institute of Mental
@@ -635,7 +635,7 @@ const GENES = [
    ============================================================ */
 
 const APP_INFO = {
-  name: "NutriGene Mind",
+  name: "GeneNutrition Atlas",
   version: "1.1.0",
   updated: "June 2026",
   // Honest editorial standing. We do NOT claim a clinician has signed off

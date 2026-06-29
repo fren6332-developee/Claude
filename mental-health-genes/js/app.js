@@ -1,5 +1,5 @@
 /* ============================================================
-   NutriGene Mind — app logic
+   GeneNutrition Atlas — app logic
    - renders the gene grid + detail pages
    - search & pathway filtering
    - audio narration via the Web Speech API (male, calm, unhurried voice)
@@ -396,7 +396,7 @@
 
       <div class="about-card">
         <h2>Safety, Sources &amp; Methodology</h2>
-        <p style="color:var(--ink-soft)">${esc(info.name || "NutriGene Mind")} ·
+        <p style="color:var(--ink-soft)">${esc(info.name || "GeneNutrition Atlas")} ·
         v${esc(info.version || "")} · Updated ${esc(info.updated || "")}</p>
       </div>
 
@@ -438,7 +438,7 @@
 
       <div class="about-card">
         <h3>🔒 Your privacy</h3>
-        <p>NutriGene Mind runs entirely on your device. It does <strong>not</strong> collect,
+        <p>GeneNutrition Atlas runs entirely on your device. It does <strong>not</strong> collect,
         store, or transmit any personal information, health data, or analytics. There are no
         accounts and no tracking. Audio narration plays from files bundled with the app.</p>
       </div>
@@ -453,7 +453,7 @@
   }
 
   /* ---------------- First-run acknowledgment gate ---------------- */
-  const ACK_KEY = "nutrigene_ack_v1";
+  const ACK_KEY = "genenutrition_ack_v1";
   function initAckGate() {
     const gate = document.getElementById("ackGate");
     if (!gate) return;
