@@ -1,115 +1,115 @@
 {
   "voice": "am_michael",
-  "engine": "Kokoro v1.0",
-  "speed": 0.94,
+  "engine": "Kokoro v1.0 (sentence-split)",
+  "speed": 0.95,
   "genes": {
     "CYP1A2": {
       "file": "audio/CYP1A2.mp3",
-      "seconds": 60.0
+      "seconds": 56.7
     },
     "CYP2B6": {
       "file": "audio/CYP2B6.mp3",
-      "seconds": 52.0
+      "seconds": 52.4
     },
     "CYP2C9": {
       "file": "audio/CYP2C9.mp3",
-      "seconds": 49.0
+      "seconds": 45.5
     },
     "CYP2C19": {
       "file": "audio/CYP2C19.mp3",
-      "seconds": 60.0
+      "seconds": 60.1
     },
     "CYP2D6": {
       "file": "audio/CYP2D6.mp3",
-      "seconds": 58.2
+      "seconds": 61.8
     },
     "CYP3A4": {
       "file": "audio/CYP3A4.mp3",
-      "seconds": 50.2
+      "seconds": 52.6
     },
     "CYP3A5": {
       "file": "audio/CYP3A5.mp3",
-      "seconds": 54.5
+      "seconds": 49.2
     },
     "UGT1A4": {
       "file": "audio/UGT1A4.mp3",
-      "seconds": 48.9
+      "seconds": 49.3
     },
     "UGT2B15": {
       "file": "audio/UGT2B15.mp3",
-      "seconds": 45.3
+      "seconds": 47.1
     },
     "ABCB1": {
       "file": "audio/ABCB1.mp3",
-      "seconds": 53.3
+      "seconds": 52.7
     },
     "ABCG2": {
       "file": "audio/ABCG2.mp3",
-      "seconds": 47.5
+      "seconds": 48.5
     },
     "SLCO1B1": {
       "file": "audio/SLCO1B1.mp3",
-      "seconds": 50.9
+      "seconds": 51.0
     },
     "SLC6A4": {
       "file": "audio/SLC6A4.mp3",
-      "seconds": 54.3
+      "seconds": 51.9
     },
     "HTR2A": {
       "file": "audio/HTR2A.mp3",
-      "seconds": 47.7
+      "seconds": 44.9
     },
     "HTR2C": {
       "file": "audio/HTR2C.mp3",
-      "seconds": 45.0
+      "seconds": 43.4
     },
     "COMT": {
       "file": "audio/COMT.mp3",
-      "seconds": 53.8
+      "seconds": 53.4
     },
     "DRD2": {
       "file": "audio/DRD2.mp3",
-      "seconds": 46.8
+      "seconds": 47.8
     },
     "ADRA2A": {
       "file": "audio/ADRA2A.mp3",
-      "seconds": 50.7
+      "seconds": 44.4
     },
     "BDNF": {
       "file": "audio/BDNF.mp3",
-      "seconds": 53.0
+      "seconds": 55.4
     },
     "ANK3": {
       "file": "audio/ANK3.mp3",
-      "seconds": 47.9
+      "seconds": 47.6
     },
     "CACNA1C": {
       "file": "audio/CACNA1C.mp3",
-      "seconds": 51.5
+      "seconds": 52.5
     },
     "GRIK1": {
       "file": "audio/GRIK1.mp3",
-      "seconds": 47.4
+      "seconds": 47.2
     },
     "OPRM1": {
       "file": "audio/OPRM1.mp3",
-      "seconds": 53.1
+      "seconds": 52.5
     },
     "MC4R": {
       "file": "audio/MC4R.mp3",
-      "seconds": 47.9
+      "seconds": 46.4
     },
     "MTHFR": {
       "file": "audio/MTHFR.mp3",
-      "seconds": 55.1
+      "seconds": 54.3
     },
     "HLA-A": {
       "file": "audio/HLA-A.mp3",
-      "seconds": 52.3
+      "seconds": 51.2
     },
     "HLA-B": {
       "file": "audio/HLA-B.mp3",
-      "seconds": 54.1
+      "seconds": 54.4
     }
   }
 }
