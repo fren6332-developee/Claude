@@ -4,7 +4,7 @@ An educational, mobile-friendly web app that explains **27 mental-health genes**
 (from the Genomind Pharmacogenetic Panel) in plain language — and connects each
 gene to the medicines it affects and the **foods that support that pathway**.
 
-👉 Open `index.html` (or deploy the `mental-health-genes/` folder) to use it.
+👉 Open `index.html` (or deploy the `genenutrition-atlas/` folder) to use it.
 It's a static Progressive Web App — no build step, no server required, and it
 works offline once loaded.
 
@@ -103,7 +103,7 @@ any medication or diet — especially for genes flagged for **drug-safety testin
 ## Files
 
 ```
-mental-health-genes/
+genenutrition-atlas/
 ├── index.html              # app shell
 ├── css/styles.css          # styling
 ├── js/data.js              # the 27-gene database (edit content here)

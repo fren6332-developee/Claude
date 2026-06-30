@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));      // capacitor-app/scripts
 const projectRoot = join(here, "..");                     // capacitor-app
-const webSrc = join(projectRoot, "..", "mental-health-genes");
+const webSrc = join(projectRoot, "..", "genenutrition-atlas");
 const dest = join(projectRoot, "www");
 
 // Runtime assets only.

@@ -1,6 +1,6 @@
 # GeneNutrition Atlas — native app wrapper (Capacitor)
 
-This folder turns the GeneNutrition Atlas web app (in `../mental-health-genes/`) into a
+This folder turns the GeneNutrition Atlas web app (in `../genenutrition-atlas/`) into a
 native **iOS** and **Android** app using [Capacitor](https://capacitorjs.com), so
 it can be submitted to the App Store and Google Play.
 
@@ -40,7 +40,7 @@ npx cap sync
 npx @capacitor/assets generate --iconBackgroundColor '#6C63FF' \
   --iconBackgroundColorDark '#6C63FF' \
   --splashBackgroundColor '#6C63FF' --splashBackgroundColorDark '#0e1018'
-#    (Pre-generated icon sets are also in ../mental-health-genes/store/icons/ if
+#    (Pre-generated icon sets are also in ../genenutrition-atlas/store/icons/ if
 #     you'd rather place them by hand.)
 
 # 6. Open in the native IDE to run / archive / submit
@@ -63,14 +63,14 @@ npx cap open android      # → Android Studio
 ## App Store / Play submission
 
 The listing copy, App Review notes, privacy-policy text, and a pre-submission
-checklist are in **`../mental-health-genes/store/app-store-listing.md`**.
+checklist are in **`../genenutrition-atlas/store/app-store-listing.md`**.
 
 Key reminders:
 - The app is positioned as an **educational reference, not a medical device**.
-- Host the **Privacy Policy** (`../mental-health-genes/privacy.html`) and
-  **Support** (`../mental-health-genes/support.html`) pages at public URLs and add
+- Host the **Privacy Policy** (`../genenutrition-atlas/privacy.html`) and
+  **Support** (`../genenutrition-atlas/support.html`) pages at public URLs and add
   them in App Store Connect. They're already live on the web deployment at
-  `…/mental-health-genes/privacy.html` and `…/support.html`.
+  `…/genenutrition-atlas/privacy.html` and `…/support.html`.
 - Paste the **App Review notes** so the reviewer sees the disclaimers, safety
   screen, and offline content up front.
 
