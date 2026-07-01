@@ -1,4 +1,4 @@
-# GeneNutrition Atlas — splash / launch screens
+# NeuroNourish — splash / launch screens
 
 Matching launch screens: the DNA-helix-and-leaf logo with the **GeneNutrition
 Atlas** wordmark on the brand gradient. Generated from `../../icons/icon-master.svg`

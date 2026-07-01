@@ -1,4 +1,4 @@
-# GeneNutrition Atlas 🧬
+# NeuroNourish 🧬
 
 An educational, mobile-friendly web app that explains **27 mental-health genes**
 (from the Genomind Pharmacogenetic Panel) in plain language — and connects each

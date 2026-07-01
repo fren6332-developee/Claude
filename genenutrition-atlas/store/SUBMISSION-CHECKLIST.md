@@ -1,4 +1,4 @@
-# GeneNutrition Atlas — App Store submission checklist
+# NeuroNourish — App Store submission checklist
 
 A start-to-finish path to the App Store, wired to the assets already in this repo.
 Work top to bottom. Items marked **(you)** require your Apple account / Mac and
@@ -42,10 +42,10 @@ npx cap open ios                 # opens Xcode
 In **Xcode**:
 - [ ] Select the project ▸ target ▸ **Signing & Capabilities**: pick your **Team**;
       enable **Automatically manage signing**.
-- [ ] Confirm **Bundle Identifier** = `com.genenutritionatlas.app` (must match
+- [ ] Confirm **Bundle Identifier** = `com.neuronourish.app` (must match
       App Store Connect; can't change after the app record is created).
 - [ ] Set **Version** `1.1.0` and **Build** `1`.
-- [ ] Pick a **Deployment Target** (e.g., iOS 14+) and a **Display Name** = GeneNutrition Atlas.
+- [ ] Pick a **Deployment Target** (e.g., iOS 14+) and a **Display Name** = NeuroNourish.
 - [ ] Run on a **real device** once to sanity-check (audio plays, gate shows, links work).
 - [ ] **Product ▸ Archive** → **Distribute App ▸ App Store Connect ▸ Upload**.
       (Or export the .ipa and upload with **Transporter**.)
@@ -58,15 +58,15 @@ In **Xcode**:
 ## Phase 2 — Create the app record (App Store Connect)
 
 - [ ] **(you)** https://appstoreconnect.apple.com ▸ **Apps ▸ +  ▸ New App**
-  - Platform: **iOS** · Name: **GeneNutrition Atlas** · Primary language: English (U.S.)
-  - Bundle ID: **com.genenutritionatlas.app** · SKU: any unique string (e.g., `gna-001`)
+  - Platform: **iOS** · Name: **NeuroNourish** · Primary language: English (U.S.)
+  - Bundle ID: **com.neuronourish.app** · SKU: any unique string (e.g., `gna-001`)
 - [ ] Accept any pending agreements (and the **Paid Apps** agreement if you'll monetize).
 
 ---
 
 ## Phase 3 — Version metadata  (copy from `store/app-store-listing.md`)
 
-- [ ] **Subtitle:** `Mental-health genes & food`
+- [ ] **Subtitle:** `Genes, food & mental wellness`
 - [ ] **Promotional text** (§2), **Description** (§3), **Keywords** (§4), **What's New** (§5)
 - [ ] **Support URL** and **Marketing URL** (§6) — Marketing URL =
       `https://fren6332-developee.github.io/Claude/genenutrition-atlas/`

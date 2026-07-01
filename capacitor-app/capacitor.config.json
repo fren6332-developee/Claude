@@ -1,6 +1,6 @@
 {
-  "appId": "com.genenutritionatlas.app",
-  "appName": "GeneNutrition Atlas",
+  "appId": "com.neuronourish.app",
+  "appName": "NeuroNourish",
   "webDir": "www",
   "server": {
     "androidScheme": "https"

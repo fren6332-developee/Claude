@@ -1,6 +1,6 @@
-# GeneNutrition Atlas — native app wrapper (Capacitor)
+# NeuroNourish — native app wrapper (Capacitor)
 
-This folder turns the GeneNutrition Atlas web app (in `../genenutrition-atlas/`) into a
+This folder turns the NeuroNourish web app (in `../genenutrition-atlas/`) into a
 native **iOS** and **Android** app using [Capacitor](https://capacitorjs.com), so
 it can be submitted to the App Store and Google Play.
 
@@ -54,10 +54,10 @@ npx cap open android      # → Android Studio
 ## Configuration
 
 `capacitor.config.json`:
-- `appId`: **`com.genenutritionatlas.app`** — change to a reverse-DNS id you control
+- `appId`: **`com.neuronourish.app`** — change to a reverse-DNS id you control
   before your first submission (it can't be changed after the app is created in
   App Store Connect).
-- `appName`: **GeneNutrition Atlas**
+- `appName`: **NeuroNourish**
 - `webDir`: **www** (populated by `npm run copy:web`)
 
 ## App Store / Play submission

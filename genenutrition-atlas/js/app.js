@@ -1,5 +1,5 @@
 /* ============================================================
-   GeneNutrition Atlas — app logic
+   NeuroNourish — app logic
    - renders the gene grid + detail pages
    - search & pathway filtering
    - audio narration via the Web Speech API (male, calm, unhurried voice)
@@ -396,7 +396,7 @@
 
       <div class="about-card">
         <h2>Safety, Sources &amp; Methodology</h2>
-        <p style="color:var(--ink-soft)">${esc(info.name || "GeneNutrition Atlas")} ·
+        <p style="color:var(--ink-soft)">${esc(info.name || "NeuroNourish")} ·
         v${esc(info.version || "")} · Updated ${esc(info.updated || "")}</p>
       </div>
 
@@ -438,7 +438,7 @@
 
       <div class="about-card">
         <h3>🔒 Your privacy</h3>
-        <p>GeneNutrition Atlas runs entirely on your device. It does <strong>not</strong> collect,
+        <p>NeuroNourish runs entirely on your device. It does <strong>not</strong> collect,
         store, or transmit any personal information, health data, or analytics. There are no
         accounts and no tracking. Audio narration plays from files bundled with the app.</p>
       </div>

@@ -1,6 +1,6 @@
-/* GeneNutrition Atlas service worker — network-first so updates are never stale,
+/* NeuroNourish service worker — network-first so updates are never stale,
    with a cache fallback for offline use. */
-const CACHE = "genenutrition-atlas-v3";
+const CACHE = "genenutrition-atlas-v4";
 const ASSETS = [
   "./",
   "./index.html",

@@ -119,6 +119,6 @@ for (const [sizeName, s] of Object.entries(SIZES)) {
 }
 await browser.close();
 writeFileSync(join(OUT, 'INDEX.txt'),
-  'GeneNutrition Atlas — App Store screenshots\n\n' + manifest.join('\n') + '\n');
+  'NeuroNourish — App Store screenshots\n\n' + manifest.join('\n') + '\n');
 console.log('Generated', manifest.length, 'screenshots');
 manifest.forEach(m => console.log(' ', m));

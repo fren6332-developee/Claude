@@ -1,5 +1,5 @@
 /*
- * Copy the GeneNutrition Atlas web app into ./www so Capacitor can bundle it.
+ * Copy the NeuroNourish web app into ./www so Capacitor can bundle it.
  * Only ships what the app needs at runtime — not the build scripts, the
  * reviewer packet, or the store copy.
  *

@@ -39,7 +39,7 @@ function splashHtml(w, h, dark) {
   </style></head><body>
     <div class="s">
       <div class="logo">${motif}</div>
-      <div class="name">GeneNutrition Atlas</div>
+      <div class="name">NeuroNourish</div>
       <div class="tag">Understand your mind.</div>
     </div>
   </body></html>`;

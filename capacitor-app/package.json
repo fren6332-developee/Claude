@@ -1,8 +1,8 @@
 {
-  "name": "genenutrition-atlas-app",
+  "name": "neuronourish-app",
   "version": "1.1.0",
   "private": true,
-  "description": "Native (iOS/Android) wrapper for the GeneNutrition Atlas web app, via Capacitor.",
+  "description": "Native (iOS/Android) wrapper for the NeuroNourish web app, via Capacitor.",
   "scripts": {
     "copy:web": "node scripts/copy-web.mjs",
     "sync": "npm run copy:web && cap sync",

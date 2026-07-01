@@ -1,4 +1,4 @@
-# GeneNutrition Atlas — app icon set
+# NeuroNourish — app icon set
 
 Generated from `../../icons/icon-master.svg` (regenerate with
 `node ../../scripts/make_icons.mjs`). All "marketing" / iOS icons are **flattened
