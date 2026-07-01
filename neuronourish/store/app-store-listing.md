@@ -127,7 +127,7 @@ App Name/Subtitle; Apple already indexes those.)*
 | Field | Value |
 |---|---|
 | **Support URL** (required) | A page where users can reach you (e.g., a simple site or a mailto-style contact page). |
-| **Marketing URL** (optional) | `https://fren6332-developee.github.io/Claude/genenutrition-atlas/` (or your standalone nutrigene-mind repo URL) |
+| **Marketing URL** (optional) | `https://fren6332-developee.github.io/Claude/neuronourish/` (or your standalone nutrigene-mind repo URL) |
 | **Privacy Policy URL** (required) | Host the privacy text below at a public URL and link it here. |
 
 > You need a real **Support URL** and **Privacy Policy URL** before you can submit.

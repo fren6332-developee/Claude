@@ -1,6 +1,6 @@
 # NeuroNourish — QR codes
 
-Both encode the live URL: `https://fren6332-developee.github.io/Claude/genenutrition-atlas/`
+Both encode the live URL: `https://fren6332-developee.github.io/Claude/neuronourish/`
 
 - **`NeuroNourish-QR.png`** — plain QR (brand-dark on white), 900×900.
 - **`NeuroNourish-QR-branded.png`** — marketing poster: logo, wordmark,

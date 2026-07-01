@@ -3,111 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#6C63FF" />
-  <meta name="description" content="NeuroNourish — an educational guide to 27 mental-health genes, the medications they affect, and the foods that support each pathway. Cross-referenced with APA, NIMH, ISNPR, the Food & Mood Centre, ASN, and GBHI." />
-  <title>NeuroNourish · Genes, Mood & Food</title>
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <title>NeuroNourish has moved</title>
+  <!-- This app moved to /neuronourish/. Redirect so old links keep working. -->
+  <meta http-equiv="refresh" content="0; url=../neuronourish/" />
+  <link rel="canonical" href="../neuronourish/" />
+  <script>location.replace("../neuronourish/" + location.hash);</script>
+  <style>
+    body { font-family: "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif;
+      background: linear-gradient(160deg,#6C63FF,#00B8A9); color:#fff; height:100vh; margin:0;
+      display:grid; place-items:center; text-align:center; }
+    a { color:#fff; font-weight:700; }
+    .c { max-width: 420px; padding: 24px; }
+  </style>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <!-- ===================== FIRST-RUN ACKNOWLEDGMENT GATE ===================== -->
-  <div id="ackGate" class="ack-overlay" role="dialog" aria-modal="true"
-       aria-labelledby="ackTitle" aria-describedby="ackBody" hidden>
-    <div class="ack-card">
-      <div class="ack-icon" aria-hidden="true">⚕️</div>
-      <h2 id="ackTitle">Before you begin — please read</h2>
-      <div id="ackBody" class="ack-body">
-        <p><strong>NeuroNourish is educational information only. It is not medical
-        advice, not a diagnosis, and not a treatment.</strong></p>
-        <ul>
-          <li>It does <strong>not</strong> replace your doctor, pharmacist, genetic test, or the official Genomind report.</li>
-          <li><strong>Never start, stop, or change any medication, supplement, or diet</strong> based on this app — talk to your prescriber first.</li>
-          <li>Foods here <em>support</em> the same biological pathways as some drugs; they do <strong>not</strong> replace medication and are not treatment claims.</li>
-          <li>Content is compiled from cited sources and is <strong>pending independent clinical review</strong>.</li>
-        </ul>
-        <p class="ack-crisis">In crisis or thinking about harming yourself? In the U.S.,
-        call or text <strong>988</strong> (Suicide &amp; Crisis Lifeline), or call
-        <strong>911</strong> for emergencies.</p>
-      </div>
-      <button id="ackAgree" class="ack-btn" type="button">I understand &amp; agree</button>
-      <button id="ackSources" class="ack-link" type="button">Read full Safety &amp; Sources first</button>
-    </div>
+  <div class="c">
+    <h1>NeuroNourish has moved</h1>
+    <p>You'll be redirected automatically. If not,
+      <a href="../neuronourish/">tap here to open the app</a>.</p>
   </div>
-
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="brand">
-        <span class="brand-mark" aria-hidden="true">🧬</span>
-        <div class="brand-text">
-          <h1>NeuroNourish</h1>
-          <p class="tagline">How your genes, your medicines, and your food work together</p>
-        </div>
-      </div>
-      <div class="header-actions">
-        <button id="safetyBtn" class="safety-pill" type="button" title="Safety, sources & methodology">
-          <span aria-hidden="true">⚕️</span><span class="safety-pill-label">Safety &amp; Sources</span>
-        </button>
-        <button id="audioToggle" class="audio-pill" type="button" aria-pressed="false" title="Stop narration">
-          <span class="audio-dot" aria-hidden="true"></span>
-          <span id="audioLabel">Audio ready</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main id="main">
-    <!-- ===================== HOME / LIST VIEW ===================== -->
-    <section id="homeView" class="view">
-      <div class="hero">
-        <h2>27 mental-health genes, explained simply</h2>
-        <p class="hero-sub">
-          Tap any gene to hear a calm, plain-language explanation, see the medicines it
-          affects, and discover five foods that <strong>amplify</strong>, <strong>modulate</strong>,
-          or <strong>protect</strong> that pathway.
-        </p>
-        <div class="search-wrap">
-          <input id="searchInput" type="search" placeholder="Search a gene, illness, drug, or food…"
-                 aria-label="Search genes, illnesses, drugs, or foods" autocomplete="off" />
-          <span class="search-icon" aria-hidden="true">🔍</span>
-        </div>
-        <div id="filterBar" class="filter-bar" role="group" aria-label="Filter by pathway"></div>
-      </div>
-
-      <div id="geneGrid" class="gene-grid" aria-live="polite"></div>
-      <p id="noResults" class="no-results" hidden>No genes match your search. Try another term.</p>
-    </section>
-
-    <!-- ===================== DETAIL VIEW ===================== -->
-    <section id="detailView" class="view" hidden></section>
-
-    <!-- ===================== SAFETY / ABOUT VIEW ===================== -->
-    <section id="aboutView" class="view" hidden></section>
-  </main>
-
-  <footer class="site-footer">
-    <p class="footer-disclaimer">
-      <strong>Educational information only — not medical advice, diagnosis, or treatment.</strong>
-      Foods support, but never replace, prescribed treatment. Never start, stop, or change a
-      medication, supplement, or diet without your clinician. Content is cross-referenced with the
-      American Psychiatric Association, National Institute of Mental Health, International
-      Society for Nutritional Psychiatry Research, the Food &amp; Mood Centre, the American
-      Society for Nutrition, and the Global Brain Health Institute, and is
-      <strong>pending independent clinical review</strong>.
-    </p>
-    <p class="footer-meta">
-      Gene list: Genomind Pharmacogenetic Report · NIH GTR000523653 (Oct 2025). ·
-      <button id="footerSafetyLink" class="link-btn" type="button">Safety, Sources &amp; Methodology</button>
-      · <a class="link-btn" href="privacy.html">Privacy</a>
-      · <a class="link-btn" href="support.html">Support</a>
-    </p>
-  </footer>
-
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
 </body>
 </html>

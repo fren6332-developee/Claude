@@ -1,6 +1,6 @@
 /* NeuroNourish service worker — network-first so updates are never stale,
    with a cache fallback for offline use. */
-const CACHE = "genenutrition-atlas-v4";
+const CACHE = "neuronourish-v4";
 const ASSETS = [
   "./",
   "./index.html",

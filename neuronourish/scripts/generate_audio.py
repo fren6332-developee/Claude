@@ -7,7 +7,7 @@ import numpy as np
 import imageio_ffmpeg
 
 BASE = "/tmp/claude-0/-home-user-Claude/e5944d0c-cddf-51fa-aff1-bb8bfbd5d23e/scratchpad"
-OUT  = "/home/user/Claude/genenutrition-atlas/audio"
+OUT  = "/home/user/Claude/neuronourish/audio"
 VOICE, SPEED, WORKERS, SR = "am_michael", 0.95, 4, 24000
 GAP = int(0.13 * SR)        # pause between sentences
 EDGE = int(0.08 * SR)       # lead/tail padding

@@ -11,12 +11,12 @@ can't be done from this repo.
 - [ ] **(you)** Enroll in the **Apple Developer Program** — $99/yr — https://developer.apple.com/programs/
 - [ ] **(you)** A **Mac with Xcode** installed (App Store), plus CocoaPods: `sudo gem install cocoapods`
 - [ ] **(you)** Fill the placeholders before anything goes public:
-  - `genenutrition-atlas/support.html` → replace `[ADD-SUPPORT-EMAIL]`
-  - `genenutrition-atlas/privacy.html` → replace `[ADD-SUPPORT-EMAIL]` and `[ADD DATE BEFORE PUBLISHING]`
+  - `neuronourish/support.html` → replace `[ADD-SUPPORT-EMAIL]`
+  - `neuronourish/privacy.html` → replace `[ADD-SUPPORT-EMAIL]` and `[ADD DATE BEFORE PUBLISHING]`
   - (A dedicated support alias is better than a personal address.)
 - [ ] Confirm the two required URLs resolve (they're already deployed):
-  - Support: `https://fren6332-developee.github.io/Claude/genenutrition-atlas/support.html`
-  - Privacy: `https://fren6332-developee.github.io/Claude/genenutrition-atlas/privacy.html`
+  - Support: `https://fren6332-developee.github.io/Claude/neuronourish/support.html`
+  - Privacy: `https://fren6332-developee.github.io/Claude/neuronourish/privacy.html`
 
 > **Strongly recommended before charging money:** get the signed clinical reviewer
 > packet (`reviewer/clinical-review-packet.html`) and a quick legal review. Not
@@ -69,7 +69,7 @@ In **Xcode**:
 - [ ] **Subtitle:** `Genes, food & mental wellness`
 - [ ] **Promotional text** (§2), **Description** (§3), **Keywords** (§4), **What's New** (§5)
 - [ ] **Support URL** and **Marketing URL** (§6) — Marketing URL =
-      `https://fren6332-developee.github.io/Claude/genenutrition-atlas/`
+      `https://fren6332-developee.github.io/Claude/neuronourish/`
 - [ ] **Privacy Policy URL** (required) = the privacy.html link above
 - [ ] **Category:** Primary **Reference**, Secondary **Medical** (recommended for a
       smoother first review — see the category note in §1)
