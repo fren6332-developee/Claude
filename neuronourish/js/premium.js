@@ -1,64 +1,78 @@
 /* ============================================================
-   NeuroNourish Plus — lightweight web monetization (freemium)
+   NeuroNourish Plus — web monetization (freemium)
    ------------------------------------------------------------
-   Fastest path: a no-backend paywall. All educational and SAFETY
-   content stays FREE; only the convenience of unlimited audio
-   narration is metered (first few gene narrations are free, then
-   "Plus" unlocks the rest).
+   All educational & SAFETY content is FREE. Only the convenience
+   of unlimited audio narration is metered (first few genes free,
+   then "Plus" unlocks the rest).
 
-   IMPORTANT — iOS: Apple requires In-App Purchase for digital goods,
-   and external payment links inside the app are against the rules.
-   So this web paywall AUTO-DISABLES when the app runs inside the
-   native (Capacitor) shell — the iOS build should use StoreKit/IAP
-   instead. See store/MONETIZATION.md.
+   ENTITLEMENT — two supported paths:
+   1) Lemon Squeezy LICENSE KEYS (recommended, tamper-resistant):
+      the buyer receives a license key at checkout and pastes it in.
+      The app calls Lemon Squeezy's public license API to
+      ACTIVATE (bind to this device) and VALIDATE (on later loads).
+      Keys can't be forged and activation limits curb sharing — all
+      with NO backend of your own.
+   2) Honor-system fallback: a manual access code (for comps/press)
+      and/or a checkout success-redirect (?plus=success).
 
-   SECURITY NOTE: client-side gating is convenient but bypassable by
-   a determined user. It's an honest "supporter" model for a wellness
-   reference. For robust entitlement, verify purchases with a tiny
-   serverless function or a Merchant-of-Record license key — the
-   guide in store/MONETIZATION.md shows how.
+   iOS: this web paywall AUTO-DISABLES inside the native (Capacitor)
+   shell — the App Store build must use StoreKit/IAP for digital
+   goods. See store/MONETIZATION.md.
    ============================================================ */
 (function () {
   "use strict";
 
   const CONFIG = {
-    // 1) Paste your Stripe Payment Link OR Lemon Squeezy checkout URL here.
-    //    (Create it in the dashboard — no code. See store/MONETIZATION.md.)
-    CHECKOUT_URL: "https://buy.stripe.com/REPLACE_WITH_YOUR_PAYMENT_LINK",
-    PRICE_LABEL:  "$2.99 / month",           // display only; real price is set in checkout
-    FREE_LISTEN_LIMIT: 3,                      // free gene narrations before Plus is needed
-    // 2) Optional manual unlock codes you can hand to purchasers (or leave as-is).
+    // Lemon Squeezy checkout URL for "NeuroNourish Plus" (create it in the LS dashboard).
+    CHECKOUT_URL: "https://STORE.lemonsqueezy.com/checkout/buy/REPLACE_VARIANT_ID",
+    PRICE_LABEL:  "$2.99 / month",
+    FREE_LISTEN_LIMIT: 3,
+
+    // Lemon Squeezy license verification (recommended). After you create a product
+    // WITH "license keys" enabled, this works with no changes — buyers paste their key.
+    LEMONSQUEEZY: {
+      enabled: true,
+      validateUrl: "https://api.lemonsqueezy.com/v1/licenses/validate",
+      activateUrl: "https://api.lemonsqueezy.com/v1/licenses/activate",
+      // Optional: lock to your store/product so keys from other LS stores are rejected.
+      expectedStoreId:   null,   // e.g., 12345
+      expectedProductId: null    // e.g., 67890
+    },
+
+    // Honor-system manual codes (always accepted — handy for comps/reviewers).
     ACCESS_CODES: ["NOURISH-PLUS"],
-    // 3) After a successful checkout, redirect back to the app with this query flag
-    //    (set the redirect URL in your Stripe/Lemon Squeezy checkout settings):
-    //    https://…/neuronourish/?plus=success
+    // Checkout success redirect flag (honor-system only): …/neuronourish/?plus=success
     SUCCESS_PARAM: "plus",
     SUCCESS_VALUE: "success"
   };
 
   const LS_ACTIVE = "nn_plus_active";
   const LS_FREE   = "nn_free_listens";
+  const LS_KEY    = "nn_ls_key";
+  const LS_INST   = "nn_ls_instance";
+  const LS_DEVICE = "nn_device";
 
   const isNative = !!(window.Capacitor &&
     (typeof window.Capacitor.isNativePlatform === "function"
       ? window.Capacitor.isNativePlatform() : true));
 
-  function ls(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
-  function setLs(key, v) { try { localStorage.setItem(key, v); } catch (e) {} }
+  function ls(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function setLs(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function delLs(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+  function deviceId() {
+    let d = ls(LS_DEVICE);
+    if (!d) { d = "web-" + Math.random().toString(36).slice(2, 10); setLs(LS_DEVICE, d); }
+    return d;
+  }
 
   const NNPlus = {
-    // On native (iOS/Android) we don't run the web paywall at all.
     gatingEnabled() { return !isNative; },
     active() { return ls(LS_ACTIVE) === "1"; },
 
-    freeListened() {
-      try { return JSON.parse(ls(LS_FREE) || "[]"); } catch (e) { return []; }
-    },
-    remaining() {
-      return Math.max(0, CONFIG.FREE_LISTEN_LIMIT - this.freeListened().length);
-    },
+    freeListened() { try { return JSON.parse(ls(LS_FREE) || "[]"); } catch (e) { return []; } },
+    remaining() { return Math.max(0, CONFIG.FREE_LISTEN_LIMIT - this.freeListened().length); },
 
-    // May this gene's audio play?
     canListen(symbol) {
       if (!this.gatingEnabled() || this.active()) return true;
       const arr = this.freeListened();
@@ -68,16 +82,75 @@
       if (!this.gatingEnabled() || this.active()) return;
       const arr = this.freeListened();
       if (!arr.includes(symbol)) { arr.push(symbol); setLs(LS_FREE, JSON.stringify(arr)); }
-      this.updateBadge();
     },
 
     activate() { setLs(LS_ACTIVE, "1"); this.updateBadge(); this.closePaywall(); },
-    tryCode(code) {
-      const norm = String(code || "").trim().toUpperCase();
-      if (CONFIG.ACCESS_CODES.map(c => c.toUpperCase()).includes(norm)) { this.activate(); return true; }
-      return false;
+    deactivate() { delLs(LS_ACTIVE); this.updateBadge(); },
+
+    /* ---------- Lemon Squeezy license API ---------- */
+    async _lsPost(url, params) {
+      const body = new URLSearchParams(params).toString();
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/x-www-form-urlencoded" },
+        body
+      });
+      return res.json();
     },
-    // If we returned from a successful checkout, unlock and clean the URL.
+    _storeProductOk(meta) {
+      const L = CONFIG.LEMONSQUEEZY;
+      if (L.expectedStoreId && meta && String(meta.store_id) !== String(L.expectedStoreId)) return false;
+      if (L.expectedProductId && meta && String(meta.product_id) !== String(L.expectedProductId)) return false;
+      return true;
+    },
+    // Activate a key on this device (first time). Returns {ok, message}.
+    async lsActivate(key) {
+      try {
+        const data = await this._lsPost(CONFIG.LEMONSQUEEZY.activateUrl, {
+          license_key: key, instance_name: "NeuroNourish Web " + deviceId()
+        });
+        if (data.activated && data.license_key && data.license_key.status === "active"
+            && this._storeProductOk(data.meta)) {
+          setLs(LS_KEY, key);
+          if (data.instance && data.instance.id) setLs(LS_INST, data.instance.id);
+          this.activate();
+          return { ok: true };
+        }
+        const msg = data.error
+          || (data.license_key && data.license_key.status !== "active"
+              ? "This key is " + data.license_key.status + "." : "That key couldn't be activated.");
+        return { ok: false, message: msg };
+      } catch (e) {
+        return { ok: false, message: "Network error — check your connection and try again." };
+      }
+    },
+    // Re-check a stored key on load. Grace on network failure (don't lock out payers offline).
+    async lsRevalidate() {
+      const key = ls(LS_KEY), inst = ls(LS_INST);
+      if (!key) return;
+      try {
+        const data = await this._lsPost(CONFIG.LEMONSQUEEZY.validateUrl, {
+          license_key: key, instance_id: inst || ""
+        });
+        if (data.valid && data.license_key && data.license_key.status === "active"
+            && this._storeProductOk(data.meta)) {
+          this.activate();                      // still good
+        } else if (data.valid === false || (data.license_key && data.license_key.status !== "active")) {
+          delLs(LS_KEY); delLs(LS_INST); this.deactivate();   // refunded/expired/disabled
+        }
+      } catch (e) { /* offline — keep last-known-good */ }
+    },
+
+    /* ---------- unlock entry point (code or license key) ---------- */
+    async tryUnlock(value) {
+      const norm = String(value || "").trim();
+      if (CONFIG.ACCESS_CODES.map(c => c.toUpperCase()).includes(norm.toUpperCase())) {
+        this.activate(); return { ok: true };
+      }
+      if (CONFIG.LEMONSQUEEZY.enabled) return this.lsActivate(norm);
+      return { ok: false, message: "Invalid code." };
+    },
+
     checkSuccessParam() {
       try {
         const u = new URL(window.location.href);
@@ -105,14 +178,15 @@
       let ov = document.getElementById("plusOverlay");
       if (!ov) { ov = this._build(); document.body.appendChild(ov); }
       const sub = ov.querySelector(".plus-sub");
+      const actions = ov.querySelector(".plus-actions");
       if (this.active()) {
         sub.textContent = "You're on NeuroNourish Plus — enjoy unlimited audio. Thank you for supporting the project!";
-        ov.querySelector(".plus-actions").style.display = "none";
+        actions.style.display = "none";
       } else {
         sub.textContent = symbol
           ? `You've used your ${CONFIG.FREE_LISTEN_LIMIT} free listens. Unlock unlimited audio narration with Plus.`
           : "Unlock unlimited audio narration for every gene with NeuroNourish Plus.";
-        ov.querySelector(".plus-actions").style.display = "";
+        actions.style.display = "";
       }
       ov.hidden = false;
       document.body.style.overflow = "hidden";
@@ -124,12 +198,10 @@
     },
 
     _build() {
+      const lsOn = CONFIG.LEMONSQUEEZY.enabled;
       const ov = document.createElement("div");
-      ov.id = "plusOverlay";
-      ov.className = "plus-overlay";
-      ov.hidden = true;
-      ov.setAttribute("role", "dialog");
-      ov.setAttribute("aria-modal", "true");
+      ov.id = "plusOverlay"; ov.className = "plus-overlay"; ov.hidden = true;
+      ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true");
       ov.innerHTML = `
         <div class="plus-card">
           <button class="plus-close" aria-label="Close">×</button>
@@ -146,20 +218,33 @@
               Get Plus — ${escapeHtml(CONFIG.PRICE_LABEL)}
             </a>
             <div class="plus-code-row">
-              <input class="plus-code" type="text" placeholder="Have an access code?" aria-label="Access code" />
+              <input class="plus-code" type="text" autocomplete="off"
+                placeholder="${lsOn ? "Paste your license key" : "Have an access code?"}"
+                aria-label="${lsOn ? "License key" : "Access code"}" />
               <button class="plus-code-btn" type="button">Unlock</button>
             </div>
-            <p class="plus-note">Educational content only — not medical advice. Cancel anytime.</p>
+            <p class="plus-msg" role="status"></p>
+            <p class="plus-note">${lsOn ? "Enter the license key from your purchase email." : ""}
+              Educational content only — not medical advice. Cancel anytime.</p>
           </div>
         </div>`;
       ov.addEventListener("click", (e) => { if (e.target === ov) this.closePaywall(); });
       ov.querySelector(".plus-close").addEventListener("click", () => this.closePaywall());
-      ov.querySelector(".plus-code-btn").addEventListener("click", () => {
-        const input = ov.querySelector(".plus-code");
-        if (this.tryCode(input.value)) { input.value = ""; }
+      const input = ov.querySelector(".plus-code");
+      const msg = ov.querySelector(".plus-msg");
+      const btn = ov.querySelector(".plus-code-btn");
+      const submit = async () => {
+        const val = input.value.trim();
+        if (!val) return;
+        btn.disabled = true; btn.textContent = "Checking…"; msg.textContent = "";
+        const r = await this.tryUnlock(val);
+        btn.disabled = false; btn.textContent = "Unlock";
+        if (r.ok) { input.value = ""; }
         else { input.classList.add("shake"); setTimeout(() => input.classList.remove("shake"), 500);
-               input.value = ""; input.placeholder = "Invalid code — try again"; }
-      });
+               msg.textContent = r.message || "That didn't work — try again."; }
+      };
+      btn.addEventListener("click", submit);
+      input.addEventListener("keydown", (e) => { if (e.key === "Enter") submit(); });
       return ov;
     },
 
@@ -169,6 +254,8 @@
       const btn = document.getElementById("plusBtn");
       if (btn) btn.addEventListener("click", () => this.showPaywall());
       this.updateBadge();
+      // Re-verify a stored license in the background (grace if offline).
+      if (CONFIG.LEMONSQUEEZY.enabled && ls(LS_KEY)) this.lsRevalidate().then(() => this.updateBadge());
     }
   };
 

@@ -8,6 +8,10 @@ free, after which **NeuroNourish Plus** unlocks the rest.
 This is the fastest way to charge money on the web because it needs **no backend**:
 you create a hosted checkout link once and paste it in.
 
+> ★ **Now wired in: Lemon Squeezy license-key verification** (recommended,
+> tamper-resistant, still no backend). Jump to
+> ["Recommended: Lemon Squeezy license keys"](#recommended-lemon-squeezy-license-keys).
+
 ---
 
 ## ⚡ Fastest setup (≈15 minutes, no code)
@@ -57,7 +61,46 @@ ACCESS_CODES: ["NOURISH-PLUS"],
 
 ---
 
-## ⚠️ Security: client-side gating is bypassable
+## Recommended: Lemon Squeezy license keys
+
+This is now **built into `js/premium.js`** (`CONFIG.LEMONSQUEEZY.enabled = true`).
+Because Lemon Squeezy's license **validate/activate** endpoints are called with the
+key itself, a static site can verify entitlements **with no server of your own** —
+and keys can't be forged, so it's far stronger than the honor-system flow.
+
+### Setup (≈15 min)
+1. Create a **Lemon Squeezy** store, then a **Product** for "NeuroNourish Plus".
+2. In the product's **License keys** section, **enable license keys** and set an
+   **activation limit** (e.g., 3 devices) to curb key sharing.
+3. Publish and copy the product's **checkout URL** →
+   set `CONFIG.CHECKOUT_URL` in `js/premium.js`.
+4. (Optional but recommended) lock to your store/product so keys from other LS
+   stores are rejected: set `CONFIG.LEMONSQUEEZY.expectedStoreId` and
+   `expectedProductId` (find these in your LS dashboard / a test key's validate
+   response).
+5. Done. On purchase, Lemon Squeezy emails the buyer a **license key**; they open
+   the paywall, paste it, and tap **Unlock**.
+
+### How the app uses it
+- **Activate** on first unlock → binds the key to this device (an "instance") and
+  stores the key + instance id locally.
+- **Validate** on every load → confirms the key is still `active` (auto-locks if it
+  was refunded/expired/disabled). If the device is **offline**, it keeps the last
+  known-good state so paying users are never locked out.
+- **Store/product check** rejects keys that aren't yours (optional).
+- **Merchant of Record:** Lemon Squeezy collects & remits **VAT/sales tax** for you.
+
+### CORS note
+The license endpoints are meant to be called from client apps and normally send
+CORS headers. If your environment ever blocks them, front the two calls with a
+5-line Cloudflare Worker / Netlify Function (pure pass-through) — no secrets needed.
+
+> The manual **access code** (`CONFIG.ACCESS_CODES`, default `NOURISH-PLUS`) still
+> works alongside license keys — handy for comps, press, and reviewers.
+
+---
+
+## ⚠️ Security: honor-system vs. license keys
 
 The default flow is an **honest "supporter" model** — a determined user can read
 the source and unlock for free. That's a fine trade-off for launch, but if you

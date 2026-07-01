@@ -19,3 +19,15 @@ Live app: https://fren6332-developee.github.io/Claude/neuronourish/
 > #nutritionalpsychiatry #foodismedicine #mentalwellness
 
 Reminder: keep the "educational, not medical advice" line in captions for health posts.
+
+---
+
+## "How it works" carousel (carousel-1 → carousel-2 → carousel-3)
+Post as a 3-image carousel/slideshow (swipe). Suggested single caption:
+> How NeuroNourish works, in 3 taps 👉 1) pick a gene, 2) hear the science,
+> 3) find foods that support that pathway. Free to explore — link in bio. 🧬🎧🥗
+> (Educational only — not medical advice.)
+
+## Quote card (quote-template)
+A social-proof **template** — replace the placeholder text with a REAL user or
+clinician quote before posting. Do not publish the placeholder as-is.
