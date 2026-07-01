@@ -1,14 +1,17 @@
 /* NeuroNourish service worker — network-first so updates are never stale,
    with a cache fallback for offline use. */
-const CACHE = "neuronourish-v4";
+const CACHE = "neuronourish-v5";
 const ASSETS = [
   "./",
   "./index.html",
   "./css/styles.css",
   "./js/data.js",
+  "./js/premium.js",
   "./js/app.js",
   "./manifest.webmanifest",
   "./icons/icon.svg",
+  "./fonts/PlusJakartaSans-800.woff2",
+  "./fonts/PlusJakartaSans-700.woff2",
   "./audio/manifest.json"
 ];
 // Narration MP3s (audio/<SYMBOL>.mp3) are cached on first play by the

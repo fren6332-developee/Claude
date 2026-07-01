@@ -324,6 +324,9 @@
 
     document.getElementById("backBtn").addEventListener("click", showHome);
     document.getElementById("listenBtn").addEventListener("click", function () {
+      // Freemium (web only): first few gene narrations are free, then Plus unlocks the rest.
+      if (window.NNPlus && !NNPlus.canListen(gene.symbol)) { NNPlus.showPaywall(gene.symbol); return; }
+      if (window.NNPlus) NNPlus.recordListen(gene.symbol);
       Narrator.play(gene.symbol, buildNarration(gene), this);
     });
 

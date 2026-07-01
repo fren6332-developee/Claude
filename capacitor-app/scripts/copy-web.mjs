@@ -19,6 +19,7 @@ const INCLUDE = [
   "index.html",
   "privacy.html",
   "support.html",
+  "fonts",
   "manifest.webmanifest",
   "sw.js",
   "css",

@@ -49,6 +49,9 @@
         </div>
       </div>
       <div class="header-actions">
+        <button id="plusBtn" class="plus-pill" type="button" title="NeuroNourish Plus" hidden>
+          <span aria-hidden="true">✨</span><span class="plus-label">Plus</span>
+        </button>
         <button id="safetyBtn" class="safety-pill" type="button" title="Safety, sources & methodology">
           <span aria-hidden="true">⚕️</span><span class="safety-pill-label">Safety &amp; Sources</span>
         </button>
@@ -64,7 +67,7 @@
     <!-- ===================== HOME / LIST VIEW ===================== -->
     <section id="homeView" class="view">
       <div class="hero">
-        <h2>27 mental-health genes, explained simply</h2>
+        <h2 class="hero-title"><span class="ht-count">27</span> mental-health genes,<br><span class="ht-accent">explained simply</span></h2>
         <p class="hero-sub">
           Tap any gene to hear a calm, plain-language explanation, see the medicines it
           affects, and discover five foods that <strong>amplify</strong>, <strong>modulate</strong>,
@@ -108,6 +111,7 @@
   </footer>
 
   <script src="js/data.js"></script>
+  <script src="js/premium.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
