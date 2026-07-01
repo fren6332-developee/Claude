@@ -25,7 +25,7 @@
   const CONFIG = {
     // Lemon Squeezy checkout URL for "NeuroNourish Plus" (create it in the LS dashboard).
     CHECKOUT_URL: "https://STORE.lemonsqueezy.com/checkout/buy/REPLACE_VARIANT_ID",
-    PRICE_LABEL:  "$2.99 / month",
+    PRICE_LABEL:  "$1.99 / month",
     FREE_LISTEN_LIMIT: 3,
 
     // Lemon Squeezy license verification (recommended). After you create a product

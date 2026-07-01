@@ -18,7 +18,7 @@ you create a hosted checkout link once and paste it in.
 
 ### Option A — Stripe Payment Link (simple)
 1. Create a Stripe account → **Payment Links** → **New link**.
-2. Add a product (e.g., "NeuroNourish Plus", **$2.99/month** recurring, or a
+2. Add a product (e.g., "NeuroNourish Plus", **$1.99/month** recurring, or a
    one-time price). Set your currency.
 3. Under **After payment**, choose **Redirect** and set the URL to:
    `https://fren6332-developee.github.io/Claude/neuronourish/?plus=success`
@@ -54,7 +54,7 @@ license-key verification, see "Make it tamper-resistant" below.
 ### Config (top of `js/premium.js`)
 ```js
 CHECKOUT_URL: "https://buy.stripe.com/REPLACE_WITH_YOUR_PAYMENT_LINK",
-PRICE_LABEL:  "$2.99 / month",
+PRICE_LABEL:  "$1.99 / month",
 FREE_LISTEN_LIMIT: 3,
 ACCESS_CODES: ["NOURISH-PLUS"],
 ```
@@ -132,7 +132,7 @@ digital goods — treat the Android build the same way.
 
 ## 💵 Pricing & legal notes
 
-- Suggested: **$2.99/month** or **$14.99 one-time** "lifetime" unlock. Test both.
+- Suggested: **$1.99/month** or **$14.99 one-time** "lifetime" unlock. Test both.
 - **Taxes:** with plain Stripe you may owe sales tax/VAT yourself; a Merchant of
   Record (Lemon Squeezy/Gumroad) removes that burden.
 - **Medical/again:** you're charging for **educational** content — keep the
