@@ -273,6 +273,29 @@ body {
 .food-body .food-name { font-weight: 700; }
 .food-body .food-why { font-size: 0.9rem; color: var(--ink-soft); margin-top: 2px; }
 
+/* brain-protective bioactive compounds per food */
+.food-bio {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: rgba(108, 99, 255, 0.06);
+  border: 1px solid rgba(108, 99, 255, 0.16);
+  border-radius: 12px;
+}
+.food-bio-label {
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--brand); margin: 0 0 6px;
+}
+.food-bio-list { margin: 0; padding: 0 0 0 0.9rem; list-style: none; }
+.food-bio-list li {
+  position: relative; font-size: 0.85rem; line-height: 1.42;
+  color: var(--ink-soft); margin: 4px 0;
+}
+.food-bio-list li::before {
+  content: "•"; position: absolute; left: -0.85rem;
+  color: var(--brand-2); font-weight: 800;
+}
+.food-bio-list li strong { color: var(--ink); font-weight: 700; }
+
 /* food-mimic highlight */
 .mimic-card {
   margin-top: 18px; border-radius: var(--radius); padding: 22px;

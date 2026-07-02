@@ -62,11 +62,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacokinetics: CYP1A2 governs how fast these drugs are cleared, so it mainly shifts blood concentration, not the drug's mechanism. Pharmacodynamics: levels that run too high amplify sedation and metabolic side effects; too low blunts efficacy. The enzyme is strongly INDUCED (sped up) by tobacco smoke and char-grilled food, and INHIBITED (slowed) by caffeine competition and certain fluoroquinolone antibiotics.",
     foods: [
-      { action: "modulate", name: "Cruciferous vegetables (broccoli, Brussels sprouts)", why: "Indole compounds gently induce CYP1A2, helping normalize sluggish clearance." },
-      { action: "modulate", name: "Coffee / caffeine (in moderation)", why: "Caffeine is a CYP1A2 substrate; tracking your caffeine response is a real-world clue to your enzyme speed." },
-      { action: "protect", name: "Apiaceous vegetables (carrots, celery, parsley)", why: "Naturally slow excessive CYP1A2 activity, smoothing big swings." },
-      { action: "amplify", name: "Fatty fish (omega-3s)", why: "Supports overall liver and neuronal membrane health that surrounds this pathway." },
-      { action: "protect", name: "Grapefruit & citrus (occasional)", why: "Mild enzyme dampening that can steady erratic metabolism — discuss with your prescriber first." }
+      { action: "modulate", name: "Cruciferous vegetables (broccoli, Brussels sprouts)", why: "Indole compounds gently induce CYP1A2, helping normalize sluggish clearance.",
+        bio: [
+          "<strong>Sulforaphane</strong> switches on the Nrf2 pathway, activating the brain's own antioxidant defenses against oxidative stress.",
+          "<strong>Indole-3-carbinol</strong> curbs neuroinflammation and supports clearance of neurotoxins.",
+          "<strong>Kaempferol</strong>, a flavonoid, has been shown to shield neurons and quiet inflammatory microglia."
+        ] },
+      { action: "modulate", name: "Coffee / caffeine (in moderation)", why: "Caffeine is a CYP1A2 substrate; tracking your caffeine response is a real-world clue to your enzyme speed.",
+        bio: [
+          "<strong>Caffeine</strong> blocks adenosine receptors to sharpen alertness and is linked in studies to lower neurodegenerative risk.",
+          "<strong>Chlorogenic acid</strong> is a polyphenol antioxidant that protects neurons from oxidative damage.",
+          "<strong>Trigonelline</strong> supports neurite outgrowth and memory-related signaling."
+        ] },
+      { action: "protect", name: "Apiaceous vegetables (carrots, celery, parsley)", why: "Naturally slow excessive CYP1A2 activity, smoothing big swings.",
+        bio: [
+          "<strong>Luteolin</strong> (celery, parsley) calms brain inflammation and supports memory circuits.",
+          "<strong>Apigenin</strong> promotes new neuron formation and has calming, anti-anxiety effects.",
+          "<strong>Beta-carotene</strong> (carrots) is an antioxidant that protects nerve-cell membranes."
+        ] },
+      { action: "amplify", name: "Fatty fish (omega-3s)", why: "Supports overall liver and neuronal membrane health that surrounds this pathway.",
+        bio: [
+          "<strong>DHA</strong> is a core structural fat of neuron membranes and synapses, keeping signaling fluid.",
+          "<strong>EPA</strong> lowers the neuroinflammation associated with low mood.",
+          "<strong>Vitamin D</strong> (abundant in fatty fish) helps regulate the enzyme that makes brain serotonin."
+        ] },
+      { action: "protect", name: "Grapefruit & citrus (occasional)", why: "Mild enzyme dampening that can steady erratic metabolism — discuss with your prescriber first.",
+        bio: [
+          "<strong>Naringenin</strong> is a flavonoid antioxidant that crosses into the brain and protects neurons.",
+          "<strong>Hesperidin</strong> supports blood–brain-barrier integrity and reduces oxidative stress.",
+          "<strong>Vitamin C</strong> is concentrated in the brain and defends neurons against free radicals."
+        ] }
     ],
     foodMimic: "There is no food that replaces clozapine or olanzapine. But cruciferous vegetables nudge the SAME enzyme these drugs depend on, which is why a sudden change in your vegetable or coffee intake can change how a medicine feels — a reason to keep diet steady once a dose is set."
   },
@@ -83,11 +108,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacokinetics dominate here: CYP2B6 controls both activation (bupropion → hydroxybupropion) and clearance, so a variant can simultaneously change potency and duration. Pharmacodynamically, higher active-metabolite levels increase both benefit and the risk of insomnia, agitation, or seizure threshold lowering.",
     foods: [
-      { action: "protect", name: "Leafy greens (folate-rich)", why: "Support liver methylation and overall detox capacity around this enzyme." },
-      { action: "amplify", name: "Garlic & onions", why: "Organosulfur compounds support Phase I/II liver enzyme balance." },
-      { action: "modulate", name: "Green tea", why: "Polyphenols gently influence CYP activity and provide calm, focused energy." },
-      { action: "amplify", name: "Berries (anthocyanins)", why: "Antioxidant support for hepatocytes carrying this enzyme." },
-      { action: "protect", name: "Turmeric (with black pepper)", why: "Curcumin modulates several CYP enzymes; supports antioxidant defense." }
+      { action: "protect", name: "Leafy greens (folate-rich)", why: "Support liver methylation and overall detox capacity around this enzyme.",
+        bio: [
+          "<strong>Folate (B9)</strong> is a cofactor for building serotonin, dopamine and norepinephrine.",
+          "<strong>Lutein</strong> accumulates in the brain and is linked to better memory and processing speed.",
+          "<strong>Magnesium</strong> supports over 300 neuronal enzymes and calms excitable nerves."
+        ] },
+      { action: "amplify", name: "Garlic & onions", why: "Organosulfur compounds support Phase I/II liver enzyme balance.",
+        bio: [
+          "<strong>S-allyl cysteine</strong> is a neuroprotective antioxidant shown to guard neurons from oxidative injury.",
+          "<strong>Quercetin</strong> (onions) crosses into the brain and reduces neuroinflammation.",
+          "<strong>Allicin</strong> supports healthy cerebral blood flow and antioxidant defenses."
+        ] },
+      { action: "modulate", name: "Green tea", why: "Polyphenols gently influence CYP activity and provide calm, focused energy.",
+        bio: [
+          "<strong>L-theanine</strong> raises calming alpha brain waves and boosts GABA for relaxed focus.",
+          "<strong>EGCG</strong> is a catechin antioxidant that protects neurons and supports plasticity.",
+          "<strong>Caffeine + theanine</strong> together improve attention without the jittery crash."
+        ] },
+      { action: "amplify", name: "Berries (anthocyanins)", why: "Antioxidant support for hepatocytes carrying this enzyme.",
+        bio: [
+          "<strong>Anthocyanins</strong> cross into the brain and are linked to slower cognitive decline.",
+          "<strong>Pterostilbene</strong> (blueberries) reduces neuroinflammation and oxidative stress.",
+          "<strong>Vitamin C</strong> regenerates other brain antioxidants and protects neurons."
+        ] },
+      { action: "protect", name: "Turmeric (with black pepper)", why: "Curcumin modulates several CYP enzymes; supports antioxidant defense.",
+        bio: [
+          "<strong>Curcumin</strong> has been shown to raise BDNF and reduce brain inflammation.",
+          "<strong>Turmerones</strong> may promote neural stem-cell growth and repair.",
+          "<strong>Piperine</strong> (black pepper) boosts curcumin absorption so more reaches the brain."
+        ] }
     ],
     foodMimic: "No food reproduces bupropion's dopamine-norepinephrine boost. Protein-rich foods supplying tyrosine (eggs, lean meat, soy) feed the SAME dopamine pathway bupropion targets, offering gentle daytime support that complements treatment."
   },
@@ -104,11 +154,36 @@ const GENES = [
     ],
     pharmacology: "Almost entirely a pharmacokinetic gene — it sets clearance rate. Because several CYP2C9 drugs are dose-sensitive, small metabolic differences translate into meaningful safety differences. Pharmacodynamically the receptor targets are unchanged; the risk comes from concentration alone.",
     foods: [
-      { action: "protect", name: "Vitamin K greens (kale, spinach) — kept STEADY", why: "If on warfarin, consistency matters more than amount; steadiness protects against swings." },
-      { action: "amplify", name: "Citrus (vitamin C)", why: "Antioxidant support for liver enzyme function." },
-      { action: "modulate", name: "Ginger", why: "Anti-inflammatory; gentle support but can affect bleeding — coordinate with your clinician." },
-      { action: "amplify", name: "Whole grains (B vitamins)", why: "Cofactors for healthy hepatic metabolism." },
-      { action: "protect", name: "Olive oil", why: "Mediterranean-diet fat that supports liver and vascular health." }
+      { action: "protect", name: "Vitamin K greens (kale, spinach) — kept STEADY", why: "If on warfarin, consistency matters more than amount; steadiness protects against swings.",
+        bio: [
+          "<strong>Vitamin K</strong> helps build sphingolipids, fatty molecules vital to nerve-cell membranes.",
+          "<strong>Lutein & zeaxanthin</strong> concentrate in the brain and support cognition.",
+          "<strong>Folate</strong> lowers homocysteine, a compound tied to low mood and cognitive decline."
+        ] },
+      { action: "amplify", name: "Citrus (vitamin C)", why: "Antioxidant support for liver enzyme function.",
+        bio: [
+          "<strong>Vitamin C</strong> is a cofactor for making dopamine and norepinephrine.",
+          "<strong>Hesperidin</strong> protects the blood–brain barrier and eases neuroinflammation.",
+          "<strong>Folate</strong> (citrus) supports neurotransmitter synthesis and nerve health."
+        ] },
+      { action: "modulate", name: "Ginger", why: "Anti-inflammatory; gentle support but can affect bleeding — coordinate with your clinician.",
+        bio: [
+          "<strong>6-Gingerol</strong> is an antioxidant shown to protect neurons and support memory.",
+          "<strong>Shogaol</strong> reduces neuroinflammation and may aid learning.",
+          "<strong>Zingerone</strong> helps buffer neurons against oxidative stress."
+        ] },
+      { action: "amplify", name: "Whole grains (B vitamins)", why: "Cofactors for healthy hepatic metabolism.",
+        bio: [
+          "<strong>Thiamine (B1)</strong> is essential for brain energy metabolism and nerve conduction.",
+          "<strong>Vitamin B6</strong> is a cofactor for serotonin, dopamine and GABA synthesis.",
+          "<strong>Magnesium & fiber</strong> steady blood sugar and calm nervous-system excitability."
+        ] },
+      { action: "protect", name: "Olive oil", why: "Mediterranean-diet fat that supports liver and vascular health.",
+        bio: [
+          "<strong>Oleocanthal</strong> has anti-inflammatory effects and may clear brain-aging proteins.",
+          "<strong>Hydroxytyrosol</strong> is a potent polyphenol that protects neurons from oxidative stress.",
+          "<strong>Oleic acid</strong> supports the myelin sheath that insulates nerve fibers."
+        ] }
     ],
     foodMimic: "No food substitutes for an anticonvulsant or blood thinner. The key nutritional lesson here is CONSISTENCY: foods rich in vitamin K interact with CYP2C9-cleared warfarin, so keeping intake steady is the food strategy clinicians actually endorse."
   },
@@ -125,11 +200,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacokinetic gene with strong, guideline-backed dosing implications (CPIC). Pharmacodynamically the SSRI mechanism is unchanged, but exposure swings shift the balance between therapeutic serotonin reuptake blockade and dose-related effects such as QT prolongation in poor metabolizers.",
     foods: [
-      { action: "amplify", name: "Fatty fish (EPA/DHA omega-3)", why: "ISNPR-supported adjunct for depression; supports serotonergic signaling the SSRIs act on." },
-      { action: "protect", name: "Fermented foods (yogurt, kefir, kimchi)", why: "Gut-brain axis support; ~90% of serotonin is made in the gut." },
-      { action: "amplify", name: "Tryptophan-rich foods (turkey, eggs, seeds)", why: "Provide the raw material for serotonin synthesis." },
-      { action: "modulate", name: "Dark leafy greens (folate)", why: "Folate is a cofactor for monoamine synthesis." },
-      { action: "protect", name: "Berries & colorful produce", why: "Polyphenols reduce neuroinflammation linked to low mood." }
+      { action: "amplify", name: "Fatty fish (EPA/DHA omega-3)", why: "ISNPR-supported adjunct for depression; supports serotonergic signaling the SSRIs act on.",
+        bio: [
+          "<strong>EPA</strong> is the omega-3 with the strongest evidence for easing depressive symptoms.",
+          "<strong>DHA</strong> builds neuron membranes and supports serotonin-receptor signaling.",
+          "<strong>Vitamin D</strong> regulates tryptophan hydroxylase, the enzyme that makes serotonin."
+        ] },
+      { action: "protect", name: "Fermented foods (yogurt, kefir, kimchi)", why: "Gut-brain axis support; ~90% of serotonin is made in the gut.",
+        bio: [
+          "<strong>Probiotic bacteria</strong> (Lactobacillus, Bifidobacterium) produce GABA and serotonin precursors.",
+          "<strong>Short-chain fatty acids</strong> like butyrate nourish the gut–brain barrier and calm inflammation.",
+          "<strong>Vitamin K2</strong> from fermentation supports nerve-membrane lipids."
+        ] },
+      { action: "amplify", name: "Tryptophan-rich foods (turkey, eggs, seeds)", why: "Provide the raw material for serotonin synthesis.",
+        bio: [
+          "<strong>Tryptophan</strong> is the direct amino-acid precursor the brain converts into serotonin.",
+          "<strong>Choline</strong> (eggs) builds acetylcholine for memory and focus.",
+          "<strong>Zinc</strong> (seeds) is a cofactor for neurotransmitter release and mood regulation."
+        ] },
+      { action: "modulate", name: "Dark leafy greens (folate)", why: "Folate is a cofactor for monoamine synthesis.",
+        bio: [
+          "<strong>Folate (B9)</strong> drives methylation reactions that build serotonin and dopamine.",
+          "<strong>Magnesium</strong> supports NMDA-receptor balance and eases stress reactivity.",
+          "<strong>Lutein</strong> deposits in neural tissue and supports cognitive performance."
+        ] },
+      { action: "protect", name: "Berries & colorful produce", why: "Polyphenols reduce neuroinflammation linked to low mood.",
+        bio: [
+          "<strong>Anthocyanins</strong> cross into the brain and enhance memory and neuroplasticity.",
+          "<strong>Quercetin</strong> quiets inflammatory signaling in the brain.",
+          "<strong>Vitamin C</strong> is a cofactor for dopamine synthesis and a key neural antioxidant."
+        ] }
     ],
     foodMimic: "SSRIs raise serotonin by blocking its reuptake. Foods can't do that, but tryptophan-rich proteins plus a fiber-rich, fermented-food diet support the body's OWN serotonin production along the same pathway — the nutritional-psychiatry approach endorsed as a complement to medication."
   },
@@ -146,11 +246,36 @@ const GENES = [
     ],
     pharmacology: "A pharmacokinetic powerhouse. Pharmacodynamics matter indirectly: ultra-rapid metabolizers can fail therapy because too little active drug forms (or, for prodrugs like codeine, too MUCH active opioid forms — a safety hazard). Many SSRIs both use and inhibit CYP2D6, creating clinically important drug–drug interactions.",
     foods: [
-      { action: "amplify", name: "Omega-3 fish (salmon, sardines)", why: "Broad support for the neurotransmitter systems these drugs target." },
-      { action: "protect", name: "Cruciferous vegetables", why: "Support balanced liver detoxification around heavy CYP2D6 traffic." },
-      { action: "modulate", name: "Green tea (L-theanine)", why: "Calming amino acid that supports focus without overstimulation." },
-      { action: "amplify", name: "Eggs & lean protein (tyrosine)", why: "Feed dopamine/norepinephrine pathways many CYP2D6 drugs act on." },
-      { action: "protect", name: "Colorful antioxidants (peppers, berries)", why: "Reduce oxidative stress on metabolizing tissue." }
+      { action: "amplify", name: "Omega-3 fish (salmon, sardines)", why: "Broad support for the neurotransmitter systems these drugs target.",
+        bio: [
+          "<strong>DHA</strong> forms the fluid membranes that dopamine and serotonin receptors sit in.",
+          "<strong>EPA</strong> dampens neuroinflammation tied to mood disorders.",
+          "<strong>Astaxanthin</strong> (salmon) is a carotenoid antioxidant that crosses into the brain."
+        ] },
+      { action: "protect", name: "Cruciferous vegetables", why: "Support balanced liver detoxification around heavy CYP2D6 traffic.",
+        bio: [
+          "<strong>Sulforaphane</strong> activates Nrf2 to boost the brain's antioxidant shield.",
+          "<strong>Indole-3-carbinol</strong> reduces neuroinflammation and supports detox pathways.",
+          "<strong>Vitamin K</strong> supports the sphingolipids that make up nerve membranes."
+        ] },
+      { action: "modulate", name: "Green tea (L-theanine)", why: "Calming amino acid that supports focus without overstimulation.",
+        bio: [
+          "<strong>L-theanine</strong> raises GABA and alpha waves for calm, alert focus.",
+          "<strong>EGCG</strong> protects dopaminergic neurons from oxidative stress.",
+          "<strong>Theanine + caffeine</strong> improve sustained attention with less jitter."
+        ] },
+      { action: "amplify", name: "Eggs & lean protein (tyrosine)", why: "Feed dopamine/norepinephrine pathways many CYP2D6 drugs act on.",
+        bio: [
+          "<strong>Tyrosine</strong> is the amino-acid building block for dopamine and norepinephrine.",
+          "<strong>Choline</strong> is converted to acetylcholine for memory and attention.",
+          "<strong>Vitamin B12</strong> maintains the myelin sheath insulating nerve fibers."
+        ] },
+      { action: "protect", name: "Colorful antioxidants (peppers, berries)", why: "Reduce oxidative stress on metabolizing tissue.",
+        bio: [
+          "<strong>Vitamin C</strong> (peppers) is a cofactor for dopamine synthesis and a neural antioxidant.",
+          "<strong>Anthocyanins</strong> (berries) enhance neuroplasticity and memory.",
+          "<strong>Capsanthin</strong> (red peppers) is a carotenoid that buffers oxidative brain stress."
+        ] }
     ],
     foodMimic: "No food matches an antipsychotic or SSRI. But because CYP2D6 sits at the crossroads of dopamine and serotonin drug handling, a steady protein-and-omega-3 diet supports those SAME neurotransmitters naturally — useful background support, never a replacement."
   },
@@ -167,11 +292,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacokinetic gene with the broadest drug coverage of all. Its hallmark is sensitivity to INHIBITORS (grapefruit, certain antifungals/antibiotics) and INDUCERS (St. John's Wort, carbamazepine). Pharmacodynamically the danger is concentration-driven: oversedation from benzodiazepines or QT prolongation from antipsychotics.",
     foods: [
-      { action: "protect", name: "Avoid grapefruit/Seville orange when on 3A4 drugs", why: "These potently inhibit CYP3A4 and can dangerously raise drug levels." },
-      { action: "amplify", name: "Cruciferous vegetables", why: "Support balanced enzyme activity and detox pathways." },
-      { action: "modulate", name: "Turmeric", why: "Mild CYP3A4 modulation plus anti-inflammatory benefit." },
-      { action: "protect", name: "Olive oil & Mediterranean fats", why: "Support hepatic membrane health." },
-      { action: "amplify", name: "Pomegranate (in moderation)", why: "Antioxidant-rich; monitor, as concentrated juice can mildly affect 3A4." }
+      { action: "protect", name: "Avoid grapefruit/Seville orange when on 3A4 drugs", why: "These potently inhibit CYP3A4 and can dangerously raise drug levels.",
+        bio: [
+          "<strong>Furanocoumarins</strong> are the very compounds that block CYP3A4 — the reason to keep grapefruit off the plate on these drugs.",
+          "<strong>Naringin</strong> is antioxidant, but it also slows drug clearance, so its brain benefit isn't worth the interaction risk here.",
+          "The safest protective step is <strong>avoidance</strong>, not the plant's chemistry — confirm with your prescriber."
+        ] },
+      { action: "amplify", name: "Cruciferous vegetables", why: "Support balanced enzyme activity and detox pathways.",
+        bio: [
+          "<strong>Sulforaphane</strong> triggers the Nrf2 antioxidant response that protects neurons.",
+          "<strong>Indole-3-carbinol</strong> lowers neuroinflammation and aids detoxification.",
+          "<strong>Folate</strong> supports methylation and neurotransmitter production."
+        ] },
+      { action: "modulate", name: "Turmeric", why: "Mild CYP3A4 modulation plus anti-inflammatory benefit.",
+        bio: [
+          "<strong>Curcumin</strong> has been shown to raise BDNF and reduce brain inflammation.",
+          "<strong>Turmerones</strong> may support neural repair and stem-cell activity.",
+          "<strong>Curcuminoids</strong> are potent antioxidants that cross into brain tissue."
+        ] },
+      { action: "protect", name: "Olive oil & Mediterranean fats", why: "Support hepatic membrane health.",
+        bio: [
+          "<strong>Oleocanthal</strong> is anti-inflammatory and may help clear brain-aging proteins.",
+          "<strong>Hydroxytyrosol</strong> protects neurons and mitochondria from oxidative stress.",
+          "<strong>Oleic acid</strong> supports myelin and overall nerve-membrane health."
+        ] },
+      { action: "amplify", name: "Pomegranate (in moderation)", why: "Antioxidant-rich; monitor, as concentrated juice can mildly affect 3A4.",
+        bio: [
+          "<strong>Punicalagins</strong> are powerful antioxidants linked to neuroprotection.",
+          "<strong>Ellagic acid</strong> reduces neuroinflammation and oxidative damage.",
+          "<strong>Urolithin A</strong> (a gut metabolite) supports mitochondrial renewal in neurons."
+        ] }
     ],
     foodMimic: "The most important food fact for CYP3A4 isn't mimicry — it's avoidance. Grapefruit can turn a normal benzodiazepine or antipsychotic dose into an overdose by blocking this enzyme. The 'food strategy' clinicians stress here is knowing which foods to keep OFF your plate."
   },
@@ -188,11 +338,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacokinetic, working alongside CYP3A4. Because expression is largely ancestry-linked, CYP3A5 is a key reason population-average doses can miss the mark. Pharmacodynamics are unchanged; the practical effect is on how much drug reaches the brain.",
     foods: [
-      { action: "amplify", name: "Cruciferous vegetables", why: "Support overall 3A-family balance." },
-      { action: "protect", name: "Be cautious with grapefruit", why: "Like 3A4, the 3A5 partner is inhibited by grapefruit constituents." },
-      { action: "modulate", name: "Green tea", why: "Polyphenols gently influence 3A activity." },
-      { action: "amplify", name: "Leafy greens", why: "Folate and antioxidants support hepatic function." },
-      { action: "protect", name: "Olive oil", why: "Supports liver membrane integrity." }
+      { action: "amplify", name: "Cruciferous vegetables", why: "Support overall 3A-family balance.",
+        bio: [
+          "<strong>Sulforaphane</strong> activates Nrf2 antioxidant defenses in the brain.",
+          "<strong>Kaempferol</strong> protects neurons and calms inflammatory microglia.",
+          "<strong>Vitamin K</strong> supports nerve-membrane sphingolipids."
+        ] },
+      { action: "protect", name: "Be cautious with grapefruit", why: "Like 3A4, the 3A5 partner is inhibited by grapefruit constituents.",
+        bio: [
+          "<strong>Furanocoumarins</strong> inhibit the 3A pathway — the reason for caution on these drugs.",
+          "<strong>Naringenin</strong> is a brain-active antioxidant, but the drug interaction outweighs it here.",
+          "The protective action is <strong>consistency/avoidance</strong> — clear it with your prescriber."
+        ] },
+      { action: "modulate", name: "Green tea", why: "Polyphenols gently influence 3A activity.",
+        bio: [
+          "<strong>L-theanine</strong> promotes calm focus by raising GABA and alpha waves.",
+          "<strong>EGCG</strong> is a catechin that protects neurons and supports plasticity.",
+          "<strong>Polyphenols</strong> reduce oxidative stress across brain tissue."
+        ] },
+      { action: "amplify", name: "Leafy greens", why: "Folate and antioxidants support hepatic function.",
+        bio: [
+          "<strong>Folate</strong> is a cofactor for serotonin and dopamine synthesis.",
+          "<strong>Lutein</strong> concentrates in the brain and supports cognition.",
+          "<strong>Magnesium</strong> calms nervous-system excitability."
+        ] },
+      { action: "protect", name: "Olive oil", why: "Supports liver membrane integrity.",
+        bio: [
+          "<strong>Hydroxytyrosol</strong> is a polyphenol that shields neurons from oxidative stress.",
+          "<strong>Oleocanthal</strong> provides anti-inflammatory protection for the brain.",
+          "<strong>Oleic acid</strong> supports the myelin insulating nerve fibers."
+        ] }
     ],
     foodMimic: "CYP3A5 has no direct drug it 'mimics.' Its practical message echoes CYP3A4: a steady, grapefruit-free diet keeps shared-pathway drug levels predictable, which is what providers want when fine-tuning a dose."
   },
@@ -209,11 +384,36 @@ const GENES = [
     ],
     pharmacology: "A Phase II (conjugation) pharmacokinetic gene. Because lamotrigine requires slow, careful dose increases to avoid serious rash, UGT1A4 activity is clinically important for both efficacy and safety. Hormones and other drugs (e.g., estrogen-containing contraceptives, valproate) also strongly change UGT1A4 activity.",
     foods: [
-      { action: "amplify", name: "Cruciferous vegetables", why: "Induce UGT enzymes, supporting healthy Phase II conjugation." },
-      { action: "amplify", name: "Citrus peel & flavonoids", why: "Naringenin-type flavonoids support glucuronidation." },
-      { action: "protect", name: "Rooibos / herbal teas", why: "Antioxidant support without caffeine load." },
-      { action: "modulate", name: "Soy foods", why: "Isoflavones interact with UGT activity; keep intake steady." },
-      { action: "amplify", name: "Dandelion greens & bitters", why: "Traditional liver-supportive foods that encourage conjugation pathways." }
+      { action: "amplify", name: "Cruciferous vegetables", why: "Induce UGT enzymes, supporting healthy Phase II conjugation.",
+        bio: [
+          "<strong>Sulforaphane</strong> switches on the Nrf2 antioxidant pathway that protects neurons.",
+          "<strong>Indole-3-carbinol</strong> reduces neuroinflammation and aids detox.",
+          "<strong>Folate</strong> fuels the methylation that builds mood neurotransmitters."
+        ] },
+      { action: "amplify", name: "Citrus peel & flavonoids", why: "Naringenin-type flavonoids support glucuronidation.",
+        bio: [
+          "<strong>Naringenin</strong> crosses into the brain and protects neurons from oxidative stress.",
+          "<strong>Hesperidin</strong> supports blood–brain-barrier integrity and eases inflammation.",
+          "<strong>Nobiletin</strong> (citrus peel) has been shown to support memory and neuroprotection."
+        ] },
+      { action: "protect", name: "Rooibos / herbal teas", why: "Antioxidant support without caffeine load.",
+        bio: [
+          "<strong>Aspalathin</strong> (rooibos) is a rare antioxidant flavonoid that buffers oxidative stress.",
+          "<strong>Quercetin</strong> reduces neuroinflammation and supports mood.",
+          "<strong>Chrysoeriol</strong> contributes gentle anti-inflammatory brain support."
+        ] },
+      { action: "modulate", name: "Soy foods", why: "Isoflavones interact with UGT activity; keep intake steady.",
+        bio: [
+          "<strong>Genistein</strong> is a phytoestrogen linked to neuroprotection and better cognition.",
+          "<strong>Daidzein</strong> supports antioxidant defenses in neural tissue.",
+          "<strong>Lecithin/choline</strong> (soy) supplies building blocks for acetylcholine and memory."
+        ] },
+      { action: "amplify", name: "Dandelion greens & bitters", why: "Traditional liver-supportive foods that encourage conjugation pathways.",
+        bio: [
+          "<strong>Luteolin</strong> calms brain inflammation and supports memory.",
+          "<strong>Chicoric acid</strong> is an antioxidant polyphenol that protects neurons.",
+          "<strong>Folate & vitamin K</strong> support neurotransmitter synthesis and nerve membranes."
+        ] }
     ],
     foodMimic: "No food replaces a mood stabilizer. But cruciferous vegetables and citrus flavonoids nudge the SAME Phase II enzyme that clears lamotrigine — another reason to keep diet consistent while a clinician titrates the dose."
   },
@@ -230,11 +430,36 @@ const GENES = [
     ],
     pharmacology: "Phase II pharmacokinetic gene. Notably, these benzodiazepines skip the busy CYP system, so UGT2B15 is their main exit route — making this gene unusually decisive for their duration. Pharmacodynamically the GABA effect is unchanged; lingering levels mean prolonged sedation and fall risk, especially in older adults.",
     foods: [
-      { action: "amplify", name: "Cruciferous vegetables", why: "Induce UGT enzymes that clear these calming drugs." },
-      { action: "protect", name: "Magnesium-rich foods (pumpkin seeds, spinach)", why: "Support the same GABA-calming system, easing reliance on sedatives." },
-      { action: "modulate", name: "Chamomile / herbal tea", why: "Gentle anxiolytic support via apigenin." },
-      { action: "amplify", name: "Citrus flavonoids", why: "Support glucuronidation capacity." },
-      { action: "protect", name: "Tart cherries (natural melatonin)", why: "Support sleep without prolonging drug sedation." }
+      { action: "amplify", name: "Cruciferous vegetables", why: "Induce UGT enzymes that clear these calming drugs.",
+        bio: [
+          "<strong>Sulforaphane</strong> activates Nrf2 antioxidant defenses in neurons.",
+          "<strong>Kaempferol</strong> protects neurons and quiets inflammatory microglia.",
+          "<strong>Vitamin K</strong> supports the sphingolipids in nerve membranes."
+        ] },
+      { action: "protect", name: "Magnesium-rich foods (pumpkin seeds, spinach)", why: "Support the same GABA-calming system, easing reliance on sedatives.",
+        bio: [
+          "<strong>Magnesium</strong> is a natural NMDA-receptor gatekeeper that calms over-excited neurons.",
+          "<strong>Tryptophan</strong> (pumpkin seeds) is the precursor for serotonin and melatonin.",
+          "<strong>Zinc</strong> supports GABA signaling and steady mood."
+        ] },
+      { action: "modulate", name: "Chamomile / herbal tea", why: "Gentle anxiolytic support via apigenin.",
+        bio: [
+          "<strong>Apigenin</strong> binds benzodiazepine sites on GABA receptors for a calming effect.",
+          "<strong>Bisabolol</strong> is an anti-inflammatory compound that soothes the nervous system.",
+          "<strong>Luteolin</strong> supports memory and reduces brain inflammation."
+        ] },
+      { action: "amplify", name: "Citrus flavonoids", why: "Support glucuronidation capacity.",
+        bio: [
+          "<strong>Hesperidin</strong> protects the blood–brain barrier and eases anxiety-like stress.",
+          "<strong>Naringenin</strong> is a brain-active antioxidant that shields neurons.",
+          "<strong>Vitamin C</strong> supports dopamine synthesis and neural antioxidant capacity."
+        ] },
+      { action: "protect", name: "Tart cherries (natural melatonin)", why: "Support sleep without prolonging drug sedation.",
+        bio: [
+          "<strong>Melatonin</strong> occurs naturally in tart cherries and regulates the sleep–wake cycle.",
+          "<strong>Anthocyanins</strong> reduce neuroinflammation and support memory.",
+          "<strong>Procyanidins</strong> are antioxidants that protect neurons from oxidative stress."
+        ] }
     ],
     foodMimic: "Benzodiazepines calm the brain through the GABA system. Foods rich in magnesium, plus chamomile's apigenin and the amino acid theanine in tea, gently support that SAME GABA-calming pathway — a soothing, non-sedating complement that may reduce how much medication is needed (only ever changed with your prescriber)."
   },
@@ -253,11 +478,36 @@ const GENES = [
     ],
     pharmacology: "A pharmacokinetic transporter acting at the blood-brain barrier rather than in the liver. Its key effect is pharmacodynamic in practice: by gatekeeping how much drug reaches brain targets, ABCB1 can determine whether a 'normal' blood level translates into a real clinical effect. Some studies link variants to antidepressant response and side-effect burden.",
     foods: [
-      { action: "modulate", name: "Black pepper (piperine)", why: "Inhibits P-gp, increasing how much of some compounds reach the brain — use mindfully." },
-      { action: "modulate", name: "Green tea (EGCG)", why: "Modulates P-gp activity at the barrier." },
-      { action: "amplify", name: "Curcumin (turmeric)", why: "Interacts with P-gp and supports anti-inflammatory brain protection." },
-      { action: "protect", name: "Omega-3 fish", why: "Supports healthy blood-brain barrier integrity." },
-      { action: "amplify", name: "Quercetin foods (capers, apples, onions)", why: "Flavonoid that modulates transporter function." }
+      { action: "modulate", name: "Black pepper (piperine)", why: "Inhibits P-gp, increasing how much of some compounds reach the brain — use mindfully.",
+        bio: [
+          "<strong>Piperine</strong> may raise brain serotonin and dopamine and boosts absorption of other nutrients.",
+          "<strong>Piperine</strong> has antioxidant effects shown to protect neurons in studies.",
+          "It enhances <strong>curcumin</strong> uptake, indirectly delivering more brain-protective compound."
+        ] },
+      { action: "modulate", name: "Green tea (EGCG)", why: "Modulates P-gp activity at the barrier.",
+        bio: [
+          "<strong>EGCG</strong> is a catechin antioxidant that protects neurons and supports plasticity.",
+          "<strong>L-theanine</strong> promotes calm, focused attention via GABA and alpha waves.",
+          "<strong>Polyphenols</strong> reduce oxidative stress at the blood–brain barrier."
+        ] },
+      { action: "amplify", name: "Curcumin (turmeric)", why: "Interacts with P-gp and supports anti-inflammatory brain protection.",
+        bio: [
+          "<strong>Curcumin</strong> raises BDNF and lowers brain inflammation in studies.",
+          "<strong>Turmerones</strong> may support neural repair and stem-cell activity.",
+          "<strong>Curcuminoids</strong> are strong antioxidants that reach brain tissue."
+        ] },
+      { action: "protect", name: "Omega-3 fish", why: "Supports healthy blood-brain barrier integrity.",
+        bio: [
+          "<strong>DHA</strong> is a key structural fat of neuron membranes and the barrier itself.",
+          "<strong>EPA</strong> reduces the neuroinflammation linked to low mood.",
+          "<strong>Vitamin D</strong> helps regulate serotonin-making enzymes."
+        ] },
+      { action: "amplify", name: "Quercetin foods (capers, apples, onions)", why: "Flavonoid that modulates transporter function.",
+        bio: [
+          "<strong>Quercetin</strong> crosses into the brain and reduces neuroinflammation.",
+          "<strong>Quercetin</strong> supports mitochondrial health and protects against oxidative stress.",
+          "<strong>Pectin</strong> (apples) feeds gut microbes that produce mood-supporting metabolites."
+        ] }
     ],
     foodMimic: "ABCB1 isn't a drug target you can 'mimic,' but several food compounds (piperine, EGCG, quercetin) influence the SAME pump that controls drug entry into the brain. This is also a caution: these foods can change how much medication reaches your brain, so consistency and clinician awareness matter."
   },
@@ -274,11 +524,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacokinetic efflux transporter in gut, liver, and barrier tissues. Reduced function generally raises drug absorption and exposure. Pharmacodynamically neutral on its own, but by changing how much drug is available it can tip both efficacy and side-effect risk.",
     foods: [
-      { action: "modulate", name: "Flavonoid-rich foods (citrus, berries)", why: "Many flavonoids interact with BCRP transport." },
-      { action: "amplify", name: "Green tea", why: "Catechins modulate efflux activity." },
-      { action: "protect", name: "Riboflavin (B2) foods (dairy, almonds)", why: "B2 is a natural BCRP substrate; supports normal transporter handling." },
-      { action: "amplify", name: "Cruciferous vegetables", why: "Support detox transport networks." },
-      { action: "protect", name: "Omega-3 fish", why: "General barrier and membrane support." }
+      { action: "modulate", name: "Flavonoid-rich foods (citrus, berries)", why: "Many flavonoids interact with BCRP transport.",
+        bio: [
+          "<strong>Anthocyanins</strong> (berries) enhance memory and neuroplasticity.",
+          "<strong>Hesperidin</strong> (citrus) protects the blood–brain barrier from oxidative stress.",
+          "<strong>Quercetin</strong> reduces neuroinflammation across brain tissue."
+        ] },
+      { action: "amplify", name: "Green tea", why: "Catechins modulate efflux activity.",
+        bio: [
+          "<strong>EGCG</strong> protects neurons and supports synaptic plasticity.",
+          "<strong>L-theanine</strong> raises GABA for calm, alert focus.",
+          "<strong>Catechins</strong> buffer the brain against oxidative damage."
+        ] },
+      { action: "protect", name: "Riboflavin (B2) foods (dairy, almonds)", why: "B2 is a natural BCRP substrate; supports normal transporter handling.",
+        bio: [
+          "<strong>Riboflavin (B2)</strong> fuels brain-cell energy production and antioxidant recycling.",
+          "<strong>Vitamin E</strong> (almonds) protects nerve-cell membranes from oxidative damage.",
+          "<strong>Magnesium</strong> (almonds) calms nervous-system excitability."
+        ] },
+      { action: "amplify", name: "Cruciferous vegetables", why: "Support detox transport networks.",
+        bio: [
+          "<strong>Sulforaphane</strong> activates the Nrf2 antioxidant response in neurons.",
+          "<strong>Indole-3-carbinol</strong> lowers neuroinflammation.",
+          "<strong>Folate</strong> supports neurotransmitter synthesis."
+        ] },
+      { action: "protect", name: "Omega-3 fish", why: "General barrier and membrane support.",
+        bio: [
+          "<strong>DHA</strong> maintains the fluid membranes of neurons and the barrier.",
+          "<strong>EPA</strong> reduces neuroinflammation tied to mood.",
+          "<strong>Vitamin D</strong> supports serotonin-making enzymes."
+        ] }
     ],
     foodMimic: "ABCG2 has no 'drug to mimic.' Its food story is about interaction awareness: flavonoids and tea catechins influence the SAME efflux pump, so a wildly changing diet can subtly shift how much medicine you absorb."
   },
@@ -295,11 +570,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacokinetic uptake transporter at the liver. Reduced function means less drug is taken into the liver, so MORE stays in circulation — the opposite direction from an efflux pump. The classic consequence is statin myopathy, a quality-of-life issue that intersects with mood and adherence.",
     foods: [
-      { action: "protect", name: "CoQ10-rich foods (fatty fish, organ meats)", why: "May ease statin-related muscle symptoms tied to this transporter." },
-      { action: "amplify", name: "Olive oil & Mediterranean pattern", why: "Supports lipid goals, potentially lowering statin dose needs." },
-      { action: "protect", name: "Magnesium foods (nuts, seeds, greens)", why: "Support muscle comfort and relaxation." },
-      { action: "modulate", name: "Soluble-fiber foods (oats, legumes)", why: "Lower cholesterol naturally, complementing statin therapy." },
-      { action: "amplify", name: "Fatty fish omega-3s", why: "Cardiometabolic and mood support together." }
+      { action: "protect", name: "CoQ10-rich foods (fatty fish, organ meats)", why: "May ease statin-related muscle symptoms tied to this transporter.",
+        bio: [
+          "<strong>Coenzyme Q10</strong> powers mitochondria in energy-hungry neurons and nerves.",
+          "<strong>B vitamins</strong> (organ meats) support nerve conduction and neurotransmitter synthesis.",
+          "<strong>Omega-3s</strong> (fatty fish) protect neuron membranes and reduce inflammation."
+        ] },
+      { action: "amplify", name: "Olive oil & Mediterranean pattern", why: "Supports lipid goals, potentially lowering statin dose needs.",
+        bio: [
+          "<strong>Hydroxytyrosol</strong> is a polyphenol that shields neurons from oxidative stress.",
+          "<strong>Oleocanthal</strong> provides anti-inflammatory brain protection.",
+          "<strong>Oleic acid</strong> supports the myelin that insulates nerve fibers."
+        ] },
+      { action: "protect", name: "Magnesium foods (nuts, seeds, greens)", why: "Support muscle comfort and relaxation.",
+        bio: [
+          "<strong>Magnesium</strong> gates NMDA receptors, calming over-excited neurons.",
+          "<strong>Vitamin E</strong> (nuts) protects nerve membranes from oxidative damage.",
+          "<strong>Tryptophan</strong> (seeds) is the precursor for serotonin and melatonin."
+        ] },
+      { action: "modulate", name: "Soluble-fiber foods (oats, legumes)", why: "Lower cholesterol naturally, complementing statin therapy.",
+        bio: [
+          "<strong>Beta-glucan</strong> (oats) feeds gut microbes that make mood-supporting short-chain fatty acids.",
+          "<strong>B vitamins</strong> (legumes) support neurotransmitter production and steady energy.",
+          "<strong>Avenanthramides</strong> (oats) are unique antioxidants with anti-inflammatory effects."
+        ] },
+      { action: "amplify", name: "Fatty fish omega-3s", why: "Cardiometabolic and mood support together.",
+        bio: [
+          "<strong>EPA</strong> has the strongest omega-3 evidence for easing depression.",
+          "<strong>DHA</strong> builds neuron membranes and supports receptor signaling.",
+          "<strong>Vitamin D</strong> helps regulate serotonin synthesis."
+        ] }
     ],
     foodMimic: "For cholesterol, oats, legumes, and a Mediterranean diet lower LDL through the SAME end-goal as statins — by different means. This whole-diet approach (endorsed by ASN and others) can support cardiometabolic health that closely ties to mood, while reducing the muscle-side-effect burden SLCO1B1 variants can cause."
   },
@@ -318,11 +618,36 @@ const GENES = [
     ],
     pharmacology: "This is a true pharmacodynamic gene — it encodes the drug's actual target. Variation changes baseline transporter density and, with it, the brain's serotonin tone and how strongly an SSRI's blockade translates into benefit. The short allele is also studied in gene–environment interactions with life stress.",
     foods: [
-      { action: "amplify", name: "Tryptophan-rich foods (turkey, eggs, pumpkin seeds)", why: "Supply the precursor the body uses to make serotonin." },
-      { action: "amplify", name: "Complex carbs (oats, sweet potato)", why: "Help tryptophan enter the brain, supporting serotonin synthesis." },
-      { action: "protect", name: "Fermented foods (yogurt, kefir, kimchi)", why: "Gut microbes shape serotonin production along the gut-brain axis." },
-      { action: "amplify", name: "Fatty fish (omega-3)", why: "Improves serotonin receptor signaling and membrane fluidity." },
-      { action: "modulate", name: "Vitamin D foods (salmon, fortified dairy, sunlight)", why: "Vitamin D helps regulate the enzyme that makes brain serotonin." }
+      { action: "amplify", name: "Tryptophan-rich foods (turkey, eggs, pumpkin seeds)", why: "Supply the precursor the body uses to make serotonin.",
+        bio: [
+          "<strong>Tryptophan</strong> is the direct amino-acid precursor for serotonin and melatonin.",
+          "<strong>Choline</strong> (eggs) builds acetylcholine for memory and focus.",
+          "<strong>Zinc & magnesium</strong> (pumpkin seeds) support neurotransmitter release and calm."
+        ] },
+      { action: "amplify", name: "Complex carbs (oats, sweet potato)", why: "Help tryptophan enter the brain, supporting serotonin synthesis.",
+        bio: [
+          "<strong>Slow carbohydrates</strong> trigger insulin that clears rival amino acids, letting tryptophan reach the brain.",
+          "<strong>Beta-glucan</strong> (oats) feeds gut microbes that produce serotonin precursors.",
+          "<strong>Beta-carotene</strong> (sweet potato) is an antioxidant protecting nerve membranes."
+        ] },
+      { action: "protect", name: "Fermented foods (yogurt, kefir, kimchi)", why: "Gut microbes shape serotonin production along the gut-brain axis.",
+        bio: [
+          "<strong>Probiotic bacteria</strong> produce GABA and serotonin precursors in the gut.",
+          "<strong>Butyrate</strong> and other short-chain fatty acids calm gut–brain inflammation.",
+          "<strong>Vitamin K2</strong> from fermentation supports nerve-membrane lipids."
+        ] },
+      { action: "amplify", name: "Fatty fish (omega-3)", why: "Improves serotonin receptor signaling and membrane fluidity.",
+        bio: [
+          "<strong>DHA</strong> keeps serotonin-receptor membranes fluid and responsive.",
+          "<strong>EPA</strong> reduces neuroinflammation linked to depression.",
+          "<strong>Vitamin D</strong> regulates the enzyme that converts tryptophan to serotonin."
+        ] },
+      { action: "modulate", name: "Vitamin D foods (salmon, fortified dairy, sunlight)", why: "Vitamin D helps regulate the enzyme that makes brain serotonin.",
+        bio: [
+          "<strong>Vitamin D</strong> activates tryptophan hydroxylase-2, the brain's serotonin-making enzyme.",
+          "<strong>Vitamin D receptors</strong> sit throughout mood-regulating brain regions.",
+          "<strong>Calcium</strong> (dairy) supports neurotransmitter release at synapses."
+        ] }
     ],
     foodMimic: "SSRIs work by blocking the transporter SLC6A4 builds. Food can't block it, but pairing tryptophan-rich protein with whole-grain carbs raises the brain's serotonin RAW MATERIALS — and a healthy gut microbiome (fermented foods, fiber) supports the same system. This is the core nutritional-psychiatry strategy for low mood, used alongside, not instead of, medication."
   },
@@ -339,11 +664,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacodynamic receptor gene. Because so many psychotropics act partly through 2A blockade, receptor variants can influence both response and tolerability (e.g., the early agitation some people feel starting an SSRI). It's a window into WHY two people react differently to the same class of drug.",
     foods: [
-      { action: "amplify", name: "Omega-3 fatty fish", why: "Supports healthy serotonin-receptor signaling." },
-      { action: "modulate", name: "Saffron (culinary amounts)", why: "Studied for mood benefits via serotonergic pathways (ISNPR-noted)." },
-      { action: "protect", name: "Polyphenol foods (berries, cocoa)", why: "Reduce neuroinflammation that disrupts receptor function." },
-      { action: "amplify", name: "Magnesium foods (greens, seeds)", why: "Cofactor for balanced neurotransmission." },
-      { action: "protect", name: "Fermented foods", why: "Gut-brain support for serotonin tone." }
+      { action: "amplify", name: "Omega-3 fatty fish", why: "Supports healthy serotonin-receptor signaling.",
+        bio: [
+          "<strong>DHA</strong> keeps 2A-receptor membranes fluid for proper signaling.",
+          "<strong>EPA</strong> lowers neuroinflammation that disrupts serotonin tone.",
+          "<strong>Vitamin D</strong> supports the enzyme that makes brain serotonin."
+        ] },
+      { action: "modulate", name: "Saffron (culinary amounts)", why: "Studied for mood benefits via serotonergic pathways (ISNPR-noted).",
+        bio: [
+          "<strong>Crocin</strong> is a carotenoid shown in trials to support mood via serotonin pathways.",
+          "<strong>Safranal</strong> has calming, antidepressant-like effects in studies.",
+          "<strong>Crocetin</strong> is an antioxidant that crosses into the brain."
+        ] },
+      { action: "protect", name: "Polyphenol foods (berries, cocoa)", why: "Reduce neuroinflammation that disrupts receptor function.",
+        bio: [
+          "<strong>Flavanols</strong> (cocoa) boost cerebral blood flow and support mood.",
+          "<strong>Anthocyanins</strong> (berries) enhance memory and neuroplasticity.",
+          "<strong>Theobromine</strong> (cocoa) provides a gentle, non-jittery lift."
+        ] },
+      { action: "amplify", name: "Magnesium foods (greens, seeds)", why: "Cofactor for balanced neurotransmission.",
+        bio: [
+          "<strong>Magnesium</strong> regulates NMDA receptors and calms excitable neurons.",
+          "<strong>Folate</strong> (greens) drives serotonin and dopamine synthesis.",
+          "<strong>Zinc</strong> (seeds) supports mood and neurotransmitter balance."
+        ] },
+      { action: "protect", name: "Fermented foods", why: "Gut-brain support for serotonin tone.",
+        bio: [
+          "<strong>Probiotic bacteria</strong> produce serotonin precursors and GABA.",
+          "<strong>Short-chain fatty acids</strong> calm gut–brain inflammation.",
+          "<strong>Vitamin K2</strong> supports nerve-membrane lipids."
+        ] }
     ],
     foodMimic: "Several drugs calm an overactive 2A receptor. Among foods, saffron has the best evidence for gentle serotonergic mood support, and omega-3s keep receptor signaling healthy — modest, complementary effects on the SAME pathway, not a substitute for prescribed treatment."
   },
@@ -360,11 +710,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacodynamic receptor gene with a metabolic spotlight. 2C receptors normally help suppress appetite; antipsychotics that block them can drive overeating and weight gain, and HTR2C variants amplify or buffer that effect. This makes the gene central to long-term physical health in serious mental illness.",
     foods: [
-      { action: "protect", name: "High-fiber foods (legumes, oats, vegetables)", why: "Improve satiety and blunt antipsychotic-related weight gain." },
-      { action: "modulate", name: "Protein-rich meals", why: "Increase fullness signals that counter appetite dysregulation." },
-      { action: "protect", name: "Low-glycemic whole grains", why: "Steady blood sugar and reduce metabolic-syndrome risk." },
-      { action: "amplify", name: "Omega-3 fish", why: "Support metabolic and cardiovascular health." },
-      { action: "protect", name: "Water-rich vegetables & salads", why: "High-volume, low-calorie foods that aid weight management." }
+      { action: "protect", name: "High-fiber foods (legumes, oats, vegetables)", why: "Improve satiety and blunt antipsychotic-related weight gain.",
+        bio: [
+          "<strong>Fermentable fiber</strong> feeds gut microbes that make butyrate, calming gut–brain inflammation.",
+          "<strong>Beta-glucan</strong> (oats) steadies blood sugar that drives appetite swings.",
+          "<strong>Folate & B vitamins</strong> (legumes) support neurotransmitter synthesis."
+        ] },
+      { action: "modulate", name: "Protein-rich meals", why: "Increase fullness signals that counter appetite dysregulation.",
+        bio: [
+          "<strong>Tyrosine & tryptophan</strong> from protein are precursors for dopamine and serotonin.",
+          "<strong>Peptide YY & GLP-1</strong> — satiety hormones protein helps release — signal the brain you're full.",
+          "<strong>Branched-chain amino acids</strong> support steady energy and mood."
+        ] },
+      { action: "protect", name: "Low-glycemic whole grains", why: "Steady blood sugar and reduce metabolic-syndrome risk.",
+        bio: [
+          "<strong>Complex carbohydrates</strong> deliver steady glucose, the brain's main fuel.",
+          "<strong>Magnesium</strong> supports insulin sensitivity and calm neurons.",
+          "<strong>B vitamins</strong> aid energy metabolism and neurotransmitter production."
+        ] },
+      { action: "amplify", name: "Omega-3 fish", why: "Support metabolic and cardiovascular health.",
+        bio: [
+          "<strong>EPA</strong> reduces inflammation tied to metabolic syndrome and low mood.",
+          "<strong>DHA</strong> supports neuron membranes and receptor signaling.",
+          "<strong>Vitamin D</strong> aids mood regulation and metabolic health."
+        ] },
+      { action: "protect", name: "Water-rich vegetables & salads", why: "High-volume, low-calorie foods that aid weight management.",
+        bio: [
+          "<strong>Folate & lutein</strong> (leafy greens) support cognition and neurotransmitter synthesis.",
+          "<strong>Nitrates</strong> (leafy greens, beets) improve cerebral blood flow.",
+          "<strong>Vitamin C & polyphenols</strong> protect neurons from oxidative stress."
+        ] }
     ],
     foodMimic: "No food blocks an antipsychotic's metabolic effect, but a high-fiber, high-protein, low-glycemic diet works on the SAME appetite-and-metabolism system HTR2C governs — the practical, provider-endorsed way to protect against medication-related weight gain."
   },
@@ -383,11 +758,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacodynamic enzyme gene shaping prefrontal dopamine tone. It doesn't break down drugs; it sets the dopamine 'baseline' on which stimulants and dopamine drugs act. This is why the same stimulant dose can sharpen one person and overwhelm another. COMT needs magnesium and is sensitive to estrogen.",
     foods: [
-      { action: "amplify", name: "Tyrosine-rich protein (eggs, lean meat, soy)", why: "Provides the building block for dopamine COMT regulates." },
-      { action: "modulate", name: "Magnesium foods (greens, seeds, dark chocolate)", why: "Magnesium is a required cofactor for COMT activity." },
-      { action: "modulate", name: "Green tea (L-theanine)", why: "Smooths dopamine/glutamate balance for calm focus." },
-      { action: "protect", name: "Berries & polyphenols", why: "Mild, balancing influence on catechol metabolism." },
-      { action: "amplify", name: "Beets & folate-rich greens", why: "Support methylation, the chemical reaction COMT performs." }
+      { action: "amplify", name: "Tyrosine-rich protein (eggs, lean meat, soy)", why: "Provides the building block for dopamine COMT regulates.",
+        bio: [
+          "<strong>Tyrosine</strong> is the direct amino-acid precursor for dopamine and norepinephrine.",
+          "<strong>Choline</strong> (eggs) builds acetylcholine for focus and memory.",
+          "<strong>Iron & B12</strong> (lean meat) support dopamine synthesis and nerve myelin."
+        ] },
+      { action: "modulate", name: "Magnesium foods (greens, seeds, dark chocolate)", why: "Magnesium is a required cofactor for COMT activity.",
+        bio: [
+          "<strong>Magnesium</strong> is the cofactor COMT needs to break down dopamine, and it calms neurons.",
+          "<strong>Flavanols</strong> (dark chocolate) boost cerebral blood flow and mood.",
+          "<strong>Zinc</strong> (seeds) supports neurotransmitter balance."
+        ] },
+      { action: "modulate", name: "Green tea (L-theanine)", why: "Smooths dopamine/glutamate balance for calm focus.",
+        bio: [
+          "<strong>L-theanine</strong> raises GABA and alpha waves for calm, alert focus.",
+          "<strong>EGCG</strong> protects dopaminergic neurons from oxidative stress.",
+          "<strong>Theanine + caffeine</strong> sharpen attention without overstimulation."
+        ] },
+      { action: "protect", name: "Berries & polyphenols", why: "Mild, balancing influence on catechol metabolism.",
+        bio: [
+          "<strong>Anthocyanins</strong> enhance memory and neuroplasticity.",
+          "<strong>Quercetin</strong> reduces neuroinflammation.",
+          "<strong>Vitamin C</strong> is a cofactor for dopamine synthesis and a neural antioxidant."
+        ] },
+      { action: "amplify", name: "Beets & folate-rich greens", why: "Support methylation, the chemical reaction COMT performs.",
+        bio: [
+          "<strong>Dietary nitrates</strong> (beets) boost cerebral blood flow and oxygen delivery.",
+          "<strong>Folate</strong> fuels the methylation cycle COMT depends on.",
+          "<strong>Betalains</strong> (beets) are antioxidants that reduce brain inflammation."
+        ] }
     ],
     foodMimic: "Stimulants raise dopamine; COMT clears it. For 'fast' metabolizers who run low on dopamine, tyrosine-rich protein supports the SAME dopamine pool — gentle daytime focus support. For 'slow' types prone to anxiety, magnesium and L-theanine help steady the system. Diet can't replace ADHD medication but can be tuned to your COMT type."
   },
@@ -404,11 +804,36 @@ const GENES = [
     ],
     pharmacology: "A core pharmacodynamic target. Antipsychotic benefit comes from D2 blockade; too much blockade causes movement side effects (EPS) and prolactin elevation. DRD2 variants help explain who responds, who needs higher doses, and who is prone to side effects — central to personalized antipsychotic care.",
     foods: [
-      { action: "amplify", name: "Tyrosine-rich protein", why: "Provides dopamine precursors for healthy receptor signaling." },
-      { action: "protect", name: "Antioxidant-rich produce (berries, greens)", why: "Protect dopamine neurons from oxidative stress." },
-      { action: "modulate", name: "Probiotic/fermented foods", why: "Gut-brain axis influences dopamine signaling." },
-      { action: "amplify", name: "Iron-rich foods (legumes, lean red meat)", why: "Iron is a cofactor for dopamine synthesis." },
-      { action: "protect", name: "Omega-3 fish", why: "Support receptor membrane function and reduce inflammation." }
+      { action: "amplify", name: "Tyrosine-rich protein", why: "Provides dopamine precursors for healthy receptor signaling.",
+        bio: [
+          "<strong>Tyrosine</strong> is the amino-acid building block the brain turns into dopamine.",
+          "<strong>Phenylalanine</strong> converts to tyrosine, feeding the same dopamine pathway.",
+          "<strong>Vitamin B6</strong> is the cofactor that finishes dopamine synthesis."
+        ] },
+      { action: "protect", name: "Antioxidant-rich produce (berries, greens)", why: "Protect dopamine neurons from oxidative stress.",
+        bio: [
+          "<strong>Anthocyanins</strong> (berries) shield dopamine neurons and support memory.",
+          "<strong>Lutein</strong> (greens) accumulates in the brain and supports cognition.",
+          "<strong>Vitamin C</strong> defends neurons against oxidative damage."
+        ] },
+      { action: "modulate", name: "Probiotic/fermented foods", why: "Gut-brain axis influences dopamine signaling.",
+        bio: [
+          "<strong>Gut bacteria</strong> synthesize dopamine precursors along the gut–brain axis.",
+          "<strong>Short-chain fatty acids</strong> support brain-barrier health and reduce inflammation.",
+          "<strong>Tyramine</strong> and related metabolites interact with dopamine pathways."
+        ] },
+      { action: "amplify", name: "Iron-rich foods (legumes, lean red meat)", why: "Iron is a cofactor for dopamine synthesis.",
+        bio: [
+          "<strong>Iron</strong> is essential for tyrosine hydroxylase, the rate-limiting dopamine enzyme.",
+          "<strong>Vitamin B12</strong> (red meat) maintains nerve myelin and neurotransmitter function.",
+          "<strong>Zinc</strong> supports dopamine-receptor signaling and mood."
+        ] },
+      { action: "protect", name: "Omega-3 fish", why: "Support receptor membrane function and reduce inflammation.",
+        bio: [
+          "<strong>DHA</strong> keeps dopamine-receptor membranes fluid and responsive.",
+          "<strong>EPA</strong> reduces neuroinflammation affecting reward circuits.",
+          "<strong>Vitamin D</strong> helps regulate dopamine synthesis."
+        ] }
     ],
     foodMimic: "No food substitutes for an antipsychotic — these are essential medicines in serious illness. But supporting dopamine raw materials (tyrosine, iron) and protecting dopamine neurons with antioxidants supports the SAME system DRD2 governs, complementing treatment and overall brain health."
   },
@@ -425,11 +850,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacodynamic receptor gene central to prefrontal attention circuits. Drugs like guanfacine 'turn up' this receptor to strengthen focus and reduce impulsivity, so variant function helps predict who benefits. It's a key gene for the non-stimulant side of ADHD care.",
     foods: [
-      { action: "amplify", name: "Omega-3 fish (DHA)", why: "Supports prefrontal circuits underlying attention." },
-      { action: "modulate", name: "Green tea (L-theanine)", why: "Calms hyperarousal while supporting steady focus." },
-      { action: "amplify", name: "Protein-rich breakfasts (tyrosine)", why: "Feed norepinephrine synthesis for morning focus." },
-      { action: "protect", name: "Magnesium foods", why: "Help dampen stress-driven overarousal." },
-      { action: "protect", name: "Iron- and zinc-rich foods", why: "Low iron/zinc worsens attention; replenishing supports the pathway." }
+      { action: "amplify", name: "Omega-3 fish (DHA)", why: "Supports prefrontal circuits underlying attention.",
+        bio: [
+          "<strong>DHA</strong> is enriched in prefrontal attention circuits and supports signaling.",
+          "<strong>EPA</strong> reduces neuroinflammation and has ADHD-symptom evidence.",
+          "<strong>Vitamin D</strong> supports catecholamine (norepinephrine/dopamine) regulation."
+        ] },
+      { action: "modulate", name: "Green tea (L-theanine)", why: "Calms hyperarousal while supporting steady focus.",
+        bio: [
+          "<strong>L-theanine</strong> raises calming GABA and alpha waves, easing overarousal.",
+          "<strong>EGCG</strong> protects neurons from oxidative stress.",
+          "<strong>Theanine + caffeine</strong> improve attention without jitter."
+        ] },
+      { action: "amplify", name: "Protein-rich breakfasts (tyrosine)", why: "Feed norepinephrine synthesis for morning focus.",
+        bio: [
+          "<strong>Tyrosine</strong> is the precursor for norepinephrine, the focus/alertness messenger.",
+          "<strong>Vitamin B6</strong> is a cofactor for catecholamine synthesis.",
+          "<strong>Choline</strong> supports acetylcholine for attention and memory."
+        ] },
+      { action: "protect", name: "Magnesium foods", why: "Help dampen stress-driven overarousal.",
+        bio: [
+          "<strong>Magnesium</strong> gates NMDA receptors, quieting an over-aroused nervous system.",
+          "<strong>Magnesium</strong> supports GABA activity for calm and better sleep.",
+          "It is a cofactor for dozens of <strong>neurotransmitter enzymes</strong>."
+        ] },
+      { action: "protect", name: "Iron- and zinc-rich foods", why: "Low iron/zinc worsens attention; replenishing supports the pathway.",
+        bio: [
+          "<strong>Iron</strong> powers tyrosine hydroxylase, the enzyme that builds dopamine and norepinephrine.",
+          "<strong>Zinc</strong> regulates dopamine transport and is linked to attention.",
+          "<strong>Ferritin iron stores</strong> correlate with steadier focus in studies."
+        ] }
     ],
     foodMimic: "Guanfacine strengthens prefrontal focus through ADRA2A. No food does that directly, but DHA-rich fish plus a protein breakfast support the norepinephrine system this receptor uses, and L-theanine eases the hyperarousal it helps regulate — gentle, complementary focus support."
   },
@@ -448,11 +898,36 @@ const GENES = [
     ],
     pharmacology: "A pharmacodynamic signaling gene that helps explain WHY antidepressants take weeks: they work partly by gradually raising BDNF and rebuilding neural connections. The Val66Met variant affects how efficiently BDNF is released, influencing resilience and treatment response. Crucially, lifestyle raises BDNF as powerfully as some drugs.",
     foods: [
-      { action: "amplify", name: "Omega-3 fatty fish (DHA)", why: "Directly boosts BDNF and neuroplasticity (strong ISNPR support)." },
-      { action: "amplify", name: "Berries & cocoa flavonoids", why: "Polyphenols increase BDNF expression." },
-      { action: "amplify", name: "Turmeric (curcumin)", why: "Shown to raise BDNF in studies; anti-inflammatory." },
-      { action: "amplify", name: "Green tea (EGCG)", why: "Supports BDNF and neuroprotection." },
-      { action: "protect", name: "Whole, unprocessed Mediterranean diet", why: "Higher adherence links to higher BDNF and lower depression risk." }
+      { action: "amplify", name: "Omega-3 fatty fish (DHA)", why: "Directly boosts BDNF and neuroplasticity (strong ISNPR support).",
+        bio: [
+          "<strong>DHA</strong> is shown to raise BDNF and build new synaptic connections.",
+          "<strong>EPA</strong> reduces neuroinflammation that suppresses plasticity.",
+          "<strong>Vitamin D</strong> supports BDNF signaling and mood regulation."
+        ] },
+      { action: "amplify", name: "Berries & cocoa flavonoids", why: "Polyphenols increase BDNF expression.",
+        bio: [
+          "<strong>Flavanols</strong> (cocoa) increase BDNF and cerebral blood flow.",
+          "<strong>Anthocyanins</strong> (berries) enhance neuroplasticity and memory.",
+          "<strong>Epicatechin</strong> supports the growth of new neural connections."
+        ] },
+      { action: "amplify", name: "Turmeric (curcumin)", why: "Shown to raise BDNF in studies; anti-inflammatory.",
+        bio: [
+          "<strong>Curcumin</strong> measurably raises BDNF and lowers brain inflammation.",
+          "<strong>Turmerones</strong> may support neural stem-cell growth and repair.",
+          "<strong>Curcuminoids</strong> are antioxidants that protect neurons."
+        ] },
+      { action: "amplify", name: "Green tea (EGCG)", why: "Supports BDNF and neuroprotection.",
+        bio: [
+          "<strong>EGCG</strong> supports BDNF and protects neurons from oxidative stress.",
+          "<strong>L-theanine</strong> promotes calm focus and supports plasticity.",
+          "<strong>Polyphenols</strong> reduce neuroinflammation."
+        ] },
+      { action: "protect", name: "Whole, unprocessed Mediterranean diet", why: "Higher adherence links to higher BDNF and lower depression risk.",
+        bio: [
+          "<strong>Polyphenols & omega-3s</strong> across the pattern jointly raise BDNF.",
+          "<strong>Olive-oil hydroxytyrosol</strong> protects neurons and mitochondria.",
+          "<strong>Fiber-fed short-chain fatty acids</strong> support the gut–brain axis and mood."
+        ] }
     ],
     foodMimic: "This is the gene where food comes closest to acting like medicine. Antidepressants, exercise, and certain foods ALL raise BDNF along the same plasticity pathway. Omega-3s, flavonoids (berries, cocoa), and curcumin measurably increase BDNF — which is exactly why nutritional psychiatry (ISNPR) treats diet as real, complementary support for the recovering brain."
   },
@@ -469,11 +944,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacodynamic structural-signaling gene. ANK3 organizes the axon initial segment — where neurons 'decide' to fire — so variants may set a person up for the unstable signaling seen in bipolar disorder. Mood stabilizers don't target ANK3 directly but calm the excitable circuits it helps build.",
     foods: [
-      { action: "protect", name: "Omega-3 fatty fish", why: "Stabilize neuronal membranes and reduce mood-episode severity (adjunctive)." },
-      { action: "protect", name: "Magnesium foods (greens, seeds, legumes)", why: "Natural membrane stabilizer supporting calmer signaling." },
-      { action: "amplify", name: "Folate & B-vitamin foods", why: "Support healthy neuronal function and methylation." },
-      { action: "protect", name: "Steady, regular meals (rhythm)", why: "Stable routines and blood sugar support mood stability in bipolar disorder." },
-      { action: "amplify", name: "Antioxidant-rich produce", why: "Reduce oxidative stress implicated in bipolar disorder." }
+      { action: "protect", name: "Omega-3 fatty fish", why: "Stabilize neuronal membranes and reduce mood-episode severity (adjunctive).",
+        bio: [
+          "<strong>DHA</strong> stabilizes neuron membranes where ion channels sit.",
+          "<strong>EPA</strong> reduces neuroinflammation and has adjunctive bipolar evidence.",
+          "<strong>Vitamin D</strong> supports mood and neuronal signaling."
+        ] },
+      { action: "protect", name: "Magnesium foods (greens, seeds, legumes)", why: "Natural membrane stabilizer supporting calmer signaling.",
+        bio: [
+          "<strong>Magnesium</strong> gates NMDA receptors, calming over-excitable neurons.",
+          "<strong>Magnesium</strong> supports GABA activity for steadier mood and sleep.",
+          "<strong>Folate</strong> (greens/legumes) fuels neurotransmitter synthesis."
+        ] },
+      { action: "amplify", name: "Folate & B-vitamin foods", why: "Support healthy neuronal function and methylation.",
+        bio: [
+          "<strong>Folate (B9)</strong> drives methylation that builds serotonin and dopamine.",
+          "<strong>Vitamin B12</strong> maintains the myelin insulating nerve fibers.",
+          "<strong>Vitamin B6</strong> is a cofactor for GABA and serotonin synthesis."
+        ] },
+      { action: "protect", name: "Steady, regular meals (rhythm)", why: "Stable routines and blood sugar support mood stability in bipolar disorder.",
+        bio: [
+          "<strong>Steady glucose</strong> is the brain's main fuel; swings destabilize signaling.",
+          "<strong>Regular meal timing</strong> reinforces circadian rhythms tied to mood stability.",
+          "<strong>Balanced protein & fiber</strong> flatten blood-sugar spikes that stress neurons."
+        ] },
+      { action: "amplify", name: "Antioxidant-rich produce", why: "Reduce oxidative stress implicated in bipolar disorder.",
+        bio: [
+          "<strong>Anthocyanins & polyphenols</strong> buffer the oxidative stress seen in bipolar disorder.",
+          "<strong>Vitamin C</strong> protects neurons and recycles other antioxidants.",
+          "<strong>Carotenoids</strong> defend nerve-cell membranes from damage."
+        ] }
     ],
     foodMimic: "No food replaces lithium, which is essential and protective in bipolar disorder. But omega-3s and magnesium support the SAME goal of stable neuronal signaling, and — importantly — regular meal and sleep rhythms are a powerful, evidence-based stabilizer that complements medication."
   },
@@ -490,11 +990,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacodynamic ion-channel gene. Because L-type calcium channels set neuronal excitability, CACNA1C variants nudge the whole brain toward instability — a reason this single gene shows up across bipolar, depression, and schizophrenia. It's an active target for new 'calcium-channel' approaches to mood disorders.",
     foods: [
-      { action: "modulate", name: "Magnesium foods (greens, seeds, legumes)", why: "Magnesium is nature's calcium-channel modulator, calming excitability." },
-      { action: "protect", name: "Omega-3 fish", why: "Stabilize membranes and dampen hyperexcitable signaling." },
-      { action: "protect", name: "Potassium-rich produce (banana, avocado, leafy greens)", why: "Support balanced neuronal electrical activity." },
-      { action: "amplify", name: "Antioxidant-rich berries", why: "Protect neurons from excitation-related stress." },
-      { action: "modulate", name: "Adequate (not excess) calcium from whole foods", why: "Balanced dietary calcium supports normal channel function." }
+      { action: "modulate", name: "Magnesium foods (greens, seeds, legumes)", why: "Magnesium is nature's calcium-channel modulator, calming excitability.",
+        bio: [
+          "<strong>Magnesium</strong> naturally blocks L-type calcium channels, easing over-excitability.",
+          "<strong>Magnesium</strong> also gates NMDA receptors for a calmer nervous system.",
+          "<strong>Folate</strong> (greens/legumes) supports neurotransmitter production."
+        ] },
+      { action: "protect", name: "Omega-3 fish", why: "Stabilize membranes and dampen hyperexcitable signaling.",
+        bio: [
+          "<strong>DHA</strong> stabilizes the membranes where calcium channels operate.",
+          "<strong>EPA</strong> reduces neuroinflammation that worsens excitability.",
+          "<strong>Vitamin D</strong> supports calcium balance and mood."
+        ] },
+      { action: "protect", name: "Potassium-rich produce (banana, avocado, leafy greens)", why: "Support balanced neuronal electrical activity.",
+        bio: [
+          "<strong>Potassium</strong> resets the neuron's electrical charge after each nerve impulse.",
+          "<strong>Vitamin B6</strong> (banana) is a cofactor for GABA and serotonin.",
+          "<strong>Monounsaturated fats</strong> (avocado) support nerve-membrane health."
+        ] },
+      { action: "amplify", name: "Antioxidant-rich berries", why: "Protect neurons from excitation-related stress.",
+        bio: [
+          "<strong>Anthocyanins</strong> protect neurons and support memory.",
+          "<strong>Pterostilbene</strong> reduces oxidative stress from over-excitation.",
+          "<strong>Vitamin C</strong> defends neurons against free-radical damage."
+        ] },
+      { action: "modulate", name: "Adequate (not excess) calcium from whole foods", why: "Balanced dietary calcium supports normal channel function.",
+        bio: [
+          "<strong>Calcium</strong> in balance is essential for neurotransmitter release at synapses.",
+          "<strong>Vitamin K2</strong> helps direct calcium into bone, not soft tissue.",
+          "<strong>Magnesium partnering</strong> keeps calcium signaling from tipping into excitotoxicity."
+        ] }
     ],
     foodMimic: "Some experimental treatments calm CACNA1C calcium channels directly. Among foods, MAGNESIUM is the standout: it acts as a natural calcium-channel modulator on the SAME channels, gently reducing the over-excitability this gene can cause — a well-tolerated, complementary support."
   },
@@ -511,11 +1036,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacodynamic glutamate-receptor gene. By shaping excitatory 'go' signaling, GRIK1 influences anxiety, craving, and seizure threshold. It's notable as a pharmacogenetic predictor for topiramate, especially in reducing heavy drinking — a clear gene-guided treatment example.",
     foods: [
-      { action: "modulate", name: "Magnesium foods (greens, seeds)", why: "Magnesium calms glutamate (NMDA/kainate) overactivity." },
-      { action: "protect", name: "Omega-3 fish", why: "Buffer excitotoxic stress from excess glutamate." },
-      { action: "modulate", name: "Green tea (L-theanine)", why: "Theanine gently counterbalances glutamate excitation." },
-      { action: "protect", name: "Antioxidant produce (berries, greens)", why: "Protect against glutamate-related oxidative stress." },
-      { action: "modulate", name: "Limit MSG-heavy ultra-processed foods", why: "Reducing excess free glutamate may help sensitive individuals." }
+      { action: "modulate", name: "Magnesium foods (greens, seeds)", why: "Magnesium calms glutamate (NMDA/kainate) overactivity.",
+        bio: [
+          "<strong>Magnesium</strong> physically blocks NMDA/kainate channels, guarding against excitotoxicity.",
+          "<strong>Magnesium</strong> supports GABA, the brain's calming counterweight to glutamate.",
+          "<strong>Folate</strong> (greens) supports balanced neurotransmitter synthesis."
+        ] },
+      { action: "protect", name: "Omega-3 fish", why: "Buffer excitotoxic stress from excess glutamate.",
+        bio: [
+          "<strong>DHA</strong> protects neurons against glutamate excitotoxicity.",
+          "<strong>EPA</strong> reduces the neuroinflammation that amplifies excitation.",
+          "<strong>Vitamin D</strong> helps regulate glutamate-calcium balance."
+        ] },
+      { action: "modulate", name: "Green tea (L-theanine)", why: "Theanine gently counterbalances glutamate excitation.",
+        bio: [
+          "<strong>L-theanine</strong> is structurally like glutamate and gently dampens over-excitation.",
+          "<strong>L-theanine</strong> raises GABA and calming alpha brain waves.",
+          "<strong>EGCG</strong> protects neurons from excitation-related oxidative stress."
+        ] },
+      { action: "protect", name: "Antioxidant produce (berries, greens)", why: "Protect against glutamate-related oxidative stress.",
+        bio: [
+          "<strong>Anthocyanins</strong> buffer neurons against excitotoxic oxidative damage.",
+          "<strong>Lutein</strong> (greens) concentrates in the brain and supports cognition.",
+          "<strong>Vitamin C</strong> protects neurons and recycles glutathione."
+        ] },
+      { action: "modulate", name: "Limit MSG-heavy ultra-processed foods", why: "Reducing excess free glutamate may help sensitive individuals.",
+        bio: [
+          "<strong>Free glutamate</strong> from additives can add to the brain's excitatory load in sensitive people.",
+          "Cutting ultra-processed foods lowers <strong>pro-inflammatory compounds</strong> that stress neurons.",
+          "A whole-food diet raises <strong>natural antioxidants</strong> that buffer excitation."
+        ] }
     ],
     foodMimic: "Glutamate-calming drugs reduce excess 'go' signaling. Magnesium and L-theanine work on the SAME excitatory balance — quieting over-excitation gently — while limiting ultra-processed, additive-heavy foods reduces excitatory load. Helpful complements for a calmer, more focused brain."
   },
@@ -534,11 +1084,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacodynamic receptor gene at the center of reward and pain. It directly sets how strongly opioids and naltrexone act, making it one of the clearest pharmacogenetic guides in addiction medicine. Endorphins released by exercise, music, and connection use this SAME receptor.",
     foods: [
-      { action: "amplify", name: "Dark chocolate (cocoa)", why: "Stimulates natural endorphin release through this reward pathway." },
-      { action: "modulate", name: "Spicy foods (capsaicin)", why: "Trigger endorphin release, a natural mood lift." },
-      { action: "protect", name: "Omega-3 fish", why: "Support reward-circuit health and reduce inflammation." },
-      { action: "amplify", name: "Protein-rich whole foods", why: "Provide amino acids for endorphin and neurotransmitter synthesis." },
-      { action: "protect", name: "Fiber-rich, gut-friendly foods", why: "Gut-brain signaling supports healthy reward and mood." }
+      { action: "amplify", name: "Dark chocolate (cocoa)", why: "Stimulates natural endorphin release through this reward pathway.",
+        bio: [
+          "<strong>Flavanols</strong> boost cerebral blood flow and mood.",
+          "<strong>Theobromine</strong> gives a gentle, non-jittery lift.",
+          "<strong>Phenylethylamine</strong> nudges the brain's natural feel-good chemistry."
+        ] },
+      { action: "modulate", name: "Spicy foods (capsaicin)", why: "Trigger endorphin release, a natural mood lift.",
+        bio: [
+          "<strong>Capsaicin</strong> triggers a natural endorphin release for a mood lift.",
+          "<strong>Capsaicin</strong> also has antioxidant, anti-inflammatory effects on nerves.",
+          "It engages the same <strong>reward circuitry</strong> that opioid receptors sit in."
+        ] },
+      { action: "protect", name: "Omega-3 fish", why: "Support reward-circuit health and reduce inflammation.",
+        bio: [
+          "<strong>DHA</strong> supports the membranes of reward-circuit neurons.",
+          "<strong>EPA</strong> reduces neuroinflammation tied to anhedonia.",
+          "<strong>Vitamin D</strong> supports dopamine and mood regulation."
+        ] },
+      { action: "amplify", name: "Protein-rich whole foods", why: "Provide amino acids for endorphin and neurotransmitter synthesis.",
+        bio: [
+          "<strong>Tyrosine & tryptophan</strong> build dopamine and serotonin for reward and mood.",
+          "<strong>Phenylalanine</strong> supports the brain's endorphin-related chemistry.",
+          "<strong>Vitamin B6</strong> is a cofactor for neurotransmitter synthesis."
+        ] },
+      { action: "protect", name: "Fiber-rich, gut-friendly foods", why: "Gut-brain signaling supports healthy reward and mood.",
+        bio: [
+          "<strong>Short-chain fatty acids</strong> from fiber fermentation support brain-barrier health and mood.",
+          "<strong>Prebiotic fiber</strong> feeds microbes that produce neurotransmitter precursors.",
+          "<strong>Polyphenols</strong> in whole plants reduce neuroinflammation."
+        ] }
     ],
     foodMimic: "Naltrexone blocks this receptor to cut cravings; opioids activate it. Food can't replace either, but endorphin-releasing experiences — dark chocolate, spicy food, and especially exercise — engage the SAME reward receptor naturally, offering healthy 'feel-good' support during recovery."
   },
@@ -555,11 +1130,36 @@ const GENES = [
     ],
     pharmacology: "Pharmacodynamic appetite-regulation gene. MC4R sits in the brain's energy-balance center; variants weaken 'I'm full' signaling, and several antipsychotics worsen this — a major driver of medication-related weight gain. It anchors proactive metabolic monitoring in psychiatric care.",
     foods: [
-      { action: "protect", name: "High-protein meals", why: "Strengthen satiety signaling that MC4R variants weaken." },
-      { action: "protect", name: "High-fiber foods (legumes, vegetables, oats)", why: "Promote fullness and steady appetite." },
-      { action: "modulate", name: "Low-glycemic whole grains", why: "Prevent blood-sugar swings that spur hunger." },
-      { action: "amplify", name: "Omega-3 fish", why: "Support metabolic health and reduce inflammation." },
-      { action: "protect", name: "Mindful, regular meals", why: "Structure and pacing counter weakened fullness cues." }
+      { action: "protect", name: "High-protein meals", why: "Strengthen satiety signaling that MC4R variants weaken.",
+        bio: [
+          "<strong>Peptide YY & GLP-1</strong> — satiety hormones protein releases — signal fullness to the brain.",
+          "<strong>Tyrosine & tryptophan</strong> feed dopamine and serotonin for mood and reward.",
+          "<strong>Amino acids</strong> stabilize energy that steadies appetite circuits."
+        ] },
+      { action: "protect", name: "High-fiber foods (legumes, vegetables, oats)", why: "Promote fullness and steady appetite.",
+        bio: [
+          "<strong>Fermentable fiber</strong> makes butyrate, calming gut–brain inflammation.",
+          "<strong>Beta-glucan</strong> (oats) steadies the blood sugar that drives hunger.",
+          "<strong>Folate & B vitamins</strong> (legumes) support neurotransmitter synthesis."
+        ] },
+      { action: "modulate", name: "Low-glycemic whole grains", why: "Prevent blood-sugar swings that spur hunger.",
+        bio: [
+          "<strong>Complex carbohydrates</strong> deliver steady glucose, the brain's main fuel.",
+          "<strong>Magnesium</strong> supports insulin sensitivity and calmer neurons.",
+          "<strong>B vitamins</strong> aid brain energy metabolism."
+        ] },
+      { action: "amplify", name: "Omega-3 fish", why: "Support metabolic health and reduce inflammation.",
+        bio: [
+          "<strong>EPA</strong> reduces inflammation tied to metabolic syndrome and low mood.",
+          "<strong>DHA</strong> supports neuron membranes and appetite-regulating circuits.",
+          "<strong>Vitamin D</strong> supports metabolic and mood health."
+        ] },
+      { action: "protect", name: "Mindful, regular meals", why: "Structure and pacing counter weakened fullness cues.",
+        bio: [
+          "<strong>Slower eating</strong> gives satiety hormones (CCK, GLP-1) time to reach the brain.",
+          "<strong>Regular timing</strong> supports circadian and appetite-hormone rhythms.",
+          "<strong>Steady glucose</strong> from paced meals keeps neurons well fueled."
+        ] }
     ],
     foodMimic: "MC4R is the brain's fullness switch. No food flips it like the targeted drug setmelanotide, but protein and fiber strengthen the SAME satiety signaling — the practical, provider-endorsed way to protect against the appetite increase MC4R variants and certain medications cause."
   },
@@ -576,11 +1176,36 @@ const GENES = [
     ],
     pharmacology: "A pharmacodynamic/metabolic gene bridging nutrition and psychiatry. MTHFR activates folate needed to build serotonin, dopamine, and norepinephrine. Reduced activity can lower these and raise homocysteine. This is why L-methylfolate — the post-enzyme product — is used to AUGMENT antidepressants, a textbook food-meets-medicine intersection.",
     foods: [
-      { action: "amplify", name: "Leafy greens (spinach, romaine, arugula)", why: "Richest natural folate sources for the methylation cycle." },
-      { action: "amplify", name: "Legumes (lentils, chickpeas, beans)", why: "Excellent folate plus steady energy." },
-      { action: "amplify", name: "Asparagus, broccoli, Brussels sprouts", why: "High folate to support monoamine synthesis." },
-      { action: "amplify", name: "Avocado", why: "Folate plus brain-healthy fats." },
-      { action: "protect", name: "B12 foods (eggs, fish, dairy)", why: "B12 partners with folate; deficiency mimics or worsens low mood." }
+      { action: "amplify", name: "Leafy greens (spinach, romaine, arugula)", why: "Richest natural folate sources for the methylation cycle.",
+        bio: [
+          "<strong>Folate (B9)</strong> is the exact nutrient MTHFR activates to build serotonin and dopamine.",
+          "<strong>Lutein</strong> concentrates in the brain and supports memory.",
+          "<strong>Magnesium</strong> calms neurons and supports enzyme function."
+        ] },
+      { action: "amplify", name: "Legumes (lentils, chickpeas, beans)", why: "Excellent folate plus steady energy.",
+        bio: [
+          "<strong>Folate</strong> fuels the methylation cycle for neurotransmitter synthesis.",
+          "<strong>Iron</strong> supports dopamine production and oxygen delivery.",
+          "<strong>Resistant starch</strong> feeds gut microbes that make mood-supporting metabolites."
+        ] },
+      { action: "amplify", name: "Asparagus, broccoli, Brussels sprouts", why: "High folate to support monoamine synthesis.",
+        bio: [
+          "<strong>Folate</strong> supports serotonin, dopamine and norepinephrine production.",
+          "<strong>Sulforaphane</strong> (broccoli, sprouts) activates Nrf2 antioxidant defenses.",
+          "<strong>Inulin</strong> (asparagus) is a prebiotic that supports the gut–brain axis."
+        ] },
+      { action: "amplify", name: "Avocado", why: "Folate plus brain-healthy fats.",
+        bio: [
+          "<strong>Folate</strong> supports the methylation MTHFR performs.",
+          "<strong>Monounsaturated fat</strong> supports nerve-membrane and myelin health.",
+          "<strong>Lutein & vitamin E</strong> protect neurons from oxidative stress."
+        ] },
+      { action: "protect", name: "B12 foods (eggs, fish, dairy)", why: "B12 partners with folate; deficiency mimics or worsens low mood.",
+        bio: [
+          "<strong>Vitamin B12</strong> works with folate in methylation and maintains nerve myelin.",
+          "<strong>Choline</strong> (eggs) builds acetylcholine for memory.",
+          "<strong>Omega-3s</strong> (fish) support neuron membranes and mood."
+        ] }
     ],
     foodMimic: "This is the clearest food-as-medicine gene. The prescription 'medical food' L-methylfolate is simply the activated form of the folate in leafy greens and legumes. For people with the MTHFR variant, a folate-rich diet (with B12) supports the EXACT pathway the supplement targets — a true complement to antidepressant care, ideally guided by a clinician."
   },
@@ -597,11 +1222,36 @@ const GENES = [
     ],
     pharmacology: "An immune-response (immunogenetic) gene — not about drug levels but about SAFETY. A risk allele can turn an ordinary drug into a trigger for severe skin reactions. This is pharmacogenetics at its most life-saving: a single test can steer a clinician away from a dangerous drug for that individual.",
     foods: [
-      { action: "protect", name: "Anti-inflammatory omega-3 fish", why: "Support balanced immune function (general wellness)." },
-      { action: "protect", name: "Colorful antioxidant produce", why: "Help regulate immune and inflammatory tone." },
-      { action: "amplify", name: "Fermented foods", why: "A healthy gut microbiome supports balanced immunity." },
-      { action: "protect", name: "Vitamin-D foods & sensible sunlight", why: "Vitamin D helps modulate immune responses." },
-      { action: "amplify", name: "Polyphenol-rich foods (berries, olive oil, tea)", why: "Support overall immune resilience." }
+      { action: "protect", name: "Anti-inflammatory omega-3 fish", why: "Support balanced immune function (general wellness).",
+        bio: [
+          "<strong>EPA & DHA</strong> resolve inflammation and protect neuron membranes.",
+          "<strong>Specialized pro-resolving mediators</strong> from omega-3s help calm immune over-activity.",
+          "<strong>Vitamin D</strong> (fatty fish) supports balanced immune and mood function."
+        ] },
+      { action: "protect", name: "Colorful antioxidant produce", why: "Help regulate immune and inflammatory tone.",
+        bio: [
+          "<strong>Carotenoids & flavonoids</strong> temper inflammation and protect neurons.",
+          "<strong>Vitamin C</strong> supports immune balance and neural antioxidant defense.",
+          "<strong>Polyphenols</strong> reduce oxidative stress across the nervous system."
+        ] },
+      { action: "amplify", name: "Fermented foods", why: "A healthy gut microbiome supports balanced immunity.",
+        bio: [
+          "<strong>Probiotic bacteria</strong> train immune balance and make neurotransmitter precursors.",
+          "<strong>Short-chain fatty acids</strong> calm gut–brain inflammation.",
+          "<strong>Vitamin K2</strong> supports nerve-membrane lipids."
+        ] },
+      { action: "protect", name: "Vitamin-D foods & sensible sunlight", why: "Vitamin D helps modulate immune responses.",
+        bio: [
+          "<strong>Vitamin D</strong> modulates immune tone and supports serotonin synthesis.",
+          "<strong>Vitamin D receptors</strong> sit throughout mood-regulating brain areas.",
+          "It supports <strong>neurotrophic factors</strong> tied to brain resilience."
+        ] },
+      { action: "amplify", name: "Polyphenol-rich foods (berries, olive oil, tea)", why: "Support overall immune resilience.",
+        bio: [
+          "<strong>Anthocyanins</strong> (berries) protect neurons and support memory.",
+          "<strong>Hydroxytyrosol</strong> (olive oil) shields neurons from oxidative stress.",
+          "<strong>EGCG</strong> (tea) supports neuroprotection and immune balance."
+        ] }
     ],
     foodMimic: "There is no food that mimics this gene's role, and — importantly — no food can substitute for HLA testing before high-risk drugs. The honest message: HLA-A is about drug SAFETY screening. Diet supports general immune health, but the protective action here is genetic testing, not nutrition."
   },
@@ -618,11 +1268,36 @@ const GENES = [
     ],
     pharmacology: "Immunogenetic safety gene. HLA-B risk alleles can trigger Stevens-Johnson syndrome and toxic epidermal necrolysis — rare but devastating reactions. Guidelines (FDA/CPIC) recommend pre-prescription testing in higher-risk populations. The 'pharmacology' here is immune recognition, and the intervention is avoidance, not dosing.",
     foods: [
-      { action: "protect", name: "Anti-inflammatory omega-3 fish", why: "Support balanced immune regulation." },
-      { action: "protect", name: "Antioxidant-rich produce", why: "Help maintain healthy immune tone." },
-      { action: "amplify", name: "Fermented/probiotic foods", why: "Gut health underpins balanced immunity." },
-      { action: "protect", name: "Vitamin-D and zinc foods", why: "Cofactors for healthy immune function." },
-      { action: "amplify", name: "Polyphenol-rich whole foods", why: "Broad immune and anti-inflammatory support." }
+      { action: "protect", name: "Anti-inflammatory omega-3 fish", why: "Support balanced immune regulation.",
+        bio: [
+          "<strong>EPA & DHA</strong> resolve inflammation and protect neuron membranes.",
+          "<strong>Pro-resolving mediators</strong> from omega-3s help calm immune over-activity.",
+          "<strong>Vitamin D</strong> supports balanced immune and mood function."
+        ] },
+      { action: "protect", name: "Antioxidant-rich produce", why: "Help maintain healthy immune tone.",
+        bio: [
+          "<strong>Flavonoids & carotenoids</strong> temper inflammation and protect neurons.",
+          "<strong>Vitamin C</strong> supports immune balance and neural antioxidant defense.",
+          "<strong>Polyphenols</strong> reduce oxidative stress in the nervous system."
+        ] },
+      { action: "amplify", name: "Fermented/probiotic foods", why: "Gut health underpins balanced immunity.",
+        bio: [
+          "<strong>Probiotic bacteria</strong> support immune balance and make neurotransmitter precursors.",
+          "<strong>Short-chain fatty acids</strong> calm gut–brain inflammation.",
+          "<strong>Vitamin K2</strong> supports nerve-membrane lipids."
+        ] },
+      { action: "protect", name: "Vitamin-D and zinc foods", why: "Cofactors for healthy immune function.",
+        bio: [
+          "<strong>Vitamin D</strong> modulates immunity and supports serotonin synthesis.",
+          "<strong>Zinc</strong> regulates immune balance and neurotransmitter signaling.",
+          "<strong>Zinc</strong> also protects against oxidative stress in neurons."
+        ] },
+      { action: "amplify", name: "Polyphenol-rich whole foods", why: "Broad immune and anti-inflammatory support.",
+        bio: [
+          "<strong>Polyphenols</strong> reduce neuroinflammation and support brain resilience.",
+          "<strong>Flavanols</strong> improve cerebral blood flow.",
+          "<strong>Resveratrol & ellagic acid</strong> protect neurons from oxidative damage."
+        ] }
     ],
     foodMimic: "Like HLA-A, this gene has no food 'mimic' and no dietary substitute for testing. The protective action is clear and clinical: genetic screening before high-risk drugs. We include nutrition for general immune wellness, but we want to be honest — here, the life-saving step is the test, not the plate."
   }
@@ -636,8 +1311,8 @@ const GENES = [
 
 const APP_INFO = {
   name: "NeuroNourish",
-  version: "1.1.0",
-  updated: "June 2026",
+  version: "1.2.0",
+  updated: "July 2026",
   // Honest editorial standing. We do NOT claim a clinician has signed off
   // unless/until one actually has — falsely claiming review would itself be
   // grounds for rejection and a consumer-protection problem.

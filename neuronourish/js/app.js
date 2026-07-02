@@ -135,6 +135,8 @@
   function catColor(key) { return (CATS[key] && CATS[key].color) || "#6C63FF"; }
   function catLabel(key) { return (CATS[key] && CATS[key].label) || key; }
   function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
+  // Escape everything, then restore the only markup we allow in authored bio facts: <strong>.
+  function bioHtml(s) { return esc(s).replace(/&lt;strong&gt;/g, "<strong>").replace(/&lt;\/strong&gt;/g, "</strong>"); }
 
   /* ---------------- Filter bar ---------------- */
   function buildFilters() {
@@ -222,12 +224,19 @@
 
     const foodItems = gene.foods.map(f => {
       const a = ACTIONS[f.action] || { label: f.action, color: "#666" };
+      const bio = Array.isArray(f.bio) && f.bio.length
+        ? `<div class="food-bio">
+             <p class="food-bio-label">🧠 Brain-protective compounds</p>
+             <ul class="food-bio-list">${f.bio.map(b => `<li>${bioHtml(b)}</li>`).join("")}</ul>
+           </div>`
+        : "";
       return `
         <div class="food-item">
           <span class="food-badge" style="background:${a.color}" title="${esc(a.hint || "")}">${esc(a.label)}</span>
           <div class="food-body">
             <div class="food-name">${esc(f.name)}</div>
             <div class="food-why">${esc(f.why)}</div>
+            ${bio}
           </div>
         </div>`;
     }).join("");
