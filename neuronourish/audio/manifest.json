@@ -3,113 +3,113 @@
   "engine": "Kokoro v1.0 (sentence-split + silence-capped)",
   "speed": 0.95,
   "genes": {
-    "CYP1A2": {
-      "file": "audio/CYP1A2.mp3",
-      "seconds": 54.3
-    },
-    "CYP2B6": {
-      "file": "audio/CYP2B6.mp3",
-      "seconds": 49.7
-    },
-    "CYP2C9": {
-      "file": "audio/CYP2C9.mp3",
-      "seconds": 43.1
-    },
-    "CYP2C19": {
-      "file": "audio/CYP2C19.mp3",
-      "seconds": 57.1
-    },
-    "CYP2D6": {
-      "file": "audio/CYP2D6.mp3",
-      "seconds": 58.4
-    },
-    "CYP3A4": {
-      "file": "audio/CYP3A4.mp3",
-      "seconds": 49.9
-    },
-    "CYP3A5": {
-      "file": "audio/CYP3A5.mp3",
-      "seconds": 47.0
-    },
-    "UGT1A4": {
-      "file": "audio/UGT1A4.mp3",
-      "seconds": 47.2
-    },
-    "UGT2B15": {
-      "file": "audio/UGT2B15.mp3",
-      "seconds": 44.6
-    },
     "ABCB1": {
       "file": "audio/ABCB1.mp3",
-      "seconds": 49.9
+      "seconds": 69.1
     },
     "ABCG2": {
       "file": "audio/ABCG2.mp3",
-      "seconds": 46.5
-    },
-    "SLCO1B1": {
-      "file": "audio/SLCO1B1.mp3",
-      "seconds": 48.8
-    },
-    "SLC6A4": {
-      "file": "audio/SLC6A4.mp3",
-      "seconds": 49.4
-    },
-    "HTR2A": {
-      "file": "audio/HTR2A.mp3",
-      "seconds": 43.0
-    },
-    "HTR2C": {
-      "file": "audio/HTR2C.mp3",
-      "seconds": 41.1
-    },
-    "COMT": {
-      "file": "audio/COMT.mp3",
-      "seconds": 50.9
-    },
-    "DRD2": {
-      "file": "audio/DRD2.mp3",
-      "seconds": 45.1
+      "seconds": 66.4
     },
     "ADRA2A": {
       "file": "audio/ADRA2A.mp3",
-      "seconds": 42.7
-    },
-    "BDNF": {
-      "file": "audio/BDNF.mp3",
-      "seconds": 52.8
+      "seconds": 64.3
     },
     "ANK3": {
       "file": "audio/ANK3.mp3",
-      "seconds": 46.1
+      "seconds": 66.6
+    },
+    "BDNF": {
+      "file": "audio/BDNF.mp3",
+      "seconds": 73.0
     },
     "CACNA1C": {
       "file": "audio/CACNA1C.mp3",
-      "seconds": 49.6
+      "seconds": 69.3
+    },
+    "COMT": {
+      "file": "audio/COMT.mp3",
+      "seconds": 71.0
+    },
+    "CYP1A2": {
+      "file": "audio/CYP1A2.mp3",
+      "seconds": 80.2
+    },
+    "CYP2B6": {
+      "file": "audio/CYP2B6.mp3",
+      "seconds": 76.7
+    },
+    "CYP2C19": {
+      "file": "audio/CYP2C19.mp3",
+      "seconds": 87.3
+    },
+    "CYP2C9": {
+      "file": "audio/CYP2C9.mp3",
+      "seconds": 65.7
+    },
+    "CYP2D6": {
+      "file": "audio/CYP2D6.mp3",
+      "seconds": 85.9
+    },
+    "CYP3A4": {
+      "file": "audio/CYP3A4.mp3",
+      "seconds": 71.4
+    },
+    "CYP3A5": {
+      "file": "audio/CYP3A5.mp3",
+      "seconds": 68.7
+    },
+    "DRD2": {
+      "file": "audio/DRD2.mp3",
+      "seconds": 65.1
     },
     "GRIK1": {
       "file": "audio/GRIK1.mp3",
-      "seconds": 44.7
-    },
-    "OPRM1": {
-      "file": "audio/OPRM1.mp3",
-      "seconds": 49.7
-    },
-    "MC4R": {
-      "file": "audio/MC4R.mp3",
-      "seconds": 44.4
-    },
-    "MTHFR": {
-      "file": "audio/MTHFR.mp3",
-      "seconds": 51.1
+      "seconds": 66.6
     },
     "HLA-A": {
       "file": "audio/HLA-A.mp3",
-      "seconds": 48.5
+      "seconds": 66.2
     },
     "HLA-B": {
       "file": "audio/HLA-B.mp3",
-      "seconds": 51.1
+      "seconds": 72.3
+    },
+    "HTR2A": {
+      "file": "audio/HTR2A.mp3",
+      "seconds": 64.7
+    },
+    "HTR2C": {
+      "file": "audio/HTR2C.mp3",
+      "seconds": 62.0
+    },
+    "MC4R": {
+      "file": "audio/MC4R.mp3",
+      "seconds": 64.8
+    },
+    "MTHFR": {
+      "file": "audio/MTHFR.mp3",
+      "seconds": 70.0
+    },
+    "OPRM1": {
+      "file": "audio/OPRM1.mp3",
+      "seconds": 70.1
+    },
+    "SLC6A4": {
+      "file": "audio/SLC6A4.mp3",
+      "seconds": 68.0
+    },
+    "SLCO1B1": {
+      "file": "audio/SLCO1B1.mp3",
+      "seconds": 69.7
+    },
+    "UGT1A4": {
+      "file": "audio/UGT1A4.mp3",
+      "seconds": 70.8
+    },
+    "UGT2B15": {
+      "file": "audio/UGT2B15.mp3",
+      "seconds": 65.1
     }
   }
 }
