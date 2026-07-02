@@ -54,6 +54,7 @@ const GENES = [
     category: "metabolism",
     population: "Very common. The fast-metabolizer version (CYP1A2*1F) is carried by roughly 40–50% of people, and its activity swings widely with smoking and diet.",
     plain: "CYP1A2 is one of your liver's recycling machines. Its job is to break down certain medicines and even the caffeine in your coffee. Some people have a fast version of this machine and some have a slow version. If yours runs fast, a medicine can leave your body before it has a chance to fully work. If yours runs slow, the same medicine can build up and cause more side effects. Knowing your speed helps a doctor pick the right starting dose, so you feel better sooner and safer.",
+    analogy: "Imagine a coffee grinder in your kitchen. Some grinders run on high and pulverize the beans in seconds; others run slow. CYP1A2 is your body's 'grinder' for certain medicines and for the caffeine in coffee. A fast grinder can chew through a medicine before it finishes its job; a slow one lets it pile up. Your doctor just needs to know which grinder you have.",
     illnesses: ["Schizophrenia (clozapine, olanzapine dosing)", "Bipolar disorder", "Depression where caffeine sensitivity is a clue"],
     drugs: [
       { name: "Clozapine", cls: "Antipsychotic", note: "Largely cleared by CYP1A2; slow metabolizers reach higher blood levels, fast metabolizers (often smokers) may need higher doses." },
@@ -100,6 +101,7 @@ const GENES = [
     category: "metabolism",
     population: "Reduced-function variants are common; about 1 in 16 people (~6%) are poor metabolizers, with intermediate activity far more frequent.",
     plain: "CYP2B6 is another liver helper. It breaks down a specific group of medicines, including bupropion, a drug often used for depression and to help people quit smoking. If your CYP2B6 works slowly, that medicine can pile up; if it works quickly, it may clear before it helps. This gene is a good example of why two people taking the exact same pill can have very different experiences.",
+    analogy: "Think of a food processor that both chops and purées. CYP2B6 first 'switches on' certain medicines like bupropion, then helps clear them out. If your processor runs slow, the ingredients (the drug) linger in the bowl; if it's fast, they're gone before you can use them — which is why the same pill can do so much for one person and little for another.",
     illnesses: ["Depression (bupropion)", "Tobacco use disorder / smoking cessation", "ADHD when bupropion is used off-label"],
     drugs: [
       { name: "Bupropion", cls: "Atypical antidepressant (NDRI)", note: "Converted by CYP2B6 to its active form; variant activity changes how much active drug you make." },
@@ -146,6 +148,7 @@ const GENES = [
     category: "metabolism",
     population: "Intermediate metabolizers are common (~35%); full poor metabolizers are less common (~1–3%), more frequent in people of European ancestry.",
     plain: "CYP2C9 breaks down certain mood stabilizers, pain relievers, and blood thinners. If your version is slow, these medicines hang around longer and can cause more side effects at normal doses. Doctors pay special attention to this gene because some of the drugs it handles, like warfarin, have a narrow safety window.",
+    analogy: "Picture a sink drain. CYP2C9 is how fast the water — a medicine — drains away. A slow drain means the sink fills higher: fine for a bath, risky if it overflows. For 'narrow-window' drugs like blood thinners, keeping that drain steady and predictable is exactly what keeps things safe.",
     illnesses: ["Bipolar disorder (some anticonvulsant mood stabilizers)", "Anxiety with chronic pain overlap", "Seizure-related mood conditions"],
     drugs: [
       { name: "Phenytoin", cls: "Anticonvulsant / mood-related", note: "Narrow therapeutic range; slow CYP2C9 raises toxicity risk." },
@@ -192,6 +195,7 @@ const GENES = [
     category: "metabolism",
     population: "Poor metabolizers are ~2–5% in European/African ancestry and up to ~15% in East Asian ancestry; the ultra-rapid *17 variant is carried by roughly 30%.",
     plain: "CYP2C19 is a star player in mental health because it breaks down several of the most common antidepressants, like citalopram and escitalopram. If you're a slow metabolizer, a normal dose can act like a high dose, bringing more side effects. If you're an ultra-fast metabolizer, the same dose may barely work. This is one of the genes doctors most often use to fine-tune antidepressant choices.",
+    analogy: "Think of a dimmer switch on a light. For the exact same 'setting' (the dose), a slow CYP2C19 lights the room too brightly — the drug builds up — while a fast one barely lights it at all. Doctors fine-tune the switch to your personal wiring so the room ends up just right.",
     illnesses: ["Major depressive disorder", "Generalized & social anxiety", "Panic disorder", "OCD"],
     drugs: [
       { name: "Escitalopram / Citalopram", cls: "SSRI antidepressant", note: "Poor metabolizers reach higher levels (QT-interval caution); ultra-rapid may underrespond." },
@@ -238,6 +242,7 @@ const GENES = [
     category: "metabolism",
     population: "Highly variable: ~5–10% poor metabolizers in European ancestry; ultra-rapid metabolizers range ~1–10% globally and up to ~20–30% in some North-African/Middle-Eastern populations.",
     plain: "CYP2D6 is one of the busiest liver enzymes in psychiatry — it helps break down many antidepressants, antipsychotics, and pain medicines. People come in four speeds: poor, intermediate, normal, and ultra-rapid. Your speed can change whether a normal dose is too strong, just right, or too weak. Because it handles so many drugs, this is often the single most useful gene on a mental-health panel.",
+    analogy: "Imagine a busy airport with baggage carousels running at different speeds. CYP2D6 is the carousel handling the most 'luggage' — more psychiatric medicines than almost any other. Some carousels crawl, some race. Match the speed wrong and bags either pile up or fly off the belt, which is why knowing your speed is so useful.",
     illnesses: ["Depression", "Anxiety disorders", "Schizophrenia", "ADHD (atomoxetine)", "Chronic pain with mood overlap"],
     drugs: [
       { name: "Fluoxetine / Paroxetine", cls: "SSRI antidepressant", note: "Both substrates and strong inhibitors of CYP2D6 — they can slow their own and other drugs' metabolism." },
@@ -284,6 +289,7 @@ const GENES = [
     category: "metabolism",
     population: "The reduced-function CYP3A4*22 variant is carried by roughly 5–8% of people; activity also varies widely with diet and other drugs even without a variant.",
     plain: "CYP3A4 is the body's workhorse enzyme — it helps break down more than half of all medicines, including many used for anxiety, sleep, and mood. Because it handles so much, it's very sensitive to what else you eat or take. Grapefruit is the famous example: it can slow this enzyme and make some medicines stronger than intended.",
+    analogy: "Think of the main highway out of a city. CYP3A4 is the road most of your medicines take to leave the body. Grapefruit acts like a sudden lane closure — traffic (the drug) backs up and levels climb higher than planned. That's why something as ordinary as a food can change how a pill feels.",
     illnesses: ["Anxiety (many benzodiazepines)", "Bipolar disorder", "Depression", "Sleep disorders"],
     drugs: [
       { name: "Alprazolam / Midazolam", cls: "Benzodiazepine", note: "Heavily CYP3A4-dependent; inhibition causes oversedation." },
@@ -330,6 +336,7 @@ const GENES = [
     category: "metabolism",
     population: "Expression varies sharply by ancestry: most people of European ancestry are non-expressers (~85–90% carry *3/*3), while many people of African ancestry actively express the enzyme.",
     plain: "CYP3A5 is a close partner to CYP3A4 and helps clear some of the same medicines. Whether you 'express' (switch on) this enzyme depends a lot on your ancestry. People who express it may clear certain drugs faster and need different doses. It's a good reminder that one-size-fits-all dosing doesn't fit everyone.",
+    analogy: "Imagine a second checkout lane that some stores open and others keep closed. CYP3A5 is that 'extra lane' for clearing medicines — switched on in some people (often depending on ancestry) and switched off in others. When the lane is open, the line moves faster, so one-size-fits-all dosing doesn't fit everyone.",
     illnesses: ["Conditions overlapping with CYP3A4 drugs", "Mood disorders on antipsychotics", "Anxiety on benzodiazepines"],
     drugs: [
       { name: "Quetiapine", cls: "Antipsychotic", note: "Shared 3A pathway; expression can speed clearance." },
@@ -376,6 +383,7 @@ const GENES = [
     category: "metabolism",
     population: "Functional variants are moderately common and differ by ancestry; they meaningfully shift how fast lamotrigine and some antipsychotics are cleared.",
     plain: "UGT1A4 is a 'Phase 2' liver enzyme — it tags certain drugs with a sugar molecule so the body can flush them out. One of its most important jobs is clearing lamotrigine, a mood stabilizer. If this enzyme is slow, lamotrigine levels can rise; if it's fast, they can fall. This matters because lamotrigine must be increased slowly to stay safe.",
+    analogy: "Think of putting a stamped address label on a package so the post office can ship it out. UGT1A4 sticks a 'shipping label' on certain medicines like lamotrigine so your body can mail them away. A slow labeler means packages sit around longer — a reason lamotrigine is raised slowly and carefully.",
     illnesses: ["Bipolar disorder (lamotrigine maintenance)", "Depression with mood instability", "Seizure-related mood conditions"],
     drugs: [
       { name: "Lamotrigine", cls: "Mood stabilizer / anticonvulsant", note: "Primarily cleared by UGT1A4; variant activity changes levels and titration needs." },
@@ -422,6 +430,7 @@ const GENES = [
     category: "metabolism",
     population: "The reduced-activity *2 variant is very common — roughly half of people carry it — affecting clearance of some benzodiazepines.",
     plain: "UGT2B15 is another Phase 2 enzyme that tags drugs for removal. It helps clear calming medicines like lorazepam and oxazepam. Because these are often used for anxiety and sleep, a slow version of this enzyme can make their effects last longer, which can be good for sleep but risky for daytime grogginess.",
+    analogy: "Same 'shipping label' idea as its cousin: UGT2B15 labels calming medicines like lorazepam for removal. If the labeler works slowly, the package lingers — which can be helpful for a full night's sleep, but may leave you groggy the next morning, especially for older adults.",
     illnesses: ["Anxiety disorders", "Insomnia", "Acute agitation", "Alcohol-withdrawal management"],
     drugs: [
       { name: "Lorazepam", cls: "Benzodiazepine", note: "Cleared mainly by UGT2B15 glucuronidation; slow activity prolongs effect." },
@@ -470,6 +479,7 @@ const GENES = [
     category: "transporter",
     population: "Extremely common variation — the C3435T variant allele is found in roughly half the population and influences how much drug crosses into the brain.",
     plain: "ABCB1 builds tiny pumps that sit on the blood-brain barrier, the brain's security gate. These pumps push some medicines back out of the brain to keep it protected. If your pumps are very active, an antidepressant may have a harder time getting in to do its job; if they're sluggish, more drug gets through. This helps explain why the same dose reaches different people's brains differently.",
+    analogy: "Picture a bouncer at the door of the brain's VIP club. ABCB1 is that bouncer, pushing certain medicines back outside to keep the brain protected. A very strict bouncer keeps more of the drug out; a relaxed one lets more in — which helps explain why the same dose reaches different people's brains differently.",
     illnesses: ["Treatment-resistant depression", "Anxiety disorders", "Schizophrenia"],
     drugs: [
       { name: "Citalopram / Escitalopram", cls: "SSRI antidepressant", note: "P-gp substrates; transporter activity affects brain entry and response." },
@@ -516,6 +526,7 @@ const GENES = [
     category: "transporter",
     population: "The reduced-function Q141K variant ranges from ~10% in European ancestry to ~30% or more in East Asian ancestry.",
     plain: "ABCG2 makes another protective pump, similar to ABCB1, that moves substances out of cells and helps guard the brain and gut. Variations change how well it works, which can affect how much of certain medicines and even some nutrients get absorbed and reach the brain. It's part of the body's overall traffic-control system for drugs.",
+    analogy: "Think of a revolving door that keeps sweeping certain substances back outside. ABCG2 is that door in your gut and brain — a busy, active door absorbs less of a medicine, while a sluggish one lets more through. It's part of the body's traffic-control system for drugs and nutrients.",
     illnesses: ["Mood disorders (drug exposure effects)", "Conditions managed with transporter-substrate drugs"],
     drugs: [
       { name: "Certain antidepressants (substrates)", cls: "Antidepressant", note: "BCRP can limit absorption and CNS entry." },
@@ -562,6 +573,7 @@ const GENES = [
     category: "transporter",
     population: "The reduced-function *5 variant is carried by roughly 15% of people and is best known for raising statin-related muscle-pain risk.",
     plain: "SLCO1B1 builds a 'doorway' on liver cells that pulls certain drugs in so the liver can process them. It's most famous for statins (cholesterol medicines), where a slow version raises the risk of muscle aches. In mental health, it matters because many people take statins alongside psychiatric medicines, and managing those side effects supports overall well-being.",
+    analogy: "Imagine a loading dock where trucks — medicines — get pulled into a warehouse (the liver) for processing. SLCO1B1 is that dock. If it works slowly, trucks keep circling the streets (your bloodstream) instead of unloading, and for statins that backup can leave muscles achy.",
     illnesses: ["Depression with cardiometabolic comorbidity", "Mood effects of chronic statin-related pain"],
     drugs: [
       { name: "Simvastatin / Atorvastatin", cls: "Statin (comedication)", note: "Reduced uptake raises blood levels and muscle-toxicity risk." },
@@ -610,6 +622,7 @@ const GENES = [
     category: "serotonergic",
     population: "The 'short' (S) version of the 5-HTTLPR promoter is common — roughly 40% of people carry at least one short allele — and is linked to SSRI response and stress sensitivity.",
     plain: "SLC6A4 builds the serotonin transporter — the exact target that SSRI medicines block. Serotonin is a 'feel-steady' chemical messenger, and this transporter recycles it back into nerve cells. Some people have a version that recycles serotonin more aggressively, which can affect mood and how well an SSRI works. It's one of the most studied genes in all of psychiatry.",
+    analogy: "Think of a vacuum cleaner that sucks up 'feel-steady' confetti (serotonin) right after it's tossed into the air. SLC6A4 builds that vacuum. Some people run it on high, cleaning up serotonin fast. SSRI medicines basically unplug the vacuum for a while, so the good feeling gets to linger.",
     illnesses: ["Major depressive disorder", "Anxiety disorders", "PTSD", "OCD", "Heightened stress reactivity"],
     drugs: [
       { name: "Sertraline", cls: "SSRI antidepressant", note: "Directly blocks the SERT this gene builds; short-allele carriers may respond less or slower." },
@@ -656,6 +669,7 @@ const GENES = [
     category: "serotonergic",
     population: "Common variants (such as rs6313) are carried by a large share of the population and are studied for antidepressant response and side-effect tendency.",
     plain: "HTR2A makes a docking station — a receptor — that serotonin plugs into. This particular receptor influences mood, sleep, and how some antidepressants and antipsychotics cause side effects. Different versions can make a person more or less likely to feel side effects like restlessness or sleep changes from certain medicines.",
+    analogy: "Picture a wall outlet that serotonin plugs into to deliver a message. HTR2A is that outlet. Different people's outlets fit the plug a little differently, which is why the very same medicine can feel calming to one person and cause restlessness or odd sleep in another.",
     illnesses: ["Depression", "Anxiety", "Schizophrenia", "Sleep disturbance"],
     drugs: [
       { name: "Trazodone", cls: "Serotonin modulator (sleep/depression)", note: "Blocks 2A receptors; variant influences sedation and benefit." },
@@ -702,6 +716,7 @@ const GENES = [
     category: "serotonergic",
     population: "Promoter variants (e.g., -759C/T) are common and are the best-known genetic predictor of weight gain from certain antipsychotics.",
     plain: "HTR2C makes another serotonin docking station, and it has a big say in appetite and weight. This is important because some mental-health medicines, especially certain antipsychotics, can cause weight gain — and your HTR2C version helps predict how much. Knowing this lets a care team plan ahead with nutrition and monitoring.",
+    analogy: "Think of a 'you're full' button in the brain's kitchen. HTR2C is that button. Some medicines press down on it so it stops signaling 'stop eating,' and your personal version of the button decides how strongly that nudges your appetite — which is why a care team can plan ahead with nutrition.",
     illnesses: ["Schizophrenia", "Bipolar disorder", "Antipsychotic-associated weight gain & metabolic syndrome", "Appetite dysregulation"],
     drugs: [
       { name: "Olanzapine", cls: "Antipsychotic", note: "2C-related variants strongly predict weight-gain risk." },
@@ -750,6 +765,7 @@ const GENES = [
     category: "dopaminergic",
     population: "The Val158Met variant splits the population roughly into thirds: about 25% fast (Val/Val), 50% intermediate, and 25% slow (Met/Met) dopamine breakdown.",
     plain: "COMT is the enzyme that cleans up dopamine in the thinking part of your brain. Dopamine helps with focus, motivation, and handling stress. Some people break dopamine down quickly ('warriors') and some slowly ('worriers'). Slow breakers often have sharper focus but feel stress more; fast breakers stay calmer under pressure but may need more dopamine support to focus. Neither is better — they're just different.",
+    analogy: "Imagine a janitor who sweeps up dopamine — your focus-and-drive chemical — in the brain's front office. COMT is that janitor. A fast janitor keeps the floor spotless but a little bare; a slow one leaves more lying around: sharper focus, but you feel stress more. Neither is 'better,' just different.",
     illnesses: ["ADHD", "Anxiety", "Depression", "Schizophrenia", "Stress sensitivity"],
     drugs: [
       { name: "Methylphenidate / Amphetamine", cls: "Stimulant (ADHD)", note: "Response and side-effect profile differ by COMT speed; slow metabolizers may be more anxiety-prone on stimulants." },
@@ -796,6 +812,7 @@ const GENES = [
     category: "dopaminergic",
     population: "The Taq1A (A1) variant near DRD2 is common, carried by roughly a third of people, and is studied in antipsychotic response and reward sensitivity.",
     plain: "DRD2 makes the main docking station for dopamine — and it's the key target of almost every antipsychotic medicine. Dopamine drives reward, motivation, and movement. Variations change how many docking stations you have, which affects how well antipsychotics work and how likely they are to cause side effects like stiffness or restlessness.",
+    analogy: "Think of parking spots for dopamine 'cars.' DRD2 builds those spots. Antipsychotic medicines work like a valet blocking some of them so fewer cars can park. How many spots you have shapes how well the medicine works and whether it causes side effects like stiffness or restlessness.",
     illnesses: ["Schizophrenia", "Bipolar disorder", "Addiction & reward disorders", "Depression with low motivation"],
     drugs: [
       { name: "Risperidone", cls: "Antipsychotic", note: "Blocks D2 receptors this gene builds; variant affects response and movement side effects." },
@@ -842,6 +859,7 @@ const GENES = [
     category: "dopaminergic",
     population: "Common promoter variants (e.g., MspI / -1291C>G) are widely distributed and studied for ADHD medication response, especially to guanfacine and atomoxetine.",
     plain: "ADRA2A makes a receptor for norepinephrine, a 'focus and alertness' messenger. It's especially important in the front of the brain for attention and self-control. Some ADHD medicines work directly through this receptor. Your version can influence how well those medicines help you concentrate and stay calm.",
+    analogy: "Picture the focus knob on a camera. ADRA2A is a knob for attention and calm at the front of the brain. Certain non-stimulant ADHD medicines gently turn that knob to sharpen the picture and steady your hand — and your version of the knob affects how much they help.",
     illnesses: ["ADHD", "Anxiety", "PTSD-related hyperarousal", "Impulse control"],
     drugs: [
       { name: "Guanfacine", cls: "Alpha-2A agonist (ADHD)", note: "Directly activates this receptor; variant predicts response." },
@@ -890,6 +908,7 @@ const GENES = [
     category: "signaling",
     population: "The Val66Met variant is common — the Met allele is carried by roughly 20–30% of people of European ancestry and up to ~40–50% in East Asian ancestry.",
     plain: "BDNF is like fertilizer for your brain. It helps brain cells grow, connect, and bounce back from stress — a process called neuroplasticity. People with a less-active version may find it a little harder to recover from depression or stress, but the great news is that BDNF responds strongly to healthy habits: exercise, sleep, and good food all turn it up. This is one of the most hopeful genes on the panel.",
+    analogy: "Think of BDNF as fertilizer and water for a garden of brain cells. With plenty of it, the garden grows, connects, and bounces back after a storm. Here's the hopeful part: exercise, sleep, and good food water this garden as powerfully as some medicines do.",
     illnesses: ["Depression", "Anxiety", "PTSD", "Bipolar disorder", "Stress-related cognitive complaints"],
     drugs: [
       { name: "SSRIs/SNRIs (class effect)", cls: "Antidepressant", note: "Raise BDNF over weeks; the rise tracks with recovery and may be blunted in Met carriers." },
@@ -936,6 +955,7 @@ const GENES = [
     category: "signaling",
     population: "Common risk variants near ANK3 are among the most replicated genetic associations with bipolar disorder, carried by a substantial minority of the population.",
     plain: "ANK3 builds scaffolding that holds nerve-cell channels in just the right place so signals fire properly. Think of it as the framework that keeps a brain cell's electrical wiring organized. Certain versions are linked to bipolar disorder. It helps researchers understand mood swings at the level of how brain cells stay stable and well-organized.",
+    analogy: "Imagine the studs and framing inside a wall that hold the electrical wiring exactly where it belongs. ANK3 is that framing inside a brain cell. When the framing sits a little off, the wiring can fire erratically — one thread behind the mood swings of bipolar disorder.",
     illnesses: ["Bipolar disorder", "Schizophrenia (overlap)", "Mood instability"],
     drugs: [
       { name: "Lithium", cls: "Mood stabilizer", note: "First-line for bipolar disorder; stabilizes neuronal signaling ANK3 supports." },
@@ -982,6 +1002,7 @@ const GENES = [
     category: "signaling",
     population: "The rs1006737 risk variant is very common — roughly a third of people carry the risk allele — and is one of the most consistent genetic links across mood and psychotic disorders.",
     plain: "CACNA1C builds a calcium gate on brain cells. Calcium flowing through this gate is how neurons get excited and talk to each other. A more active version can make brain cells a bit too excitable, which is linked to bipolar disorder, depression, and schizophrenia. It's a shared thread connecting several mental-health conditions.",
+    analogy: "Think of a floodgate on a dam that lets water (calcium) rush in to get a brain cell excited. CACNA1C is that gate. If it opens too easily, cells get over-excited — which is why this single gate shows up as a shared thread across bipolar disorder, depression, and schizophrenia.",
     illnesses: ["Bipolar disorder", "Major depression", "Schizophrenia", "Anxiety"],
     drugs: [
       { name: "Lithium", cls: "Mood stabilizer", note: "Calms overexcitable calcium-driven signaling." },
@@ -1028,6 +1049,7 @@ const GENES = [
     category: "signaling",
     population: "Functional variants are moderately common and are studied as predictors of response to the anticonvulsant topiramate and in anxiety/alcohol-use traits.",
     plain: "GRIK1 makes part of a receptor for glutamate, the brain's main 'go' signal that speeds activity up. Balancing 'go' (glutamate) against 'stop' (GABA) is key to a calm, focused mind. Variations in GRIK1 affect this balance and can influence anxiety and how well certain medicines, like topiramate, work for a person.",
+    analogy: "Imagine a car with a gas pedal ('go' = glutamate) and a brake ('stop' = GABA). GRIK1 is part of the gas pedal. A pedal that's too sensitive keeps the engine revving and the mind racing — which can feel like anxiety, and helps explain who responds to calming medicines.",
     illnesses: ["Anxiety disorders", "Alcohol use disorder", "Mood disorders", "Seizure-related conditions"],
     drugs: [
       { name: "Topiramate", cls: "Anticonvulsant / anti-craving", note: "Acts on kainate glutamate receptors; GRIK1 variant predicts response, including in alcohol use disorder." },
@@ -1076,6 +1098,7 @@ const GENES = [
     category: "other",
     population: "The A118G (N40D) variant is common — the G allele is carried by roughly 10–30% of people, higher in East Asian ancestry — and influences opioid and naltrexone response.",
     plain: "OPRM1 makes the brain's main opioid receptor — the docking station for both natural 'feel-good' endorphins and opioid medicines. It also shapes how people respond to naltrexone, a medicine used for alcohol and opioid use disorders. Your version can affect pain relief, addiction risk, and how well anti-craving treatment works. It links mood, reward, and recovery.",
+    analogy: "Think of a lock that fits two kinds of keys: your body's natural 'feel-good' keys (endorphins) and opioid medicines. OPRM1 is that lock. Its exact shape affects pain relief, addiction risk, and how well an anti-craving medicine like naltrexone works — and exercise turns the same lock naturally.",
     illnesses: ["Alcohol use disorder", "Opioid use disorder", "Depression with anhedonia", "Chronic pain with mood overlap"],
     drugs: [
       { name: "Naltrexone", cls: "Opioid antagonist (anti-craving)", note: "G-allele carriers may respond especially well for alcohol use disorder." },
@@ -1122,6 +1145,7 @@ const GENES = [
     category: "other",
     population: "Variants near MC4R are among the most common genetic influences on appetite and obesity, and they help predict antipsychotic-related weight gain.",
     plain: "MC4R makes a receptor that acts like an appetite thermostat in the brain — it tells you when you're full. Some versions set the thermostat so you feel hungry more easily, which raises the risk of weight gain, especially with certain mental-health medicines. Understanding this helps a care team support healthy weight from the very start of treatment.",
+    analogy: "Picture a thermostat that decides when you feel 'full.' MC4R is that appetite thermostat. Set a little low, and hunger switches on more easily — especially with certain medicines — so planning healthy, filling meals from the very start of treatment really helps.",
     illnesses: ["Antipsychotic-associated weight gain", "Obesity & metabolic syndrome", "Binge-eating patterns", "Depression with appetite changes"],
     drugs: [
       { name: "Olanzapine / Clozapine", cls: "Antipsychotic", note: "MC4R variants predict added weight-gain risk." },
@@ -1168,6 +1192,7 @@ const GENES = [
     category: "other",
     population: "Very common: roughly 10–15% of people carry two copies of the C677T variant (TT), and about 40% carry one copy, each modestly reducing folate activation.",
     plain: "MTHFR is the enzyme that activates folate (vitamin B9) into the form your brain actually uses to make mood chemicals like serotonin and dopamine. A common slower version means you activate folate less efficiently. For some people, using the already-active form of folate (L-methylfolate) supports better mood. It's one of the most talked-about nutrition genes in mental health.",
+    analogy: "Think of a can opener for a can of soup (folate). Your brain can't 'eat' the folate until it's opened into the usable form. MTHFR is that opener. A slower opener means using the already-opened form — L-methylfolate — can give the brain the folate it needs to build mood chemicals.",
     illnesses: ["Depression (especially treatment-resistant)", "Anxiety", "Bipolar disorder", "Cognitive complaints"],
     drugs: [
       { name: "L-methylfolate (Deplin)", cls: "Medical food / augmentation", note: "Provides the active folate the variant struggles to make; used to augment antidepressants." },
@@ -1214,6 +1239,7 @@ const GENES = [
     category: "other",
     population: "Specific risk alleles are uncommon overall (often a few percent) but vary widely by ancestry; HLA-A*31:01, for example, flags carbamazepine hypersensitivity risk.",
     plain: "HLA-A is part of your immune system's ID-checking team — it shows pieces of molecules to immune cells to decide what's friend or foe. Certain versions can mistakenly flag a specific drug as dangerous, triggering a serious rash or reaction. Testing for these before prescribing those drugs is a powerful safety step that can prevent harm.",
+    analogy: "Imagine a security guard checking IDs at a door. HLA-A is that guard for your immune system. In some people the guard mistakes a specific medicine for an intruder and sounds a serious alarm (a dangerous rash) — which is why a quick test before those drugs is so protective.",
     illnesses: ["Bipolar disorder (carbamazepine safety)", "Seizure-related mood conditions", "Any condition treated with high-risk drugs"],
     drugs: [
       { name: "Carbamazepine", cls: "Mood stabilizer / anticonvulsant", note: "HLA-A*31:01 raises risk of hypersensitivity reactions; pre-screening advised." },
@@ -1260,6 +1286,7 @@ const GENES = [
     category: "other",
     population: "Risk alleles are uncommon but highly ancestry-dependent: HLA-B*15:02 (severe carbamazepine reactions) is notably more frequent in Southeast/East Asian populations.",
     plain: "HLA-B is a close partner to HLA-A in the immune system's ID-checking team. Some versions are strongly linked to severe, dangerous skin reactions to specific drugs — reactions so serious that guidelines recommend testing first, especially for people of certain ancestries. It's one of the clearest examples of how a simple genetic test can prevent a life-threatening event.",
+    analogy: "Same security-guard idea, with a partner on duty: HLA-B. For certain people — often tied to ancestry — this guard reacts to a specific drug with a dangerous, whole-building alarm (a severe skin reaction). A simple genetic test beforehand is like checking the guest list to prevent it.",
     illnesses: ["Bipolar disorder (drug-safety screening)", "Seizure-related mood conditions", "Conditions requiring high-risk anticonvulsants"],
     drugs: [
       { name: "Carbamazepine", cls: "Mood stabilizer / anticonvulsant", note: "HLA-B*15:02 strongly predicts Stevens-Johnson syndrome/TEN; testing recommended in at-risk ancestries." },

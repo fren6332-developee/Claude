@@ -280,6 +280,11 @@
       <div class="plain-card">
         <p class="section-eyebrow">🎧 In plain language (8th-grade level)</p>
         <p>${esc(gene.plain)}</p>
+        ${gene.analogy ? `
+        <div class="analogy-box">
+          <p class="analogy-label">💡 Think of it like this</p>
+          <p class="analogy-text">${esc(gene.analogy)}</p>
+        </div>` : ""}
       </div>
 
       <div class="section">
@@ -357,6 +362,7 @@
   function buildNarration(gene) {
     return `${gene.symbol}. ${gene.name}. ` +
            `${gene.plain} ` +
+           (gene.analogy ? `Here's a simple way to picture it. ${gene.analogy} ` : "") +
            `Here's a quick population note. ${gene.population} ` +
            `Remember, this is educational information to discuss with your clinician, not medical advice.`;
   }
