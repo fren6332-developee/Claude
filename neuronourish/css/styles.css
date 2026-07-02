@@ -218,6 +218,23 @@ body {
 .plain-card .section-eyebrow { color: var(--brand); }
 .plain-card p { margin: 8px 0 0; font-size: 1.05rem; }
 
+/* simple analogy addendum */
+.analogy-box {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(0,184,169,0.09), rgba(108,99,255,0.09));
+  border: 1px solid rgba(0,184,169,0.28);
+  border-left: 4px solid var(--brand-2);
+  border-radius: 12px;
+}
+.analogy-box .analogy-label {
+  margin: 0; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--brand-2);
+}
+.analogy-box .analogy-text {
+  margin: 6px 0 0; font-size: 1.02rem; line-height: 1.5; color: var(--ink);
+}
+
 /* generic section */
 .section {
   margin-top: 18px; background: var(--bg-card); border: 1px solid var(--line);
@@ -272,6 +289,29 @@ body {
 }
 .food-body .food-name { font-weight: 700; }
 .food-body .food-why { font-size: 0.9rem; color: var(--ink-soft); margin-top: 2px; }
+
+/* brain-protective bioactive compounds per food */
+.food-bio {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: rgba(108, 99, 255, 0.06);
+  border: 1px solid rgba(108, 99, 255, 0.16);
+  border-radius: 12px;
+}
+.food-bio-label {
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--brand); margin: 0 0 6px;
+}
+.food-bio-list { margin: 0; padding: 0 0 0 0.9rem; list-style: none; }
+.food-bio-list li {
+  position: relative; font-size: 0.85rem; line-height: 1.42;
+  color: var(--ink-soft); margin: 4px 0;
+}
+.food-bio-list li::before {
+  content: "•"; position: absolute; left: -0.85rem;
+  color: var(--brand-2); font-weight: 800;
+}
+.food-bio-list li strong { color: var(--ink); font-weight: 700; }
 
 /* food-mimic highlight */
 .mimic-card {
