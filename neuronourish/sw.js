@@ -1,6 +1,6 @@
 /* NeuroNourish service worker — network-first so updates are never stale,
    with a cache fallback for offline use. */
-const CACHE = "neuronourish-v9";
+const CACHE = "neuronourish-v10";
 const ASSETS = [
   "./",
   "./index.html",
