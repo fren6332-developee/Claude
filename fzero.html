@@ -63,6 +63,46 @@
   .title-sub{
     font-size:clamp(9px,2.1vw,14px); letter-spacing:.3em; color:var(--accent2); margin-bottom:.6em;
   }
+
+  /* ---------- title screen: 80s punk flyer ---------- */
+  #screen-title{
+    background:
+      radial-gradient(circle at 18% 20%, rgba(255,46,108,.5), transparent 42%),
+      radial-gradient(circle at 84% 12%, rgba(232,255,61,.35), transparent 38%),
+      radial-gradient(circle at 68% 84%, rgba(255,46,108,.32), transparent 46%),
+      radial-gradient(circle at 20% 88%, rgba(255,255,255,.1), transparent 30%),
+      #0a0a0a;
+    overflow:hidden;
+  }
+  #screen-title::before{
+    content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background-image:repeating-linear-gradient(0deg, rgba(255,255,255,.045) 0 1px, transparent 1px 3px);
+    mix-blend-mode:overlay;
+  }
+  /* flex items get z-index without needing position:relative, so this doesn't
+     clobber the position:absolute on .tape / #punkSplatter below */
+  #screen-title > *{ z-index:1; }
+  #punkSplatter{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+  #punkSplatter span{ position:absolute; border-radius:47% 53% 51% 49%/53% 47% 53% 47%; }
+  .tape{
+    position:absolute; width:15%; max-width:70px; height:18px; background:rgba(255,255,255,.82);
+    box-shadow:0 2px 5px rgba(0,0,0,.5); z-index:2;
+  }
+  .tape.tape-l{ top:5%; left:9%; transform:rotate(-15deg); }
+  .tape.tape-r{ top:4%; right:10%; transform:rotate(12deg); }
+  .punk-title{
+    display:flex; flex-wrap:wrap; justify-content:center; align-items:baseline;
+    gap:0 .03em; margin:0 0 .05em; line-height:1.15; max-width:94%;
+  }
+  .punk-title .ln{ display:inline-block; font-weight:900; }
+  .punk-sub{
+    font-size:clamp(9px,2.3vw,13px); letter-spacing:.4em; color:#e8ff3d;
+    text-shadow:2px 2px 0 #000; margin-bottom:.5em;
+  }
+  #btnQuick{
+    font-size:clamp(9px,2vw,12px); padding:.55em 1em;
+    background:linear-gradient(180deg,#e8ff3d,#a7c400); color:#141200; border-color:#fff;
+  }
   .pixel-btn{
     font-family:inherit; font-weight:bold; letter-spacing:.08em;
     font-size:clamp(11px,2.6vw,16px); color:var(--ink);
@@ -114,6 +154,14 @@
     color:var(--gold); font-size:clamp(16px,4.4vw,30px); text-shadow:3px 3px 0 #b3232f; z-index:6; pointer-events:none;
   }
   #msgFlash.hidden{ display:none; }
+  #controlReminder{
+    position:absolute; top:44%; left:50%; transform:translate(-50%,-50%);
+    display:flex; gap:.9em; background:rgba(10,4,26,.72); border:1px solid #7a53c9; border-radius:6px;
+    padding:.5em 1em; font-size:clamp(9px,2.2vw,12px); color:var(--ink); z-index:6; pointer-events:none;
+    opacity:1; transition:opacity .6s ease; letter-spacing:.05em;
+  }
+  #controlReminder.hidden{ display:none; }
+  #controlReminder.fading{ opacity:0; }
 
   /* touch controls */
   #touchLayer{ position:absolute; inset:0; z-index:7; }
@@ -177,6 +225,9 @@
 
       <div id="msgFlash" class="hidden"></div>
       <div id="countdown" class="hidden"></div>
+      <div id="controlReminder" class="hidden">
+        <span>&#9664;&#9654; STEER</span><span>BRAKE</span><span>BOOST</span>
+      </div>
 
       <div id="touchLayer" style="display:none;">
         <div class="zone left" id="zoneLeft"><span class="zoneArrow">&#9664;</span></div>
@@ -185,13 +236,17 @@
         <div id="boostBtn">BOOST</div>
       </div>
 
-      <!-- ---------------- TITLE ---------------- -->
+      <!-- ---------------- TITLE (80s punk flyer) ---------------- -->
       <div id="screen-title" class="screen">
-        <div class="title-big">TURBO ZERO</div>
-        <div class="title-sub">16-BIT STREET CIRCUIT</div>
-        <div class="hint" style="margin-bottom:1em;">Pick your car. Pick a rival. Head-to-head, one on one.</div>
+        <div id="punkSplatter"></div>
+        <div class="tape tape-l"></div>
+        <div class="tape tape-r"></div>
+        <h1 class="title-big punk-title" id="punkTitleText">TURBO ZERO</h1>
+        <div class="punk-sub">— 16-BIT STREET CIRCUIT —</div>
+        <div class="hint" style="margin-bottom:.6em;">Pick your car. Pick a rival. Head-to-head, one on one.</div>
         <button class="pixel-btn hot" id="btnStart">TAP TO START</button>
-        <div class="hint" style="margin-top:1.4em;">Steer with the left / right zones or arrow keys.<br/>Tap BOOST for turbo, BRAKE to slow.<br/>Watch for jumps, ramps, hairpins &amp; road hazards.</div>
+        <button class="pixel-btn" id="btnQuick">&#9889; QUICK RACE (RANDOM CAR + RIVAL)</button>
+        <div class="hint" style="margin-top:1em;">Steer with the left / right zones or arrow keys.<br/>Auto-centering keeps you on the road — BOOST for turbo, BRAKE to slow.<br/>Watch for jumps, ramps, hairpins &amp; road hazards.</div>
       </div>
 
       <!-- ---------------- CAR SELECT ---------------- -->
@@ -322,10 +377,19 @@ const Audio1 = (function(){
     return g;
   }
 
-  function tone(dest, freq, t0, dur, {type="sawtooth", a=0.01,d=0.08,s=0.7,r=0.08,peak=0.3,detune=0,filterHz=null,vibrato=0}={}){
+  function distortionCurve(amount){
+    const n = 256, curve = new Float32Array(n);
+    for (let i=0;i<n;i++){ const x = i*2/n - 1; curve[i] = (1+amount)*x/(1+amount*Math.abs(x)); }
+    return curve;
+  }
+  function tone(dest, freq, t0, dur, {type="sawtooth", a=0.01,d=0.08,s=0.7,r=0.08,peak=0.3,detune=0,filterHz=null,vibrato=0,distortion=0}={}){
     const osc = actx.createOscillator();
     osc.type = type; osc.frequency.setValueAtTime(freq, t0); if (detune) osc.detune.value = detune;
     let node = osc;
+    if (distortion){
+      const ws = actx.createWaveShaper(); ws.curve = distortionCurve(distortion); ws.oversample = "2x";
+      node.connect(ws); node = ws;
+    }
     if (filterHz){
       const f = actx.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = filterHz; f.Q.value = 0.7;
       node.connect(f); node = f;
@@ -488,13 +552,56 @@ const Audio1 = (function(){
     return { stop(){ stopFlag = true; if (timer) clearTimeout(timer); } };
   }
 
+  // ---- Title screen: raw 80s punk rock (distorted power chords, fast d-beat) ----
+  function makeTitlePunk(){
+    let stopFlag = false;
+    const bpm = 176, beat = 60/bpm, bar = beat*4;
+    // fast power-chord changes, root+fifth: E - A - B - A
+    const prog = [ [40,47], [45,52], [47,54], [45,52] ];
+    let barIdx = 0;
+    let nextTime = actx.currentTime + 0.05;
+    const lookahead = 0.1, scheduleAheadTime = 0.3;
+    let timer = null;
+
+    function scheduleBar(t0){
+      const chord = prog[barIdx % prog.length];
+      // palm-muted eighth-note downstrokes, distorted
+      for (let i=0;i<8;i++){
+        const t = t0 + i*beat/2;
+        chord.forEach((n,ci)=>{
+          tone(musicGain, noteFreq(n+12), t, beat/2*0.75, {type:"sawtooth", a:0.001,d:0.03,s:0.35,r:0.03, peak:0.22, distortion:16, filterHz:2400, detune:ci*3});
+        });
+      }
+      // fast, raw d-beat: kick on 1 & 3, snare crack on 2 & 4, driving 16th hats
+      kick(musicGain, t0, 0.85); kick(musicGain, t0+beat*2, 0.85);
+      noiseHit(musicGain, t0+beat, 0.14, {filterHz:1500, type:"bandpass", peak:0.6});
+      noiseHit(musicGain, t0+beat*3, 0.14, {filterHz:1500, type:"bandpass", peak:0.6});
+      for (let i=0;i<16;i++){
+        const t = t0 + i*beat/4;
+        noiseHit(musicGain, t, 0.04, {filterHz:8000, type:"highpass", peak:0.14});
+      }
+      barIdx++;
+    }
+    function schedulerTick(){
+      if (stopFlag) return;
+      while (nextTime < actx.currentTime + scheduleAheadTime){
+        scheduleBar(nextTime);
+        nextTime += bar;
+      }
+      timer = setTimeout(schedulerTick, lookahead*1000);
+    }
+    schedulerTick();
+    return { stop(){ stopFlag = true; if (timer) clearTimeout(timer); } };
+  }
+
   function playSong(name){
     ensure(); resume();
     if (currentSong){ currentSong.stop(); currentSong = null; }
     // always schedule — master gain (via setEnabled) is what actually mutes it,
     // so toggling sound back on mid-race brings the song back instead of
     // leaving it permanently unscheduled for the rest of the race
-    if (name === "rock") currentSong = makeRockAnthem();
+    if (name === "punk") currentSong = makeTitlePunk();
+    else if (name === "rock") currentSong = makeRockAnthem();
     else if (name === "soft") currentSong = makeSoftRock();
   }
   function stopSong(){ if (currentSong){ currentSong.stop(); currentSong = null; } }
@@ -993,6 +1100,9 @@ function drawObstacleMarker(g, obstacle, p1){
 /* --------------------------------------------------------------- */
 /* ----------------------------- INPUT ------------------------------ */
 /* --------------------------------------------------------------- */
+// short haptic taps on jumps/hits/boosts — silently a no-op where unsupported (iOS Safari)
+function vibrate(ms){ if (navigator.vibrate) navigator.vibrate(ms); }
+
 const Input = { left:false, right:false, brake:false, boostHeld:false };
 (function setupInput(){
   window.addEventListener("keydown", (e)=>{
@@ -1037,7 +1147,7 @@ const Input = { left:false, right:false, brake:false, boostHeld:false };
 /* --------------------------------------------------------------- */
 /* ----------------------------- GAME -------------------------------- */
 /* --------------------------------------------------------------- */
-const CENTRIFUGAL = 0.3;
+const CENTRIFUGAL = 0.19; // gentler pull through curves so beginners can hold a line
 const OFFROAD_LIMIT = 1.0;
 const JUMP_DURATION = 0.9;
 
@@ -1117,21 +1227,21 @@ function triggerObstacle(r, o){
       if (r.jumpTimer<=0){
         r.jumpTimer = JUMP_DURATION; r.speed += 350;
         Game.shake = Math.max(Game.shake, 0.05);
-        if (r.isPlayer){ Audio1.boostWhoosh(); showFlash("JUMP!", 700); }
+        if (r.isPlayer){ Audio1.boostWhoosh(); showFlash("JUMP!", 700); vibrate(25); }
       }
       break;
     case "bump":
-      r.speed *= 0.95; Game.shake = Math.max(Game.shake, 0.12);
-      if (r.isPlayer) Audio1.collisionThud();
+      r.speed *= 0.96; Game.shake = Math.max(Game.shake, 0.1);
+      if (r.isPlayer){ Audio1.collisionThud(); vibrate(15); }
       break;
     case "pothole":
-      r.speed *= 0.78; Game.shake = Math.max(Game.shake, 0.28);
-      if (r.isPlayer) Audio1.collisionThud();
+      r.speed *= 0.85; Game.shake = Math.max(Game.shake, 0.22);
+      if (r.isPlayer){ Audio1.collisionThud(); vibrate(35); }
       break;
     case "cone":
     case "rockhaz":
-      r.speed *= 0.85; r.x += (Math.random()-0.5)*0.3; Game.shake = Math.max(Game.shake, 0.22);
-      if (r.isPlayer) Audio1.collisionThud();
+      r.speed *= 0.9; r.x += (Math.random()-0.5)*0.2; Game.shake = Math.max(Game.shake, 0.18);
+      if (r.isPlayer){ Audio1.collisionThud(); vibrate(35); }
       break;
   }
 }
@@ -1161,12 +1271,16 @@ function updateRacerPhysics(r, dt, track){
   if (r.isPlayer){
     const steerInput = (Input.right?1:0) - (Input.left?1:0);
     r.bank += ((steerInput) - r.bank)*Math.min(1, dt*6);
-    r.x += steerInput * dt * 2.2 * (0.4+r.grip) * (0.4+speedRatio) * (airborne?0.5:1);
+    r.x += steerInput * dt * 2.6 * (0.55+r.grip) * (0.4+speedRatio) * (airborne?0.5:1);
+    // gentle auto-centering assist when not actively steering — makes it much
+    // easier to recover a line after a curve or a hazard bump without fighting
+    // the wheel back yourself
+    if (steerInput===0 && !airborne) r.x += (0 - r.x) * dt * 0.5;
     if (Input.brake) r.speed -= r.accel*1.6*dt;
     else r.speed += r.accel*dt*(1-speedRatio*0.6);
 
     if (Input.boostHeld && r.boost>0.08 && !r.boosting){
-      r.boosting = true; r.boostTimer = 1.3; Audio1.boostWhoosh();
+      r.boosting = true; r.boostTimer = 1.3; Audio1.boostWhoosh(); vibrate(30);
     }
   } else {
     // AI: steer toward a target x that leans into the upcoming curve, with personality jitter
@@ -1208,9 +1322,10 @@ function updateRacerPhysics(r, dt, track){
   r.x -= (seg.curve * Math.pow(r.speed/r.maxSpeed,2) * CENTRIFUGAL) * dt * (airborne?0.25:1);
 
   // off-road penalty (skipped while jumping — you're sailing over the shoulder)
+  // kept forgiving: a beginner drifting a little wide shouldn't feel like hitting a wall
   if (!airborne && Math.abs(r.x) > OFFROAD_LIMIT){
-    r.speed -= r.speed*1.6*dt;
-    if (r.speed < r.maxSpeed*0.35) r.speed = Math.max(r.speed, r.maxSpeed*0.1);
+    r.speed -= r.speed*0.9*dt;
+    if (r.speed < r.maxSpeed*0.45) r.speed = Math.max(r.speed, r.maxSpeed*0.22);
   }
 
   r.speed = Math.max(0, Math.min(r.maxSpeed*1.35, r.speed));
@@ -1436,11 +1551,51 @@ function renderTrackPreview(canvasEl, themeDef){
 renderTrackPreview(document.querySelector("#cardCity canvas"), TRACKS.city);
 renderTrackPreview(document.querySelector("#cardDesert canvas"), TRACKS.desert);
 
+// ---- punk-flyer title screen: ransom-note lettering + spray splatter ----
+(function setupPunkTitle(){
+  const titleEl = document.getElementById("punkTitleText");
+  const palette = ["#ff2e6c","#e8ff3d","#ffffff","#28e0ff"];
+  const text = titleEl.textContent.trim();
+  titleEl.textContent = "";
+  [...text].forEach(ch=>{
+    const span = document.createElement("span");
+    span.className = "ln";
+    span.textContent = ch===" " ? "  " : ch;
+    const rot = (Math.random()*14-7).toFixed(1);
+    const jitterY = (Math.random()*10-5).toFixed(1);
+    const size = (1 + (Math.random()*0.26-0.13)).toFixed(2);
+    span.style.transform = `rotate(${rot}deg) translateY(${jitterY}px) scale(${size})`;
+    span.style.color = palette[Math.floor(Math.random()*palette.length)];
+    span.style.textShadow = "2px 2px 0 #000, -1px -1px 0 #000, 3px 3px 0 rgba(0,0,0,.55)";
+    titleEl.appendChild(span);
+  });
+
+  const splatter = document.getElementById("punkSplatter");
+  const colors = ["#ff2e6c","#e8ff3d","#ffffff"];
+  for (let i=0;i<16;i++){
+    const dot = document.createElement("span");
+    const size = 4 + Math.random()*22;
+    dot.style.width = size+"px"; dot.style.height = size+"px";
+    dot.style.left = (Math.random()*100)+"%"; dot.style.top = (Math.random()*100)+"%";
+    dot.style.background = colors[Math.floor(Math.random()*colors.length)];
+    dot.style.opacity = (0.12 + Math.random()*0.32).toFixed(2);
+    splatter.appendChild(dot);
+  }
+})();
+
 /* ---------------------------- flow -------------------------------- */
 document.getElementById("btnStart").addEventListener("click", ()=>{
-  Audio1.resume();
+  Audio1.resume(); Audio1.stopSong();
   Game.carIndex = 0; renderCarSelect();
   showScreen("car");
+});
+document.getElementById("btnQuick").addEventListener("click", ()=>{
+  Audio1.resume(); Audio1.stopSong();
+  Game.carIndex = Math.floor(Math.random()*CARS.length);
+  const others = CARS.map((_,i)=>i).filter(i=>i!==Game.carIndex);
+  Game.opponentIndex = others[Math.floor(Math.random()*others.length)];
+  Game.trackKey = Math.random()<0.5 ? "city" : "desert";
+  startRace();
 });
 document.getElementById("btnCarPrev").addEventListener("click", ()=>{
   Game.carIndex = (Game.carIndex-1+CARS.length)%CARS.length; renderCarSelect();
@@ -1489,7 +1644,18 @@ document.getElementById("btnAgain").addEventListener("click", ()=>{
 document.getElementById("btnMenu").addEventListener("click", ()=>{
   Audio1.stopSong();
   showScreen("title");
+  if (audioUnlocked) Audio1.playSong("punk");
 });
+
+// the first tap anywhere unlocks audio (required by mobile browsers) and kicks
+// off the punk title riff without the player needing to hit a specific button first
+let audioUnlocked = false;
+document.addEventListener("pointerdown", function firstTouch(){
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  Audio1.resume();
+  if (Game.state === "title") Audio1.playSong("punk");
+}, { once:true });
 
 let soundOn = true;
 const btnMute = document.getElementById("btnMute");
@@ -1518,8 +1684,10 @@ function runCountdown(){
   function step(){
     el.countdown.textContent = seq[i];
     Audio1.countdownBeep(i);
+    vibrate(seq[i]==="GO!" ? 60 : 20);
     if (seq[i]==="GO!"){
       Audio1.playSong(TRACKS[Game.trackKey].song);
+      showControlReminder();
       setTimeout(()=>{ el.countdown.classList.add("hidden"); Game.state="race"; }, 500);
     } else {
       i++; setTimeout(step, 800);
@@ -1533,6 +1701,15 @@ function showFlash(text, ms){
   el.msgFlash.classList.remove("hidden");
   clearTimeout(Game.msgTimer);
   Game.msgTimer = setTimeout(()=>el.msgFlash.classList.add("hidden"), ms||1400);
+}
+
+let crTimer1 = null, crTimer2 = null;
+function showControlReminder(){
+  const crEl = document.getElementById("controlReminder");
+  crEl.classList.remove("hidden","fading");
+  clearTimeout(crTimer1); clearTimeout(crTimer2);
+  crTimer1 = setTimeout(()=>crEl.classList.add("fading"), 2400);
+  crTimer2 = setTimeout(()=>crEl.classList.add("hidden"), 3000);
 }
 
 function endRace(){
