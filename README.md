@@ -150,4 +150,7 @@ node tests/perft.test.cjs   # legal-move counts from the start position match
 ```
 
 > An earlier Zelda-style game still lives in the self-contained
-> [`play.html`](play.html) if you'd like to revisit it.
+> [`play.html`](play.html) if you'd like to revisit it, and a 16-bit,
+> F-Zero-inspired racer — pick a car, pick a rival, race head-to-head across
+> a City/Highway or Desert circuit full of jumps, ramps, hairpins and road
+> hazards — lives in [`fzero.html`](fzero.html).
