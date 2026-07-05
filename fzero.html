@@ -139,6 +139,12 @@
   #resultsList li.me{ color:var(--gold); }
   #resultsList li .rk{ width:1.6em; }
 
+  #btnMute{
+    position:absolute; top:9%; right:2%; z-index:10;
+    padding:.35em .55em; font-size:clamp(12px,3vw,16px); line-height:1;
+  }
+  #btnMute.muted{ opacity:.45; }
+
   .hint{ font-size:clamp(8px,1.8vw,11px); color:#9a86c9; max-width:80%; }
   .footer-credit{ position:absolute; bottom:2px; right:6px; font-size:9px; color:#5a4a86; z-index:9; }
 </style>
@@ -148,6 +154,8 @@
   <div id="stage">
     <div id="frame">
       <canvas id="game" width="400" height="225"></canvas>
+
+      <button id="btnMute" class="pixel-btn" type="button">&#9834;</button>
 
       <div id="hud">
         <div class="hud-top">
@@ -483,7 +491,9 @@ const Audio1 = (function(){
   function playSong(name){
     ensure(); resume();
     if (currentSong){ currentSong.stop(); currentSong = null; }
-    if (!enabled) return;
+    // always schedule — master gain (via setEnabled) is what actually mutes it,
+    // so toggling sound back on mid-race brings the song back instead of
+    // leaving it permanently unscheduled for the rest of the race
     if (name === "rock") currentSong = makeRockAnthem();
     else if (name === "soft") currentSong = makeSoftRock();
   }
@@ -1086,8 +1096,18 @@ function resetRace(){
 
 function rankRacers(){
   const trackLen = Game.track.length;
-  const withProgress = Game.racers.map(r => ({ r, p: totalTrackDistance({length:trackLen}, r.lap, r.z) }));
-  withProgress.sort((a,b)=>b.p-a.p);
+  const withProgress = Game.racers.map(r => ({
+    r, finished: r.finished, finishTime: r.finishTime,
+    p: totalTrackDistance({length:trackLen}, r.lap, r.z)
+  }));
+  // finished racers always outrank ones still driving, and among finishers the
+  // earlier finish time wins — raw progress is meaningless once z resets to a
+  // tiny post-finish-line remainder, so it only breaks ties among non-finishers
+  withProgress.sort((a,b)=>{
+    if (a.finished !== b.finished) return a.finished ? -1 : 1;
+    if (a.finished) return a.finishTime - b.finishTime;
+    return b.p - a.p;
+  });
   withProgress.forEach((e,i)=> e.r.rank = i+1);
 }
 
@@ -1216,6 +1236,7 @@ function checkCollisions(){
   for (let i=0;i<list.length;i++){
     for (let j=i+1;j<list.length;j++){
       const a = list[i], b = list[j];
+      if (a.finished || b.finished) continue; // a finished car is parked, not a live obstacle
       const dz = Math.abs(a.z - b.z);
       if (dz < 220 && Math.abs(a.x-b.x) < 0.42){
         const push = (0.42 - Math.abs(a.x-b.x))*0.5*(a.x<b.x?-1:1);
@@ -1470,7 +1491,19 @@ document.getElementById("btnMenu").addEventListener("click", ()=>{
   showScreen("title");
 });
 
+let soundOn = true;
+const btnMute = document.getElementById("btnMute");
+btnMute.addEventListener("click", ()=>{
+  soundOn = !soundOn;
+  Audio1.setEnabled(soundOn);
+  btnMute.textContent = soundOn ? "♪" : "♪✕";
+  btnMute.classList.toggle("muted", !soundOn);
+});
+
 function startRace(){
+  // a touch could still be "down" from the previous screen if its pointerup
+  // never reached the (now hidden) control — start every race with a clean slate
+  Input.left = false; Input.right = false; Input.brake = false; Input.boostHeld = false;
   resetRace();
   showScreen(null);
   Audio1.startEngine();
