@@ -18,12 +18,25 @@ recorded in `skills-lock.json`.
 ```
 cd engine/hyperframes
 npm install
+npm test
 ```
 
-Requires Node >= 18 and `ffmpeg` on PATH (not bundled — see
-`src/ffmpeg.js`). Playwright needs a Chromium build; if your environment
-already has one at a pinned path (e.g. this repo's dev sandbox), point at it
-instead of downloading a fresh copy:
+Requires Node >= 18 and `ffmpeg` on PATH for actually rendering a job (not
+bundled — see `src/ffmpeg.js`; missing ffmpeg fails with a clear error,
+not a crash). `npm install` also pulls down Playwright's matching Chromium
+build for HTML frame rendering, unless one is already cached at
+`PLAYWRIGHT_BROWSERS_PATH`.
+
+`playwright` is pinned to an **exact** version in `package.json` (not a
+range) on purpose: Playwright ties each release to a specific bundled
+Chromium revision, so a semver-compatible `npm install` picking up a newer
+patch can silently expect a browser build that isn't the one you have
+cached — that's a real class of "worked yesterday, breaks today" bug, not
+just a sandbox quirk. Bump it deliberately, not implicitly.
+
+If your environment has Chromium pre-installed at a nonstandard path (some
+CI images, this repo's own dev sandbox) and you'd rather point at that than
+let Playwright manage its own copy, override it:
 
 ```
 export HYPERFRAMES_CHROMIUM_PATH=/path/to/chromium
