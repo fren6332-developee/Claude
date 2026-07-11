@@ -1,0 +1,10 @@
+{
+  "_readme": "Registry for the vendored HyperFrames engine. Update only through the process in engine/hyperframes/README.md — never hand-edit vendored files, and keep this record in sync with what's actually checked in under engine/hyperframes/vendor/.",
+  "engine": "hyperframes",
+  "vendored": false,
+  "source": null,
+  "version": null,
+  "commit": null,
+  "vendored_at": null,
+  "modules": ["reframe", "graphics", "b-roll", "motion", "captions"]
+}

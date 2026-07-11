@@ -1,0 +1,46 @@
+---
+name: rough-cut
+description: Step 2 of the YouTube pipeline. Runs WhisperX to transcribe/align the raw clip, cuts filler and dead air, polishes audio, and produces the working script. Use after intake, before graphics-plan.
+---
+
+# Rough cut
+
+Step 2 of 7. Same for every format. Produces the script that steps 3 and 5 both
+consume.
+
+## Prerequisites
+
+- `projects/<job>/raw/` populated by `intake`.
+- `whisperx` installed and on PATH (or reachable via `python -m whisperx`). If it
+  isn't available, tell the user rather than approximating a transcript by hand.
+- `ffmpeg` on PATH for audio extraction/rendering.
+
+## What to do
+
+1. Extract audio from the raw clip if needed:
+   `ffmpeg -i raw/<source> -vn -acodec pcm_s16le -ar 16000 -ac 1 rough-cut/audio-src.wav`
+2. Run WhisperX for word-level timestamps and speaker alignment:
+   `whisperx rough-cut/audio-src.wav --output_dir rough-cut/ --output_format json`
+3. From the word-level transcript, build a cut list at `rough-cut/cuts.json`:
+   - Mark filler words (`um`, `uh`, false starts, stammered repeats) for removal.
+   - Mark silences/dead air beyond ~0.6s for trimming (leave natural breath room).
+   - Each cut entry: `{ "start": <sec>, "end": <sec>, "reason": "filler"|"silence" }`.
+4. Render the rough cut by cutting the marked segments out and concatenating the
+   remainder (ffmpeg `select`/`concat`, or an edit-decision-list workflow — whichever
+   is more reliable for the source format). Output: `rough-cut/rough-cut.mp4`.
+5. Polish audio on the render: loudness-normalize to a broadcast target
+   (`ffmpeg -af loudnorm=I=-16:TP=-1.5:LRA=11`), output `rough-cut/audio.wav`.
+6. Write `rough-cut/script.md`: the transcript **as it now reads after cuts** —
+   this is "the script." It's the input graphics-plan and embedded-captions both
+   read from, so keep it in sync with the actual cut timing (timestamps per line).
+7. Update `job.json.status` to `"rough-cut"`.
+
+## Off-ramp
+
+If the user wants to finish this job by hand in Premiere Pro instead of continuing
+through the automated pipeline, stop here and invoke `to-premiere` instead of
+`graphics-plan`. This is a dashed/alternate path — most jobs continue straight on.
+
+## Next step
+
+Hand off to `graphics-plan` (step 3), or `to-premiere` if taking the off-ramp.

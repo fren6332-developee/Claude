@@ -1,0 +1,10 @@
+# Per-job working state and raw/rendered media are local artifacts, not source.
+projects/*
+!projects/.gitkeep
+
+outputs/*
+!outputs/.gitkeep
+
+# Vendored HyperFrames drop-in (tracked once actually vendored, per
+# engine/hyperframes/README.md -- not committed as part of this scaffolding).
+engine/hyperframes/vendor/

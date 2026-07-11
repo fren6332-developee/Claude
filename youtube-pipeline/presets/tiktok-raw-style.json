@@ -1,0 +1,25 @@
+{
+  "_locked": true,
+  "_update_policy": "Edit only via a deliberate design change + version bump. Skills must treat this file as read-only input, never rewrite it as a side effect of rendering a job.",
+  "preset": "tiktok-raw-style",
+  "used_by": ["graphics-plan", "embedded-captions"],
+  "applies_to_formats": ["short-tiktok-raw"],
+  "graphics": {
+    "hook_card": {
+      "duration_sec": 1.5,
+      "style": "bold statement, no logo"
+    },
+    "after_hook": "cut straight to raw footage, no further cards"
+  },
+  "captions": {
+    "position": "low, under face",
+    "locked_position": false,
+    "burn_in": "on-beat",
+    "typography": {
+      "font": "system-native-look",
+      "size_pct_of_frame_height": 7,
+      "weight": "black",
+      "case": "sentence"
+    }
+  }
+}

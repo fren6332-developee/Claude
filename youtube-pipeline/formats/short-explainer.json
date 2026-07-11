@@ -1,0 +1,15 @@
+{
+  "format": "short-explainer",
+  "aspect_ratio": "9:16",
+  "resolution": "1080x1920",
+  "graphics": {
+    "style": "top-half cards",
+    "preset": "signature-style"
+  },
+  "captions": {
+    "position": "centered",
+    "locked": true,
+    "preset": "captions-style"
+  },
+  "thumbnail": "usually_skip"
+}

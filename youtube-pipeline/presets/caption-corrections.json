@@ -1,0 +1,10 @@
+{
+  "_locked": true,
+  "_update_policy": "Upstream brand & spelling fixes. Append new corrections here as they're discovered during captioning; do not remove existing entries without checking prior jobs don't depend on them.",
+  "used_by": ["embedded-captions"],
+  "corrections": {
+    "example": "Replace ASR mis-transcriptions here as { \"wrong\": \"right\" } pairs, e.g. brand names, technical terms, proper nouns.",
+    "mthfr": "MTHFR",
+    "dna": "DNA"
+  }
+}

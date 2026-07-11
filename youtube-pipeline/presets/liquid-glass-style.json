@@ -1,0 +1,13 @@
+{
+  "_locked": true,
+  "_update_policy": "Edit only via a deliberate design change + version bump. Skills must treat this file as read-only input, never rewrite it as a side effect of rendering a job.",
+  "preset": "liquid-glass-style",
+  "used_by": ["graphics-plan"],
+  "applies_to_formats": ["long-form-youtube"],
+  "graphics": {
+    "panel": "frosted-glass blur",
+    "motion": "slow zoom (ken-burns), 2-4% per beat",
+    "transitions": "cross-dissolve, 250ms",
+    "safe_margins_pct": 5
+  }
+}
