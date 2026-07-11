@@ -22,24 +22,32 @@ Check `job.json.format`:
 
 - `second-pass` review has approved the current `composite.mp4`.
 - `rough-cut/rough-cut.mp4`'s word-level timestamps (from WhisperX, step 2) for
-  on-beat sync.
+  on-beat sync — save/keep these as `rough-cut/words.json` (`[{ text, start, end }]`)
+  during the `rough-cut` skill so this step can read them directly.
+- HyperFrames set up: `cd engine/hyperframes && npm install` (one-time).
 
 ## What to do
 
-1. Take the word-level transcript from `rough-cut/` and `rough-cut/script.md`.
-2. Apply `presets/caption-corrections.json`: run every corrections entry over the
-   transcript text before rendering (brand names, spelling, technical terms — these
-   are upstream fixes, not job-specific, so don't skip them).
-3. Style per format (see table in `CLAUDE.md`):
-   - `short-explainer`: centered, **locked position** — don't move it per-job.
-   - `short-tiktok-raw`: low, under face — this one does track the subject, not a
-     fixed position.
-4. Burn in **on-beat**: sync caption word/phrase reveals to audio emphasis, not just
-   flat word-by-word timing — use the preset's `burn_in: "on-beat"` behavior via the
-   HyperFrames captions module (see `engine/hyperframes/README.md`).
-5. Output to `projects/<job>/captions/`, and update `composite.mp4` with captions
-   burned in.
-6. Update `job.json.status` to `"captions"`.
+1. Take the word-level transcript at `rough-cut/words.json`.
+2. Invoke the HyperFrames CLI, which applies `presets/caption-corrections.json`,
+   groups words into on-beat cues, and renders + composites them per the preset's
+   position rule (centered/locked for `short-explainer`, low-under-face for
+   `short-tiktok-raw`):
+
+   ```
+   node engine/hyperframes/bin/hyperframes.js captions \
+     --transcript projects/<job>/rough-cut/words.json \
+     --corrections presets/caption-corrections.json \
+     --preset presets/<captions-style-or-tiktok-raw-style>.json \
+     --base projects/<job>/composite.mp4 \
+     --out-dir projects/<job>/captions/render \
+     --out projects/<job>/composite.mp4
+   ```
+
+   Don't hand-roll correction or cue-grouping logic here — that's the engine's job;
+   if a specific correction is missing, add it to `presets/caption-corrections.json`
+   (a deliberate, tracked edit) rather than working around it per-job.
+3. Update `job.json.status` to `"captions"`.
 
 ## Next step
 

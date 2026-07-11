@@ -12,9 +12,10 @@ then `formats/<format>.json` (both at the pipeline root) for what that format wa
 
 - `rough-cut` has completed: `rough-cut/script.md` and `rough-cut/rough-cut.mp4`
   exist.
-- HyperFrames vendored under `engine/hyperframes/vendor/` (check
-  `engine/hyperframes/skills-lock.json` — if `"vendored": false`, you can still do
-  the planning half of this skill, but rendering is blocked; tell the user).
+- HyperFrames set up: `cd engine/hyperframes && npm install` (one-time). Requires
+  `ffmpeg` on PATH for the actual render/composite step — the plan (beats, copy)
+  can still be produced without it, but rendering will fail with a clear error if
+  it's missing.
 
 ## What to do
 
@@ -42,15 +43,26 @@ footage, untouched.
 
 ### 2. Build the graphics
 
-Invoke the vendored HyperFrames engine (see `engine/hyperframes/README.md` for its
-entry point) with `graphics-plan.json` and the matching locked preset. Never
-hand-write competing graphics-rendering logic here, and never hand-edit files under
-`engine/hyperframes/vendor/` — if the render looks wrong, fix the plan or preset
-inputs, not the engine.
+Invoke the HyperFrames CLI with `graphics-plan.json` and the matching locked preset:
 
-Output rendered graphic assets/composite to `projects/<job>/graphics/`, and produce
-an updated `composite.mp4` (rough-cut + graphics composited together) at the project
-root.
+```
+node engine/hyperframes/bin/hyperframes.js graphics \
+  --plan projects/<job>/graphics/graphics-plan.json \
+  --preset presets/<preset-for-format>.json \
+  --base projects/<job>/rough-cut/rough-cut.mp4 \
+  --out-dir projects/<job>/graphics/render \
+  --out projects/<job>/composite.mp4
+```
+
+Never hand-write competing graphics-rendering logic here, and never hand-edit files
+under `engine/hyperframes/src/`, `bin/`, or `templates/` — if the render looks wrong,
+fix the plan or preset inputs, not the engine. If you do need to change the engine
+itself (a new template, a new motion parameter), that's a deliberate change following
+the update policy in `engine/hyperframes/README.md`, not something to do inline while
+rendering a job.
+
+`projects/<job>/composite.mp4` (rough-cut + graphics composited together) is now the
+project's working master; later steps (captions, music) keep updating this same file.
 
 3. Update `job.json.status` to `"graphics"`.
 

@@ -14,5 +14,10 @@
     "card_shadow": "soft",
     "animation": "ease-out slide + fade",
     "safe_margins_pct": 6
+  },
+  "engine": {
+    "graphics_template": "signature-card.html",
+    "in_duration_sec": 0.35,
+    "out_duration_sec": 0.35
   }
 }

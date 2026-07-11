@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  .caption-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    text-align: center;
+  }
+  .caption-layer.centered { top: 45%; }
+  .caption-layer.low-under-face { bottom: 12%; }
+  .line {
+    max-width: 84%;
+    font-weight: 800;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+  }
+  .word { color: #fff; opacity: 0.55; transition: none; }
+  .word.active { color: var(--hf-highlight, #ffd23f); opacity: 1; }
+</style>
+</head>
+<body>
+  <div class="caption-layer" id="layer">
+    <div class="line" id="line"></div>
+  </div>
+  <script id="hf-data" type="application/json">{{DATA}}</script>
+  <script>
+    // data: { position: 'centered'|'low-under-face', fontSizePct, words: [{text,start,end}] }
+    const data = JSON.parse(document.getElementById('hf-data').textContent);
+    const layer = document.getElementById('layer');
+    const line = document.getElementById('line');
+
+    layer.classList.add(data.position === 'low-under-face' ? 'low-under-face' : 'centered');
+    line.style.fontSize = `${data.fontSizePct ?? 6}vh`;
+
+    line.innerHTML = data.words
+      .map((w, i) => `<span class="word" data-i="${i}">${w.text}</span>`)
+      .join(' ');
+    const spans = Array.from(line.querySelectorAll('.word'));
+
+    // On-beat: a word is "active" (highlighted) for the span it's actually
+    // spoken, driven by the word-level timestamps from rough-cut, not a flat
+    // even split across the cue.
+    window.hfSetTime = function (t) {
+      spans.forEach((span, i) => {
+        const w = data.words[i];
+        span.classList.toggle('active', t >= w.start && t < w.end);
+      });
+    };
+    window.hfSetTime(0);
+  </script>
+</body>
+</html>

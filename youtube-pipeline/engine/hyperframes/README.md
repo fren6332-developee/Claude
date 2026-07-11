@@ -1,32 +1,90 @@
-# HyperFrames toolkit (vendored, external)
+# HyperFrames toolkit
 
-HyperFrames is an HTML-based video engine that handles reframe, graphics, b-roll,
-motion, and captions rendering for this pipeline. It is **not implemented in this
-repo** — it's a vendored external dependency, referenced by the `graphics-plan` and
-`embedded-captions` skills.
+An HTML-based video engine: it renders graphics/caption "scenes" as HTML+CSS,
+drives them frame-by-frame through headless Chromium (Playwright) to a
+transparent PNG sequence, then composites that sequence onto the base
+footage with ffmpeg. It handles `reframe`, `graphics`, `b-roll`, `motion`,
+and `captions` for the pipeline in `youtube-pipeline/`.
 
-This directory is the vendoring point. Nothing here is fabricated scaffolding for
-"a video engine" — that's a real piece of software that needs to be dropped in from
-wherever it's actually maintained.
+This is first-party source, built in this repo (`src/`, `bin/`) — not a
+drop-in from an external project. It's still called "vendored" and gated
+behind `skills-lock.json` because the *policy* is the same either way:
+skills must never hand-edit `src/`/`bin/`/`templates/` as a side effect of
+rendering one job. Engine changes are deliberate, version-bumped, and
+recorded in `skills-lock.json`.
 
-## To vendor HyperFrames in
+## Install
 
-1. Place the toolkit's distributable (or a git submodule / subtree checkout) under
-   `engine/hyperframes/vendor/`.
-2. Record what you vendored in `skills-lock.json` next to this file: source, pinned
-   version/commit, and the date it was vendored.
-3. Skills call HyperFrames through whatever CLI/entry point it exposes — do not
-   hand-write a competing implementation inside a skill.
+```
+cd engine/hyperframes
+npm install
+```
+
+Requires Node >= 18 and `ffmpeg` on PATH (not bundled — see
+`src/ffmpeg.js`). Playwright needs a Chromium build; if your environment
+already has one at a pinned path (e.g. this repo's dev sandbox), point at it
+instead of downloading a fresh copy:
+
+```
+export HYPERFRAMES_CHROMIUM_PATH=/path/to/chromium
+```
+
+## CLI
+
+```
+node bin/hyperframes.js reframe   --in <file> --width <n> --height <n> --out <file>
+node bin/hyperframes.js graphics  --plan <graphics-plan.json> --preset <preset.json> \
+                                   --base <video> --out-dir <scratch-dir> --out <file> [--fps 30]
+node bin/hyperframes.js captions  --transcript <words.json> --corrections <caption-corrections.json> \
+                                   --preset <preset.json> --base <video> --out-dir <scratch-dir> --out <file> [--fps 30]
+node bin/hyperframes.js broll     --plan <broll-plan.json> --base <video> --out <file>
+```
+
+Add `--dry-run` to any command to build (and print) the ffmpeg command plan
+without shelling out to ffmpeg — useful in environments without ffmpeg
+installed. `graphics` and `captions` still render real frames through
+Chromium in dry-run mode; only the final ffmpeg encode/composite is skipped.
+
+The `graphics-plan` and `embedded-captions` skills in
+`youtube-pipeline/.claude/skills/` call this CLI — they should never
+import from `src/` directly or reimplement rendering logic themselves.
+
+## Architecture
+
+```
+src/
+  render-html.js   # core primitive: HTML scene -> PNG frame sequence (Playwright)
+  ffmpeg.js         # ffmpeg argv builders (pure functions) + a thin spawn wrapper
+  graphics.js        # graphics-plan.json + preset -> rendered beats -> composited video
+  captions.js          # word transcript + corrections + preset -> cued captions -> composited video
+  reframe.js            # crop/scale/pad to a format's target aspect ratio
+  broll.js               # mechanically splices a b-roll plan's clips into the base
+  templates/
+    signature-card.html   # short-explainer: top-half cards (signature-style)
+    hook-card.html          # short-tiktok-raw: hook card -> cut to raw (tiktok-raw-style)
+    liquid-glass.html         # long-form-youtube: glass + zoom (liquid-glass-style)
+    captions.html               # both caption presets; position comes from preset.engine
+bin/
+  hyperframes.js   # CLI entry point
+test/
+  *.test.js        # node --test; includes real Chromium-rendered assertions,
+                     # not just mocks -- run with `npm test`
+```
+
+Each locked preset in `presets/*.json` carries an `engine` block
+(`graphics_template`, `captions_template`, `captions_position`, motion
+params like `zoom_pct`) that tells this engine which template and
+parameters to use — that's the seam between "what a preset says" and "what
+HyperFrames renders." Add a new format variant by adding a template here
+and an `engine` block to its preset, not by branching on format names
+inside `graphics.js`/`captions.js`.
 
 ## Update policy
 
-**Never hand-edit files under `engine/hyperframes/vendor/`.** To pick up a new
-version:
+**Never hand-edit `src/`, `bin/`, or `templates/` as part of rendering a
+job.** To change the engine:
 
-1. Re-vendor from upstream (repeat step 1 above).
-2. Update the `version` / `commit` / `vendored_at` fields in `skills-lock.json`.
-3. Spot-check one job per format variant still renders correctly before committing.
-
-If HyperFrames isn't vendored yet, `graphics-plan` and `embedded-captions` can still
-produce the *plan* (beats, copy, caption text + timing) — only the actual render step
-is blocked until the engine is in place.
+1. Make the change as a deliberate commit (not folded into a job's render).
+2. Bump `version` in both `package.json` and `skills-lock.json`.
+3. Run `npm test`, and spot-check one job per format variant still renders
+   correctly.

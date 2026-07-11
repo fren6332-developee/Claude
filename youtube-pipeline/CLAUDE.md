@@ -63,11 +63,14 @@ be one of these three values; skills read the matching file to decide behavior.
 `graphics-plan`, `second-pass`, `embedded-captions`, `background-music`,
 `thumbnail-generator`, `to-premiere`, `finalize`, `prune`.
 
-**Engine — HyperFrames toolkit (vendored, external)**: an HTML-based video engine
-handling reframe, graphics, b-roll, motion, and captions rendering. It is **not**
-implemented in this repo — see `engine/hyperframes/README.md` for how to vendor it in.
-Update only via the `engine/hyperframes/skills-lock.json` registry; never hand-edit
-vendored engine files.
+**Engine — HyperFrames toolkit** (`engine/hyperframes/`): a real, working HTML-based
+video engine — renders graphics/caption scenes as HTML+CSS, drives them through
+headless Chromium (Playwright) to a PNG frame sequence, then composites onto the base
+footage with ffmpeg. Handles `reframe`, `graphics`, `b-roll`, `motion`, and `captions`.
+Run `npm install && npm test` in that directory to set it up and verify it. Update only
+via the `engine/hyperframes/skills-lock.json` registry; never hand-edit its `src/`,
+`bin/`, or `templates/` as a side effect of rendering a job — see
+`engine/hyperframes/README.md` for the update policy.
 
 **Locked presets** (`presets/`, treat as read-only from skills — see file header for
 the update process): `signature-style.json`, `captions-style.json`,

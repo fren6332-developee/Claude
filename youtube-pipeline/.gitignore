@@ -5,6 +5,5 @@ projects/*
 outputs/*
 !outputs/.gitkeep
 
-# Vendored HyperFrames drop-in (tracked once actually vendored, per
-# engine/hyperframes/README.md -- not committed as part of this scaffolding).
-engine/hyperframes/vendor/
+# HyperFrames engine dependencies (npm install), not source.
+engine/hyperframes/node_modules/

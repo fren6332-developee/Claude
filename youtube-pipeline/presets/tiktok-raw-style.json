@@ -21,5 +21,11 @@
       "weight": "black",
       "case": "sentence"
     }
+  },
+  "engine": {
+    "graphics_template": "hook-card.html",
+    "captions_template": "captions.html",
+    "captions_position": "low-under-face",
+    "in_duration_sec": 0.2
   }
 }

@@ -26,22 +26,24 @@ it without an actual sign-off.
 
 ## What's real vs. what needs to be plugged in
 
-This scaffolding is complete and functional for the parts that are pure
-orchestration/logic:
+This scaffolding is complete and functional, including the render engine:
 - Directory conventions, job manifests, format configs (`formats/*.json`)
 - `scripts/finalize.sh` and `scripts/prune.sh` (real bash, exercised against
   `projects/<job>/`)
 - All 10 skills, with concrete step-by-step instructions and ffmpeg/WhisperX
   command shapes
+- **HyperFrames** (`engine/hyperframes/`) — a real, working HTML video engine used by
+  `graphics-plan` and `embedded-captions`. It renders scenes through headless Chromium
+  (Playwright) and composites them with ffmpeg. `npm install && npm test` inside that
+  directory sets it up and exercises it end-to-end, including real Chromium-rendered
+  frame checks. See [`engine/hyperframes/README.md`](engine/hyperframes/README.md).
 
-Two pieces are external dependencies this repo intentionally does not fabricate:
+One piece is an external dependency this repo intentionally does not fabricate:
 - **WhisperX** — must be installed (`pip install whisperx`) for `rough-cut`'s
   transcription/alignment to run.
-- **HyperFrames** — the HTML video engine used by `graphics-plan` and
-  `embedded-captions` for actual rendering. It's vendored, not written here — see
-  [`engine/hyperframes/README.md`](engine/hyperframes/README.md) to drop it in.
-  Until it's vendored, those two skills can still produce the *plan* (beats, copy,
-  caption timing) — only the render step is blocked.
+
+`ffmpeg` also needs to be on PATH wherever a job is actually rendered (not bundled by
+either the pipeline scripts or HyperFrames).
 
 ## Layout
 
@@ -49,9 +51,10 @@ Two pieces are external dependencies this repo intentionally does not fabricate:
 CLAUDE.md                 # full pipeline reference
 .claude/skills/            # one skill per pipeline step
 scripts/                   # finalize.sh, prune.sh
-engine/hyperframes/        # vendoring point + skills-lock.json registry
+engine/hyperframes/        # the HTML video engine (Node/Playwright/ffmpeg), + skills-lock.json
 presets/                   # locked style presets (signature, captions, tiktok-raw,
-                            # liquid-glass, caption-corrections)
+                            # liquid-glass, caption-corrections) -- each carries an
+                            # `engine` block binding it to a HyperFrames template
 formats/                   # short-explainer.json, short-tiktok-raw.json,
                             # long-form-youtube.json
 projects/<job>/             # working directory per job (gitignored contents aside

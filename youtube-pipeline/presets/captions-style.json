@@ -16,5 +16,9 @@
   "highlight": {
     "active_word": true,
     "style": "color-pop"
+  },
+  "engine": {
+    "captions_template": "captions.html",
+    "captions_position": "centered"
   }
 }

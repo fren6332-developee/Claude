@@ -33,7 +33,14 @@ consume.
 6. Write `rough-cut/script.md`: the transcript **as it now reads after cuts** —
    this is "the script." It's the input graphics-plan and embedded-captions both
    read from, so keep it in sync with the actual cut timing (timestamps per line).
-7. Update `job.json.status` to `"rough-cut"`.
+7. Write `rough-cut/words.json`: the word-level transcript **remapped onto the
+   rough-cut's timeline**, not WhisperX's original raw-clip timeline. For each word
+   that survived (wasn't inside a removed cut span), subtract the total duration of
+   every earlier cut from its `start`/`end`. `embedded-captions` (step 5) burns
+   captions in against `composite.mp4`, which descends from this rough cut, not the
+   raw clip — timestamps that don't account for the cuts will drift out of sync with
+   the speaker.
+8. Update `job.json.status` to `"rough-cut"`.
 
 ## Off-ramp
 
