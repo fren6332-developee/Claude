@@ -954,6 +954,14 @@ const CAMERA_HEIGHT = 900;
 const FOV = 100;
 const CAMERA_DEPTH = 1/Math.tan((FOV/2)*Math.PI/180);
 const DRAW_DISTANCE = 180;
+// the camera trails behind the car instead of sitting on top of it, so the
+// player's own car is actually visible on screen — a 3rd-person chase view
+// rather than a 1st-person view where the camera and car occupy the same point
+const CAMERA_BEHIND = 560;
+// a car's on-screen size is derived from the same perspective math as the
+// road (rather than a fixed multiplier), so it scales correctly with distance;
+// this fraction of ROAD_WIDTH sets how wide a car reads relative to the road
+const CAR_WORLD_WIDTH = ROAD_WIDTH * 0.26;
 
 function project(p, camX, camY, camZ, width, height, roadWidth){
   p.camera.x = (p.world.x||0) - camX;
@@ -962,7 +970,14 @@ function project(p, camX, camY, camZ, width, height, roadWidth){
   const scale = CAMERA_DEPTH / Math.max(1, p.camera.z);
   p.screen.scale = scale;
   p.screen.x = Math.round(width/2 + scale*p.camera.x*width/2);
-  p.screen.y = Math.round(height/2 - scale*p.camera.y*width/2);
+  // y scales off the SHORTER of width/height, not a fixed axis: the internal
+  // resolution budget makes width and height diverge a lot between portrait
+  // and landscape, so scaling off whichever axis happens to be the long one
+  // in a given orientation pushes vertical content (camera height, hills)
+  // far outside the canvas on that orientation. The short axis keeps the
+  // vertical framing on-screen regardless of aspect ratio.
+  const vScale = Math.min(width, height);
+  p.screen.y = Math.round(height/2 - scale*p.camera.y*vScale/2);
   p.screen.w = Math.round(scale*roadWidth*width/2);
 }
 
@@ -1378,11 +1393,17 @@ function renderRace(){
   ctx.translate((Math.random()-0.5)*Game.shake*14, (Math.random()-0.5)*Game.shake*8);
 
   const player = Game.player;
-  const baseSegment = findSegment(track, player.z);
-  const basePercent = (player.z % SEG_LEN)/SEG_LEN;
-  const playerY = baseSegment.p1.world.y + (baseSegment.p2.world.y-baseSegment.p1.world.y)*basePercent;
+  const playerSeg = findSegment(track, player.z);
+  const playerPercent = (((player.z % SEG_LEN)+SEG_LEN)%SEG_LEN)/SEG_LEN;
+  const playerY = playerSeg.p1.world.y + (playerSeg.p2.world.y-playerSeg.p1.world.y)*playerPercent;
 
-  drawBackground(ctx, themeDef, player.z, width, height);
+  // the camera sits CAMERA_BEHIND world units back from the car, so rendering
+  // starts from the camera's own segment, not the car's
+  const camZWorld = player.z - CAMERA_BEHIND;
+  const baseSegment = findSegment(track, camZWorld);
+  const basePercent = (((camZWorld % SEG_LEN)+SEG_LEN)%SEG_LEN)/SEG_LEN;
+
+  drawBackground(ctx, themeDef, camZWorld, width, height);
 
   let x = 0, dx = -(baseSegment.curve*basePercent);
   let maxy = height;
@@ -1397,14 +1418,33 @@ function renderRace(){
   });
 
   const N = Math.min(DRAW_DISTANCE, track.segments.length-1);
+  const carsToDraw = [];
   for (let n=0; n<N; n++){
     const segIndex = (baseSegment.index+n) % track.segments.length;
     const segment = track.segments[segIndex];
     const looped = segIndex < baseSegment.index;
     const zOffset = looped ? track.length : 0;
 
-    project(segment.p1, player.x*ROAD_WIDTH - x, camHeight, player.z - zOffset, width, height, ROAD_WIDTH);
-    project(segment.p2, player.x*ROAD_WIDTH - (x+dx), camHeight, player.z - zOffset, width, height, ROAD_WIDTH);
+    project(segment.p1, player.x*ROAD_WIDTH - x, camHeight, camZWorld - zOffset, width, height, ROAD_WIDTH);
+    project(segment.p2, player.x*ROAD_WIDTH - (x+dx), camHeight, camZWorld - zOffset, width, height, ROAD_WIDTH);
+
+    // queue any cars whose z falls within this segment for a depth-sorted draw
+    // pass after the loop — computed here, before the road-culling checks
+    // below, so a car isn't skipped just because its segment's road polygon
+    // got culled (near-clip / hill-occlusion), and using this segment's own
+    // x/dx (before they advance to the next segment below) so the curve
+    // offset is interpolated correctly across the segment
+    const carsHere = carsBySegment.get(segIndex);
+    if (carsHere){
+      carsHere.forEach(r=>{
+        const carPercent = (((r.z % SEG_LEN)+SEG_LEN)%SEG_LEN)/SEG_LEN;
+        const carX = x + dx*carPercent;
+        const cw = {world:{x:r.x*ROAD_WIDTH, y: segment.p1.world.y, z:r.z}, camera:{}, screen:{}};
+        project(cw, player.x*ROAD_WIDTH - carX, camHeight, camZWorld - zOffset, width, height, ROAD_WIDTH);
+        if (cw.camera.z > 1) carsToDraw.push({r, cw});
+      });
+    }
+
     x += dx; dx += segment.curve;
 
     if (segment.p1.camera.z <= 1) continue;
@@ -1440,22 +1480,20 @@ function renderRace(){
     });
 
     maxy = p1.y;
-
-    // cars on this segment (draw far-to-near naturally since loop is far->near)
-    const carsHere = carsBySegment.get(segIndex);
-    if (carsHere){
-      carsHere.forEach(r=>{
-        const cw = {world:{x:r.x*ROAD_WIDTH, y: segment.p1.world.y, z:r.z}, camera:{}, screen:{}};
-        project(cw, player.x*ROAD_WIDTH - x, camHeight, player.z - zOffset, width, height, ROAD_WIDTH);
-        if (cw.camera.z > 1){
-          const jumpP = r.jumpTimer>0 ? Math.sin(Math.PI*(1-r.jumpTimer/JUMP_DURATION)) : 0;
-          const carScale = cw.screen.scale * 2.1 * (1 + jumpP*0.1);
-          const lift = jumpP * 24 * cw.screen.scale;
-          drawCarAt(ctx, r.car, cw.screen.x, cw.screen.y - lift, carScale*0.34, r.bank);
-        }
-      });
-    }
   }
+
+  // draw cars farthest-to-nearest so a closer car correctly occludes a farther one
+  carsToDraw.sort((a,b)=> b.cw.camera.z - a.cw.camera.z);
+  carsToDraw.forEach(({r,cw})=>{
+    const jumpP = r.jumpTimer>0 ? Math.sin(Math.PI*(1-r.jumpTimer/JUMP_DURATION)) : 0;
+    // tie car size to the same perspective scale used for the road itself,
+    // so it shrinks/grows correctly with distance instead of a fixed factor
+    const carScreenW = cw.screen.scale * CAR_WORLD_WIDTH * (width/2) * (1 + jumpP*0.1);
+    const carScale = carScreenW / r.car.sprite.width;
+    const lift = jumpP * 0.5 * carScreenW;
+    drawCarAt(ctx, r.car, cw.screen.x, cw.screen.y - lift, carScale, r.bank);
+  });
+
   ctx.restore();
 }
 
