@@ -7,3 +7,6 @@ outputs/*
 
 # HyperFrames engine dependencies (npm install), not source.
 engine/hyperframes/node_modules/
+
+# WhisperX virtualenv (python3 -m venv .venv && pip install whisperx), not source.
+.venv/

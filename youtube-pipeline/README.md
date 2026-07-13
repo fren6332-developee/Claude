@@ -38,12 +38,20 @@ This scaffolding is complete and functional, including the render engine:
   directory sets it up and exercises it end-to-end, including real Chromium-rendered
   frame checks. See [`engine/hyperframes/README.md`](engine/hyperframes/README.md).
 
-One piece is an external dependency this repo intentionally does not fabricate:
-- **WhisperX** — must be installed (`pip install whisperx`) for `rough-cut`'s
-  transcription/alignment to run.
+**WhisperX** installs cleanly (`python3 -m venv .venv && pip install whisperx`,
+confirmed working, CPU-only is fine — see `rough-cut/SKILL.md` for the exact
+commands) but its *model weights* download from huggingface.co on first run, which
+is a genuinely separate dependency from the pip package itself. In a
+network-restricted environment that blocks huggingface.co by egress policy (as this
+one does — confirmed via a real install attempt, not assumed), that download fails
+even though whisperx is correctly installed. That's not a bug in this repo to fix;
+it's an environment/network permission, documented with two workarounds in
+`rough-cut/SKILL.md` (pre-cache the weights elsewhere and point `HF_HOME` at that
+cache, or run `rough-cut` somewhere with HF access).
 
 `ffmpeg` also needs to be on PATH wherever a job is actually rendered (not bundled by
-either the pipeline scripts or HyperFrames).
+either the pipeline scripts or HyperFrames) — confirmed working via `apt-get install
+ffmpeg` and a full synthetic end-to-end render (see git history for that pass).
 
 ## Layout
 

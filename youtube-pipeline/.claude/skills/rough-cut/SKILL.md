@@ -11,8 +11,31 @@ consume.
 ## Prerequisites
 
 - `projects/<job>/raw/` populated by `intake`.
-- `whisperx` installed and on PATH (or reachable via `python -m whisperx`). If it
-  isn't available, tell the user rather than approximating a transcript by hand.
+- `whisperx` installed and on PATH. Verified working install path (CPU, no GPU
+  required):
+  ```
+  cd youtube-pipeline
+  python3 -m venv .venv && source .venv/bin/activate
+  pip install whisperx
+  whisperx <audio.wav> --model tiny.en --language en --device cpu \
+    --compute_type int8 --output_dir <dir> --output_format json --no_align
+  ```
+  `pip install whisperx` pulls in torch/torchaudio and runs fine on CPU (slower than
+  GPU, not broken) — confirmed by actually installing it (~7.5GB in the venv, ~4
+  minutes). **First run downloads model weights from huggingface.co** (the ASR model
+  itself, the wav2vec2 alignment model, and — if `--diarize` is used — pyannote
+  diarization models). In a network-restricted environment where huggingface.co is
+  blocked by egress policy, that download will fail with a `ProxyError`/403 even
+  though the install succeeded — this is a policy block, not a whisperx bug, and
+  isn't fixable by retrying or picking a different model size. Two ways around it in
+  a restricted environment:
+  - Pre-download the models once on a machine with HF access, then point
+    `HF_HOME` (or `--model_dir`) at that pre-populated cache before running whisperx
+    in the restricted environment — inference itself is local compute and needs no
+    network once the weights are on disk.
+  - Run `rough-cut` from an environment that does have huggingface.co access.
+  If neither is available, tell the user rather than approximating a transcript by
+  hand.
 - `ffmpeg` on PATH for audio extraction/rendering.
 
 ## What to do
