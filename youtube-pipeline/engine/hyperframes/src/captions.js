@@ -65,6 +65,8 @@ export function groupIntoCues(words, { maxWords = 6, maxCueDurationSec = 3.2, ma
  * @param {string} opts.baseVideo
  * @param {string} opts.outDir
  * @param {string} opts.outFile
+ * @param {number} opts.width - frame width in px, the format's target resolution.
+ * @param {number} opts.height - frame height in px.
  * @param {number} [opts.fps]
  * @param {boolean} [opts.dryRun]
  */
@@ -75,9 +77,14 @@ export async function renderCaptions({
   baseVideo,
   outDir,
   outFile,
+  width,
+  height,
   fps = 30,
   dryRun = false,
 }) {
+  if (!width || !height) {
+    throw new Error('renderCaptions requires width/height (the format\'s target resolution) -- there is no safe default.');
+  }
   const words = JSON.parse(await readFile(transcriptPath, 'utf-8'));
   const correctionsDoc = JSON.parse(await readFile(correctionsPath, 'utf-8'));
   const preset = JSON.parse(await readFile(presetPath, 'utf-8'));
@@ -114,8 +121,8 @@ export async function renderCaptions({
     // can exercise the actual HTML rendering without requiring ffmpeg.
     await renderFrames({
       html,
-      width: cue.width ?? 1080,
-      height: cue.height ?? 1920,
+      width,
+      height,
       durationSec,
       fps,
       outDir: cueDir,
@@ -132,6 +139,7 @@ export async function renderCaptions({
       baseFile: currentBase,
       overlayFile,
       startSec: cue.start,
+      endSec: cue.end,
       outFile: compositeFile,
     });
 

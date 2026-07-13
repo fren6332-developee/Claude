@@ -23,10 +23,16 @@ const TEMPLATES_DIR = path.join(__dirname, 'templates');
  * @param {string} opts.baseVideo - path to the video to composite onto.
  * @param {string} opts.outDir - scratch dir for frame sequences + intermediates.
  * @param {string} opts.outFile - final composited video path.
+ * @param {number} opts.width - frame width in px. The whole job renders at one
+ *   resolution (the format's target); this is not a per-beat choice.
+ * @param {number} opts.height - frame height in px.
  * @param {number} [opts.fps]
  * @param {boolean} [opts.dryRun] - build ffmpeg argv but don't execute; for tests.
  */
-export async function renderGraphics({ planPath, presetPath, baseVideo, outDir, outFile, fps = 30, dryRun = false }) {
+export async function renderGraphics({ planPath, presetPath, baseVideo, outDir, outFile, width, height, fps = 30, dryRun = false }) {
+  if (!width || !height) {
+    throw new Error('renderGraphics requires width/height (the format\'s target resolution) -- there is no safe default.');
+  }
   const beats = JSON.parse(await readFile(planPath, 'utf-8'));
   const preset = JSON.parse(await readFile(presetPath, 'utf-8'));
   const engine = preset.engine;
@@ -64,8 +70,8 @@ export async function renderGraphics({ planPath, presetPath, baseVideo, outDir, 
     // can exercise the actual HTML rendering without requiring ffmpeg.
     await renderFrames({
       html,
-      width: beat.width ?? 1080,
-      height: beat.height ?? 1920,
+      width,
+      height,
       durationSec,
       fps,
       outDir: beatDir,
@@ -82,6 +88,7 @@ export async function renderGraphics({ planPath, presetPath, baseVideo, outDir, 
       baseFile: currentBase,
       overlayFile,
       startSec: beat.start,
+      endSec: beat.end,
       outFile: compositeFile,
     });
 

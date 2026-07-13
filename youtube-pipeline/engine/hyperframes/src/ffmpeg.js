@@ -40,16 +40,28 @@ export function buildFrameSequenceToOverlayArgs({ framesGlob, fps, outFile }) {
 }
 
 /**
- * Builds the argv for compositing an overlay clip onto a base video at a
- * given start offset (seconds), re-muxing audio through unchanged.
+ * Builds the argv for compositing an overlay clip onto a base video across
+ * [startSec, endSec), re-muxing audio through unchanged.
+ *
+ * Two things matter here and both are load-bearing, not stylistic:
+ *  - `enable='between(t,start,end)'`, not `gte(t,start)` -- the overlay must
+ *    turn back off at `end`, or it stays composited for the rest of the video.
+ *  - `eof_action=pass` -- overlay's default eof_action is `repeat`, which
+ *    freezes the overlay input's *last frame* and keeps compositing it once
+ *    that (short) overlay stream reaches EOF. Combined with a `gte` enable
+ *    expression this produces a real, confirmed bug: the graphic ghost-
+ *    freezes on screen for the remainder of the video after every beat.
+ *    `pass` makes the filter fall through to the unmodified base video once
+ *    the overlay ends, which is what "between" already implies.
  */
-export function buildOverlayCompositeArgs({ baseFile, overlayFile, startSec, outFile }) {
+export function buildOverlayCompositeArgs({ baseFile, overlayFile, startSec, endSec, outFile }) {
   return [
     '-y',
     '-i', baseFile,
     '-itsoffset', String(startSec),
     '-i', overlayFile,
-    '-filter_complex', `[0:v][1:v]overlay=enable='gte(t,${startSec})':shortest=0[v]`,
+    '-filter_complex',
+    `[0:v][1:v]overlay=enable='between(t,${startSec},${endSec})':eof_action=pass:shortest=0[v]`,
     '-map', '[v]',
     '-map', '0:a?',
     '-c:a', 'copy',

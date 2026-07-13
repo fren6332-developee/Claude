@@ -51,8 +51,14 @@ node engine/hyperframes/bin/hyperframes.js graphics \
   --preset presets/<preset-for-format>.json \
   --base projects/<job>/rough-cut/rough-cut.mp4 \
   --out-dir projects/<job>/graphics/render \
-  --out projects/<job>/composite.mp4
+  --out projects/<job>/composite.mp4 \
+  --width <format.resolution.width> --height <format.resolution.height>
 ```
+
+`--width`/`--height` are the job's target resolution from `formats/<format>.json`
+(e.g. 1080x1920 for `short-explainer`, 1920x1080 for `long-form-youtube`) — the whole
+render happens at one resolution, there's no per-beat default, and the CLI will
+refuse to run without them rather than silently guessing.
 
 Never hand-write competing graphics-rendering logic here, and never hand-edit files
 under `engine/hyperframes/src/`, `bin/`, or `templates/` — if the render looks wrong,

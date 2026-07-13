@@ -37,6 +37,8 @@ test('renderCaptions groups words into cues, applies corrections, and renders re
     baseVideo: path.join(workDir, 'fake-base.mp4'),
     outDir,
     outFile: path.join(workDir, 'composite.mp4'),
+    width: 200,
+    height: 200,
     fps: 5,
     dryRun: true,
   });

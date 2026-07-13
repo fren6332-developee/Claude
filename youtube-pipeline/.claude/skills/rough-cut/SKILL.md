@@ -28,19 +28,34 @@ consume.
 4. Render the rough cut by cutting the marked segments out and concatenating the
    remainder (ffmpeg `select`/`concat`, or an edit-decision-list workflow — whichever
    is more reliable for the source format). Output: `rough-cut/rough-cut.mp4`.
-5. Polish audio on the render: loudness-normalize to a broadcast target
+5. Reframe to the job's target aspect ratio/resolution (read `job.json.format`, then
+   `formats/<format>.json` for `aspect_ratio`/`resolution`) — raw footage is commonly
+   16:9 camera source, but `short-explainer`/`short-tiktok-raw` need 9:16:
+   ```
+   node engine/hyperframes/bin/hyperframes.js reframe \
+     --in projects/<job>/rough-cut/rough-cut.mp4 \
+     --width <target-width> --height <target-height> \
+     --out projects/<job>/rough-cut/rough-cut.mp4
+   ```
+   Use a temp output path and replace the original rather than reading and writing
+   the same file in one ffmpeg invocation. Skip this step only if the raw footage
+   was already shot at the target aspect ratio — check, don't assume.
+6. Polish audio on the render: loudness-normalize to a broadcast target
    (`ffmpeg -af loudnorm=I=-16:TP=-1.5:LRA=11`), output `rough-cut/audio.wav`.
-6. Write `rough-cut/script.md`: the transcript **as it now reads after cuts** —
+7. Write `rough-cut/script.md`: the transcript **as it now reads after cuts** —
    this is "the script." It's the input graphics-plan and embedded-captions both
    read from, so keep it in sync with the actual cut timing (timestamps per line).
-7. Write `rough-cut/words.json`: the word-level transcript **remapped onto the
+8. Write `rough-cut/words.json`: the word-level transcript **remapped onto the
    rough-cut's timeline**, not WhisperX's original raw-clip timeline. For each word
    that survived (wasn't inside a removed cut span), subtract the total duration of
    every earlier cut from its `start`/`end`. `embedded-captions` (step 5) burns
    captions in against `composite.mp4`, which descends from this rough cut, not the
    raw clip — timestamps that don't account for the cuts will drift out of sync with
    the speaker.
-8. Update `job.json.status` to `"rough-cut"`.
+9. Update `job.json.status` to `"rough-cut"`.
+
+Reframing before the audio pass (rather than after) means loudnorm's analysis runs
+once on the final-geometry render, not twice.
 
 ## Off-ramp
 

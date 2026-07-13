@@ -53,13 +53,15 @@ async function main() {
       break;
     }
     case 'graphics': {
-      requireArgs(args, ['plan', 'preset', 'base', 'out-dir', 'out'], 'graphics');
+      requireArgs(args, ['plan', 'preset', 'base', 'out-dir', 'out', 'width', 'height'], 'graphics');
       const result = await renderGraphics({
         planPath: args.plan,
         presetPath: args.preset,
         baseVideo: args.base,
         outDir: args['out-dir'],
         outFile: args.out,
+        width: Number(args.width),
+        height: Number(args.height),
         fps: args.fps ? Number(args.fps) : undefined,
         dryRun,
       });
@@ -67,7 +69,7 @@ async function main() {
       break;
     }
     case 'captions': {
-      requireArgs(args, ['transcript', 'corrections', 'preset', 'base', 'out-dir', 'out'], 'captions');
+      requireArgs(args, ['transcript', 'corrections', 'preset', 'base', 'out-dir', 'out', 'width', 'height'], 'captions');
       const result = await renderCaptions({
         transcriptPath: args.transcript,
         correctionsPath: args.corrections,
@@ -75,6 +77,8 @@ async function main() {
         baseVideo: args.base,
         outDir: args['out-dir'],
         outFile: args.out,
+        width: Number(args.width),
+        height: Number(args.height),
         fps: args.fps ? Number(args.fps) : undefined,
         dryRun,
       });
@@ -97,10 +101,11 @@ async function main() {
 
   reframe   --in <file> --width <n> --height <n> --out <file>
   graphics  --plan <graphics-plan.json> --preset <preset.json> --base <video>
-            --out-dir <scratch-dir> --out <file> [--fps 30] [--dry-run]
+            --out-dir <scratch-dir> --out <file> --width <n> --height <n>
+            [--fps 30] [--dry-run]
   captions  --transcript <words.json> --corrections <caption-corrections.json>
             --preset <preset.json> --base <video> --out-dir <scratch-dir>
-            --out <file> [--fps 30] [--dry-run]
+            --out <file> --width <n> --height <n> [--fps 30] [--dry-run]
   broll     --plan <broll-plan.json> --base <video> --out <file> [--dry-run]
 `);
       process.exit(command ? 1 : 0);

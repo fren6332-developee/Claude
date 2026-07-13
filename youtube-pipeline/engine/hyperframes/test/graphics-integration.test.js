@@ -23,8 +23,8 @@ test('renderGraphics renders real frames for each beat and records the ffmpeg co
   await writeFile(
     planPath,
     JSON.stringify([
-      { start: 0, end: 1, copy: 'Beat one', width: 200, height: 200 },
-      { start: 3, end: 4.5, copy: 'Beat two', width: 200, height: 200 },
+      { start: 0, end: 1, copy: 'Beat one' },
+      { start: 3, end: 4.5, copy: 'Beat two' },
     ])
   );
 
@@ -35,6 +35,8 @@ test('renderGraphics renders real frames for each beat and records the ffmpeg co
     baseVideo: path.join(workDir, 'fake-base.mp4'), // never opened in dryRun
     outDir,
     outFile: path.join(workDir, 'composite.mp4'),
+    width: 200,
+    height: 200,
     fps: 5,
     dryRun: true,
   });
@@ -67,8 +69,31 @@ test('renderGraphics rejects a beat with non-positive duration', async (t) => {
         baseVideo: 'unused.mp4',
         outDir: path.join(workDir, 'render'),
         outFile: path.join(workDir, 'composite.mp4'),
+        width: 200,
+        height: 200,
         dryRun: true,
       }),
     /non-positive duration/
+  );
+});
+
+test('renderGraphics rejects a missing width/height rather than silently defaulting', async (t) => {
+  const workDir = await mkdtemp(path.join(tmpdir(), 'hf-graphics-'));
+  t.after(() => rm(workDir, { recursive: true, force: true }));
+
+  const planPath = path.join(workDir, 'graphics-plan.json');
+  await writeFile(planPath, JSON.stringify([{ start: 0, end: 1, copy: 'beat' }]));
+
+  await assert.rejects(
+    () =>
+      renderGraphics({
+        planPath,
+        presetPath: SIGNATURE_PRESET,
+        baseVideo: 'unused.mp4',
+        outDir: path.join(workDir, 'render'),
+        outFile: path.join(workDir, 'composite.mp4'),
+        dryRun: true,
+      }),
+    /requires width\/height/
   );
 });

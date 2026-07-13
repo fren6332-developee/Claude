@@ -41,8 +41,12 @@ Check `job.json.format`:
      --preset presets/<captions-style-or-tiktok-raw-style>.json \
      --base projects/<job>/composite.mp4 \
      --out-dir projects/<job>/captions/render \
-     --out projects/<job>/composite.mp4
+     --out projects/<job>/composite.mp4 \
+     --width <format.resolution.width> --height <format.resolution.height>
    ```
+
+   `--width`/`--height` come from `formats/<format>.json` — same resolution the
+   `graphics-plan` step rendered at; the CLI refuses to run without them.
 
    Don't hand-roll correction or cue-grouping logic here — that's the engine's job;
    if a specific correction is missing, add it to `presets/caption-corrections.json`
