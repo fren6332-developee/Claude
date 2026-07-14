@@ -89,8 +89,8 @@
   // larger Z nearer the camera. Pieces are drawn as upright billboards whose
   // size follows the perspective, so they stand up and the near ones are
   // bigger than the far ones.
-  const CAM_EYE = [0, 8.6, 9.9];
-  const CAM_TGT = [0, 0.2, 0.4];
+  const CAM_EYE = [0, 11.5, 13.2];   // pulled back so the whole field fits with margins
+  const CAM_TGT = [0, 0.35, 0.2];
   const CAM_FOV = 36 * Math.PI / 180;
   const SLAB = 0.62;        // board thickness (world units)
   const FRAME = 0.42;       // border beyond the 8×8 squares
