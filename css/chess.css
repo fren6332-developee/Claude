@@ -24,7 +24,7 @@ html, body {
 }
 
 #shell {
-  max-width: 1000px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 18px 14px 40px;
 }
@@ -47,11 +47,11 @@ html, body {
   flex-wrap: wrap;
 }
 
-#board-area { flex: 0 1 560px; max-width: 100%; }
+#board-area { flex: 0 1 720px; max-width: 100%; }
 
 #board-wrap {
   position: relative;
-  width: min(560px, 94vw);
+  width: min(720px, 96vw);
   margin: 6px auto 10px;
   /* the 3D board (with its own clay slab) is painted inside the canvas, which
      is transparent around the edges, so it floats over the studio backdrop */
@@ -74,7 +74,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 8px;
-  width: min(560px, 92vw);
+  width: min(720px, 96vw);
   margin: 2px auto;
 }
 .tray-label {
