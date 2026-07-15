@@ -44,3 +44,8 @@ command -v pyright-langserver >/dev/null 2>&1 || npm install -g pyright
 
 claude plugin marketplace add anthropics/claude-code
 claude plugin install frontend-design@claude-code-plugins
+
+claude plugin marketplace add ComposioHQ/awesome-claude-plugins
+claude plugin install connect-apps@awesome-claude-plugins
+# Installing connect-apps only wires up the plugin's /setup command; it does
+# NOT configure auth. Run `/setup` yourself to link a Composio API key.
