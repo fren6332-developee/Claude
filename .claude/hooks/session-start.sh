@@ -52,3 +52,6 @@ claude plugin install connect-apps@awesome-claude-plugins
 
 claude plugin marketplace add timescale/pg-aiguide
 claude plugin install pg@aiguide
+
+claude plugin marketplace add pbakaus/impeccable
+claude plugin install impeccable@impeccable
