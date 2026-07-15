@@ -32,3 +32,6 @@ claude plugin install open-design@open-design
 
 claude plugin marketplace add kepano/obsidian-skills
 claude plugin install obsidian@obsidian-skills
+
+claude plugin marketplace add multica-ai/andrej-karpathy-skills
+claude plugin install andrej-karpathy-skills@karpathy-skills
