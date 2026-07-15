@@ -41,3 +41,6 @@ claude plugin install pyright@claude-code-lsps
 # The plugin only wires up LSP config; the actual language server binary
 # still needs to be on PATH.
 command -v pyright-langserver >/dev/null 2>&1 || npm install -g pyright
+
+claude plugin marketplace add anthropics/claude-code
+claude plugin install frontend-design@claude-code-plugins
