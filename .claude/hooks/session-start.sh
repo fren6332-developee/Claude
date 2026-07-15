@@ -13,3 +13,6 @@ claude plugin install superpowers@superpowers-marketplace
 
 claude plugin marketplace add affaan-m/everything-claude-code
 claude plugin install ecc@ecc
+
+claude plugin marketplace add ruvnet/ruflo
+claude plugin install ruflo-core@ruflo
