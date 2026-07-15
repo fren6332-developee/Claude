@@ -26,3 +26,6 @@ for p in ruflo-core ruflo-swarm ruflo-loop-workers ruflo-security-audit \
   ruflo-metaharness ruflo-arena; do
   claude plugin install "${p}@ruflo"
 done
+
+claude plugin marketplace add nexu-io/open-design
+claude plugin install open-design@open-design
