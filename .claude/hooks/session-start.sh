@@ -55,3 +55,6 @@ claude plugin install pg@aiguide
 
 claude plugin marketplace add pbakaus/impeccable
 claude plugin install impeccable@impeccable
+
+claude plugin marketplace add upstash/context7
+claude plugin install context7@context7-marketplace
