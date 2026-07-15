@@ -49,3 +49,6 @@ claude plugin marketplace add ComposioHQ/awesome-claude-plugins
 claude plugin install connect-apps@awesome-claude-plugins
 # Installing connect-apps only wires up the plugin's /setup command; it does
 # NOT configure auth. Run `/setup` yourself to link a Composio API key.
+
+claude plugin marketplace add timescale/pg-aiguide
+claude plugin install pg@aiguide
