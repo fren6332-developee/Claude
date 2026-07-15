@@ -58,3 +58,6 @@ claude plugin install impeccable@impeccable
 
 claude plugin marketplace add upstash/context7
 claude plugin install context7@context7-marketplace
+
+claude plugin marketplace add thedotmack/claude-mem
+claude plugin install claude-mem@thedotmack
