@@ -29,3 +29,6 @@ done
 
 claude plugin marketplace add nexu-io/open-design
 claude plugin install open-design@open-design
+
+claude plugin marketplace add kepano/obsidian-skills
+claude plugin install obsidian@obsidian-skills
