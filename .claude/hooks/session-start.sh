@@ -10,3 +10,6 @@ fi
 # Both commands are idempotent no-ops if already installed at user scope.
 claude plugin marketplace add obra/superpowers-marketplace
 claude plugin install superpowers@superpowers-marketplace
+
+claude plugin marketplace add affaan-m/everything-claude-code
+claude plugin install ecc@ecc
