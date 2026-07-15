@@ -35,3 +35,9 @@ claude plugin install obsidian@obsidian-skills
 
 claude plugin marketplace add multica-ai/andrej-karpathy-skills
 claude plugin install andrej-karpathy-skills@karpathy-skills
+
+claude plugin marketplace add Piebald-AI/claude-code-lsps
+claude plugin install pyright@claude-code-lsps
+# The plugin only wires up LSP config; the actual language server binary
+# still needs to be on PATH.
+command -v pyright-langserver >/dev/null 2>&1 || npm install -g pyright
