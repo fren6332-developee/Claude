@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Scott M.'s Prostate Health Guide</title>
 <meta name="description" content="A private, plain-language companion for organizing prostate cancer records and understanding treatment. Educational only — not medical advice.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#215a55">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Prostate Guide">
 <style>
 /* ---------- Design tokens ---------- */
 :root{
@@ -858,6 +864,78 @@ const store = {
   set:(k,v)=>{try{localStorage.setItem("phg_"+k,JSON.stringify(v))}catch(e){}},
 };
 
+/* ---------- Personalization engine ----------
+   Reads what's typed into the diagnosis/history fields and highlights the most
+   relevant sections. Purely keyword-based on the user's own text — educational,
+   never a recommendation. Updates live as Scott's real report is entered. */
+function analyzeProfile(){
+  const gl=store.get('gleason','')||'', is=store.get('isup','')||'', st=store.get('stage','')||'';
+  const txt=((store.get('dxSummary','')||'')+' '+st+' '+gl+' '+is+' '+(store.get('family','')||'')+' '+(store.get('meds','')||'')).toLowerCase();
+  const flags=new Set(), genes=[];
+  ['BRCA1','BRCA2','ATM','CHEK2','HOXB13','PALB2','TP53','PTEN','CDK12','MSH2','MSH6','MLH1']
+    .forEach(g=>{if(new RegExp('\\b'+g+'\\b','i').test(txt))genes.push(g);});
+  const brcaLike=genes.some(g=>['BRCA1','BRCA2','ATM','PALB2','CDK12'].includes(g));
+  const lynch=genes.some(g=>['MSH2','MSH6','MLH1'].includes(g));
+  if(/msi[-\s]?high|microsatellite|mismatch[-\s]repair|dmmr|mmr[-\s]deficien/i.test(txt)||lynch)flags.add('msi');
+  let gsum=null; let m=gl.match(/(\d)\s*\+\s*(\d)/); if(m)gsum=+m[1]+ +m[2];
+  if(gsum==null){m=gl.match(/(\d{1,2})\s*$/); if(m)gsum=+m[1];}
+  const isup=parseInt((is.match(/[1-5]/)||[])[0]||'0',10);
+  if(/gleason\s*(8|9|10)|[45]\s*\+\s*[45]|4\s*\+\s*4/i.test(txt)||gsum>=8||isup>=4)flags.add('high');
+  else if(gsum===7||isup===2||isup===3||/gleason\s*7|3\s*\+\s*4|4\s*\+\s*3/i.test(txt))flags.add('intermediate');
+  else if(gsum===6||isup===1||/gleason\s*6|3\s*\+\s*3/i.test(txt))flags.add('low');
+  if(/metasta|\bm1\b|stage\s*(iv|4)|\bspread|bone (metas|lesion)|distant (metas|disease)/i.test(txt))flags.add('metastatic');
+  if(/\bn1\b|lymph node|node[-\s]positive/i.test(txt))flags.add('node');
+  if(/castrat\w*[-\s]resistant|crpc/i.test(txt))flags.add('crpc');
+  if(/psma/i.test(txt))flags.add('psma');
+  return {flags,genes,brcaLike,lynch,gsum,isup,hasData:txt.trim().length>3};
+}
+function personalizeHTML(){
+  const p=analyzeProfile();
+  if(!p.hasData || (p.flags.size===0 && p.genes.length===0)){
+    return `<div class="card section-gap" style="border-style:dashed">
+      <h3 style="font-size:19px;margin-bottom:6px">Personalize this guide</h3>
+      <p style="color:var(--muted);font-size:14.5px;margin:0">Paste Scott's diagnosis in <a href="#biopsy">Biopsy &amp; diagnosis</a> (Gleason, ISUP, stage, and any gene results). This page will then automatically highlight the sections that matter most for his specific case.</p></div>`;
+  }
+  // detected chips
+  let chips='';
+  const gradeLbl = p.flags.has('high')?['High grade','crit']:p.flags.has('intermediate')?['Intermediate grade','warn']:p.flags.has('low')?['Low grade','good']:null;
+  if(gradeLbl)chips+=`<span class="pill ${gradeLbl[1]}">${gradeLbl[0]}</span>`;
+  if(p.flags.has('metastatic'))chips+=`<span class="pill crit">Possible spread noted</span>`;
+  if(p.flags.has('node'))chips+=`<span class="pill warn">Lymph node mention</span>`;
+  if(p.flags.has('crpc'))chips+=`<span class="pill warn">Castration-resistant</span>`;
+  if(p.flags.has('msi'))chips+=`<span class="pill info">MSI / mismatch-repair</span>`;
+  p.genes.forEach(g=>chips+=`<span class="pill info">${g}</span>`);
+  // build focus cards
+  const cards=[]; const seen=new Set();
+  const add=(tag,title,why,href)=>{if(seen.has(title))return;seen.add(title);cards.push({tag,title,why,href});};
+  if(p.brcaLike){add('Targeted therapy','PARP inhibitors may be relevant','A DNA-repair gene ('+p.genes.filter(g=>['BRCA1','BRCA2','ATM','PALB2','CDK12'].includes(g)).join(', ')+') was mentioned — ask whether a PARP inhibitor like olaparib fits.','#drugs');
+    add('Genetics','Review the gene findings','Understand what the mentioned gene(s) mean for treatment and for family members.','#genes');
+    add('Trials','BRCA-matched trials','Some trials specifically enroll men with DNA-repair mutations.','#trials');}
+  if(p.flags.has('msi')){add('Immunotherapy','Immunotherapy may be an option','MSI-high / mismatch-repair signals can make checkpoint immunotherapy (pembrolizumab) effective — ask about it.','#drugs');
+    add('Genetics','Lynch-syndrome genes','Ask about counseling — these findings affect relatives too.','#genes');}
+  if(p.flags.has('metastatic')){add('Advanced disease','Systemic & bone-directed options','With possible spread, hormone therapy combinations and bone-targeted radiopharmaceuticals (radium-223, Pluvicto) become central.','#drugs');
+    add('Radiation','PSMA-guided radiation','Ask whether PSMA imaging should guide treatment of spread.','#radiation');
+    add('Trials','Metastatic trials','Platform trials like STAMPEDE2 focus on advanced disease.','#trials');}
+  if(p.flags.has('crpc')){add('Next-line therapy','Beyond first hormone therapy','Castration-resistant disease needs a different class — AR inhibitors, chemo, PSMA radioligand, or a trial.','#drugs');}
+  if(p.flags.has('high')){add('Treatment','Discuss intensive combinations','Higher-grade disease is often treated with combined approaches — compare surgery vs. radiation + hormone therapy.','#treatments');
+    add('Radiation','Radiation planning','Review external-beam, brachytherapy, and combined options.','#radiation');}
+  if(p.flags.has('intermediate')){add('Treatment','Weigh the main options','Compare surgery, radiation, and (sometimes) surveillance for intermediate-risk disease.','#treatments');}
+  if(p.flags.has('low')){add('Treatment','Active surveillance may fit','Low-grade cancer is often watched closely rather than treated right away — ask if it applies.','#treatments');
+    add('Terms','Learn the monitoring terms','Understand PSA trends, nadir, and what would trigger treatment.','#terms');}
+  // always-useful supportive care
+  add('Supportive','Nutrition & exercise','Supportive habits that help through any treatment path.','#nutrition');
+  let cardsHTML=cards.slice(0,8).map((c,i)=>`<a class="step" href="${c.href}" style="text-decoration:none;color:inherit">
+    <div class="n">${i+1}</div><div><h4>${esc(c.title)}</h4><p><span style="color:var(--accent);font-weight:600">${esc(c.tag)}.</span> ${esc(c.why)}</p></div></a>`).join('');
+  return `<div class="card section-gap" style="border-color:var(--primary)">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px">
+      <h3 style="font-size:20px">Scott's focus areas</h3><span class="pill info">Auto-generated from entered records</span></div>
+    <p style="color:var(--muted);font-size:14px;margin:0 0 4px">Detected in the diagnosis text:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">${chips||'<span class="pill">—</span>'}</div>
+    ${cardsHTML}
+    <div class="callout warn" style="margin-top:14px;font-size:13.5px">This panel is built automatically from the words you typed — it is <strong>not</strong> a diagnosis, recommendation, or eligibility check. It only points to relevant reading. Every decision belongs with Scott's care team.</div>
+  </div>`;
+}
+
 function viewHome(){
   const name = store.get("patientName","Scott M.");
   const dx = store.get("dxSummary","");
@@ -873,6 +951,8 @@ function viewHome(){
     <div class="card"><div class="vit"><div class="lbl">Records saved locally</div><div class="val">${countRecords()}</div></div></div>
     <div class="card"><div class="vit"><div class="lbl">Reference topics</div><div class="val">9 <small>with audio</small></div></div></div>
   </div>
+
+  ${personalizeHTML()}
 
   <div class="grid cols-2 section-gap">
     <div class="card">

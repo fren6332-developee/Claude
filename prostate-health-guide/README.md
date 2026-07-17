@@ -14,6 +14,17 @@ of treatment — in plain, eighth-grade-level explanations with optional audio.
 - **QR code:** [`qr-code.png`](./qr-code.png) — scan to open on a phone.
 - On an iPhone, open the URL in Safari and choose **Share → Add to Home Screen**
   for an app-like icon without the App Store.
+- To ship it as a real **native iOS/Android app**, see
+  [`capacitor-app/`](./capacitor-app/) and the store materials in [`store/`](./store/).
+
+## Personalized focus
+
+The Overview shows a **"Scott's focus areas"** panel that reads the diagnosis text you
+enter (Gleason, ISUP, stage, and any gene results) and automatically highlights the most
+relevant sections — e.g. a BRCA2 mention surfaces PARP-inhibitor drugs, genetics, and
+matched trials; a high grade or "metastatic" surfaces intensive treatment and
+bone-directed options. It is keyword-based on your own text, clearly labeled as
+auto-generated, and never a recommendation. It updates live as the real report is added.
 
 ## What's inside
 
@@ -42,6 +53,22 @@ button (browser text-to-speech), and 10+ action items to bring to the care team:
   review, and Apple App Store submission (these require licensed clinicians, an
   attorney, and a developer account; they are **not** done)
 - Disclaimers
+
+## Packaging & publishing
+
+- [`capacitor-app/`](./capacitor-app/) — a [Capacitor](https://capacitorjs.com) wrapper
+  that turns the web app into a native iOS/Android build. It has the config, an app
+  icon (`assets/icon.png`), a copy script, and step-by-step build instructions.
+  Requires a Mac + Xcode + Apple Developer account to actually build and submit.
+- [`store/listing.md`](./store/listing.md) — App Store / Play listing copy, keywords,
+  privacy-label answers, and the screenshot shot-list.
+- [`store/review-notes.md`](./store/review-notes.md) — App Store review-guideline
+  mapping (1.4.1, 5.1.1) and the required human steps (clinical peer review, legal
+  review) before submission.
+- [`privacy.html`](./privacy.html) and [`support.html`](./support.html) — the public
+  Privacy Policy and Support pages Apple requires URLs for.
+- [`manifest.webmanifest`](./manifest.webmanifest) + [`icons/`](./icons/) — PWA install
+  support (Add to Home Screen) with the app icon.
 
 ## Technical notes
 

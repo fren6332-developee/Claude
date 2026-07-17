@@ -1,0 +1,22 @@
+{
+  "name": "prostate-health-guide-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Native (iOS/Android) wrapper for Scott M.'s Prostate Health Guide web app, via Capacitor.",
+  "scripts": {
+    "copy:web": "node scripts/copy-web.mjs",
+    "sync": "npm run copy:web && cap sync",
+    "assets": "capacitor-assets generate --iconBackgroundColor '#215a55' --iconBackgroundColorDark '#152220' --splashBackgroundColor '#152220' --splashBackgroundColorDark '#0e1817'",
+    "open:ios": "cap open ios",
+    "open:android": "cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/ios": "^6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.1.2"
+  }
+}

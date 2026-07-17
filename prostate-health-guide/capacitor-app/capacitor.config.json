@@ -1,0 +1,12 @@
+{
+  "appId": "com.scottmguide.prostatehealth",
+  "appName": "Prostate Health Guide",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "contentInset": "always"
+  },
+  "backgroundColor": "#152220"
+}
