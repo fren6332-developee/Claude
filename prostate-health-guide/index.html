@@ -1,0 +1,1709 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scott M.'s Prostate Health Guide</title>
+<meta name="description" content="A private, plain-language companion for organizing prostate cancer records and understanding treatment. Educational only — not medical advice.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#215a55">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Prostate Guide">
+<style>
+/* ---------- Design tokens ---------- */
+:root{
+  --paper:#f5f7f6; --surface:#ffffff; --surface-2:#eef2f0;
+  --ink:#1a2a29; --muted:#5c6d6b; --faint:#8a9997;
+  --border:#dde4e1; --border-strong:#c7d1ce;
+  --primary:#2f7d76; --primary-ink:#215a55; --primary-soft:#e3efed;
+  --accent:#c47a4d; --accent-soft:#f6e9df;
+  --good:#3f8f5f; --warn:#b5822a; --crit:#bd554a;
+  --good-soft:#e4f0e8; --warn-soft:#f6ecd8; --crit-soft:#f6e2df;
+  --shadow:0 1px 2px rgba(20,40,38,.05), 0 6px 20px rgba(20,40,38,.06);
+  --radius:14px; --radius-sm:9px;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --maxw:1180px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#0e1817; --surface:#152220; --surface-2:#1b2b28;
+    --ink:#e7efeb; --muted:#a2b3ae; --faint:#7d908b;
+    --border:#26332f; --border-strong:#33433e;
+    --primary:#63b8ad; --primary-ink:#8fd0c6; --primary-soft:#183330;
+    --accent:#df9d6f; --accent-soft:#2c2117;
+    --good:#5cae7b; --warn:#d3a24e; --crit:#e08074;
+    --good-soft:#172c22; --warn-soft:#2c2413; --crit-soft:#2e1c19;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="light"]{
+  --paper:#f5f7f6; --surface:#ffffff; --surface-2:#eef2f0;
+  --ink:#1a2a29; --muted:#5c6d6b; --faint:#8a9997;
+  --border:#dde4e1; --border-strong:#c7d1ce;
+  --primary:#2f7d76; --primary-ink:#215a55; --primary-soft:#e3efed;
+  --accent:#c47a4d; --accent-soft:#f6e9df;
+  --good:#3f8f5f; --warn:#b5822a; --crit:#bd554a;
+  --good-soft:#e4f0e8; --warn-soft:#f6ecd8; --crit-soft:#f6e2df;
+  --shadow:0 1px 2px rgba(20,40,38,.05), 0 6px 20px rgba(20,40,38,.06);
+}
+:root[data-theme="dark"]{
+  --paper:#0e1817; --surface:#152220; --surface-2:#1b2b28;
+  --ink:#e7efeb; --muted:#a2b3ae; --faint:#7d908b;
+  --border:#26332f; --border-strong:#33433e;
+  --primary:#63b8ad; --primary-ink:#8fd0c6; --primary-soft:#183330;
+  --accent:#df9d6f; --accent-soft:#2c2117;
+  --good:#5cae7b; --warn:#d3a24e; --crit:#e08074;
+  --good-soft:#172c22; --warn-soft:#2c2413; --crit-soft:#2e1c19;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;line-height:1.2;text-wrap:balance;margin:0}
+a{color:var(--primary-ink);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:6px}
+
+/* ---------- Shell ---------- */
+.app{display:grid;grid-template-columns:264px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);
+  border-right:1px solid var(--border);padding:22px 16px;display:flex;flex-direction:column;gap:6px}
+.brand{display:flex;gap:12px;align-items:flex-start;padding:6px 8px 16px}
+.brand .mark{flex:0 0 auto;width:40px;height:40px;border-radius:11px;
+  background:linear-gradient(150deg,var(--primary),var(--primary-ink));display:grid;place-items:center;
+  color:#fff;font-family:var(--serif);font-size:20px;box-shadow:var(--shadow)}
+.brand .who{font-size:12.5px;color:var(--muted);line-height:1.35}
+.brand .who strong{display:block;font-family:var(--serif);font-size:15px;color:var(--ink);font-weight:600}
+.navgroup{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);
+  padding:14px 10px 4px;font-weight:600}
+.navlink{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;color:var(--muted);
+  font-size:14px;cursor:pointer;border:none;background:none;text-align:left;width:100%;transition:.15s}
+.navlink:hover{background:var(--surface-2);color:var(--ink)}
+.navlink.active{background:var(--primary-soft);color:var(--primary-ink);font-weight:600}
+.navlink .ic{width:18px;text-align:center;flex:0 0 auto;opacity:.9}
+.theme-toggle{margin-top:auto;display:flex;gap:8px;align-items:center;justify-content:space-between;
+  padding:10px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
+.tbtn{border:1px solid var(--border-strong);background:var(--surface);color:var(--ink);
+  border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px}
+
+/* ---------- Topbar (mobile) ---------- */
+.topbar{display:none;position:sticky;top:0;z-index:30;background:var(--surface);
+  border-bottom:1px solid var(--border);padding:10px 14px;align-items:center;gap:12px}
+.hamb{border:1px solid var(--border-strong);background:var(--surface);border-radius:8px;
+  width:38px;height:38px;font-size:18px;cursor:pointer;color:var(--ink)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(10,20,18,.45);z-index:40}
+
+/* ---------- Main ---------- */
+.main{min-width:0;padding:34px clamp(18px,4vw,56px) 90px;max-width:var(--maxw)}
+.view{display:none;animation:fade .25s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.page-h{font-size:clamp(26px,3.6vw,36px);margin:6px 0 8px}
+.lead{color:var(--muted);max-width:64ch;font-size:16.5px}
+.section-gap{margin-top:26px}
+
+/* ---------- Cards ---------- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 22px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:16px}
+.grid.cols-2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.grid.cols-3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.ref-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px}
+.ref-card h3{font-size:19px}
+.art{height:116px;border-radius:12px;overflow:hidden;display:block;background:var(--surface-2);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.04)}
+.art svg{display:block;width:100%;height:100%}
+.hero-art{height:150px;border-radius:16px;overflow:hidden;margin:22px 0 2px;box-shadow:var(--shadow)}
+.hero-art svg{display:block;width:100%;height:100%}
+@media (max-width:520px){.hero-art{height:120px}}
+/* Subtle hero animations — heroes only, and only when motion is welcome */
+@media (prefers-reduced-motion: no-preference){
+  .hero-art svg{animation:heroBreathe 7s ease-in-out infinite;transform-origin:center}
+  .hero-art .beat{transform-box:fill-box;transform-origin:center;animation:heroBeat 2.6s ease-in-out infinite}
+  .hero-art .pulse{transform-box:fill-box;transform-origin:center;animation:heroPulse 2.8s ease-in-out infinite}
+  .hero-art .glow{transform-box:fill-box;transform-origin:center;animation:heroGlow 2.8s ease-in-out infinite}
+  .hero-art .rise,.hero-art .rise2{animation:heroRise 3.2s ease-in infinite}
+  .hero-art .rise2{animation-delay:1.5s}
+  .hero-art .shimmer{animation:heroShimmer 3s ease-in-out infinite}
+  .hero-art .twinkle{animation:heroTwinkle 2.6s ease-in-out infinite}
+  .hero-art .twinkle2{animation:heroTwinkle 2.6s ease-in-out infinite;animation-delay:1.3s}
+}
+@keyframes heroBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+@keyframes heroBeat{0%,100%{transform:scale(1)}12%{transform:scale(1.18)}24%{transform:scale(1)}36%{transform:scale(1.11)}48%{transform:scale(1)}}
+@keyframes heroPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.28);opacity:.72}}
+@keyframes heroGlow{0%,100%{transform:scale(1);opacity:.35}50%{transform:scale(1.5);opacity:.14}}
+@keyframes heroRise{0%{transform:translateY(6px);opacity:0}25%{opacity:.9}100%{transform:translateY(-30px);opacity:0}}
+@keyframes heroShimmer{0%,100%{opacity:.85}50%{opacity:.42}}
+@keyframes heroTwinkle{0%,100%{opacity:1}50%{opacity:.4}}
+.ref-card .tag{font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
+  font-weight:600}
+.ref-card p{margin:0;color:var(--ink);font-size:14.5px;line-height:1.5}
+.ref-card .metaphor{color:var(--muted);font-size:14px;border-left:3px solid var(--accent);
+  padding-left:11px;font-style:italic;margin-top:2px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
+  border-radius:999px;padding:3px 10px;border:1px solid var(--border-strong);color:var(--muted)}
+.pill.good{background:var(--good-soft);color:var(--good);border-color:transparent}
+.pill.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.pill.crit{background:var(--crit-soft);color:var(--crit);border-color:transparent}
+.pill.info{background:var(--primary-soft);color:var(--primary-ink);border-color:transparent}
+
+/* ---------- Listen button ---------- */
+.listen{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-top:4px;
+  border:1px solid var(--border-strong);background:var(--surface-2);color:var(--ink);
+  border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+.listen:hover{border-color:var(--primary);color:var(--primary-ink)}
+.listen.speaking{background:var(--primary);color:#fff;border-color:var(--primary)}
+.listen .wave{display:inline-flex;gap:2px;align-items:flex-end;height:13px}
+.listen .wave i{width:2.5px;background:currentColor;border-radius:2px;height:5px;animation:none}
+.listen.speaking .wave i{animation:wv .9s infinite ease-in-out}
+.listen.speaking .wave i:nth-child(2){animation-delay:.15s}
+.listen.speaking .wave i:nth-child(3){animation-delay:.3s}
+.listen.speaking .wave i:nth-child(4){animation-delay:.45s}
+@keyframes wv{0%,100%{height:4px}50%{height:13px}}
+@media (prefers-reduced-motion:reduce){.listen.speaking .wave i{animation:none;height:9px}}
+
+/* ---------- Action items ---------- */
+.actions{margin-top:8px}
+details.actions-d{border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-2);
+  padding:0;overflow:hidden}
+details.actions-d>summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px;
+  list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
+details.actions-d>summary::-webkit-details-marker{display:none}
+details.actions-d>summary .chev{transition:.2s;color:var(--muted)}
+details.actions-d[open]>summary .chev{transform:rotate(90deg)}
+.checklist{list-style:none;margin:0;padding:4px 16px 16px}
+.checklist li{display:flex;gap:11px;padding:7px 0;border-top:1px solid var(--border);font-size:14px;color:var(--ink)}
+.checklist li:first-child{border-top:none}
+.checklist input{margin-top:3px;flex:0 0 auto;width:16px;height:16px;accent-color:var(--primary)}
+.checklist label{cursor:pointer}
+
+/* ---------- Forms / records ---------- */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600;color:var(--muted)}
+.field input,.field textarea,.field select{font-family:inherit;font-size:15px;color:var(--ink);
+  background:var(--surface);border:1px solid var(--border-strong);border-radius:9px;padding:10px 12px;width:100%}
+.field textarea{min-height:120px;resize:vertical;line-height:1.5}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn{border:none;border-radius:9px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s}
+.btn.primary{background:var(--primary);color:#fff}
+.btn.primary:hover{background:var(--primary-ink)}
+.btn.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--border-strong)}
+.saved-note{font-size:13px;color:var(--good);opacity:0;transition:.3s}
+.saved-note.show{opacity:1}
+.imguploads{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:14px}
+.imgtile{border:1px solid var(--border);border-radius:11px;overflow:hidden;background:var(--surface-2);position:relative}
+.imgtile img{width:100%;height:120px;object-fit:cover;display:block}
+.imgtile .cap{padding:7px 9px;font-size:12px;color:var(--muted);line-height:1.3}
+.imgtile .del{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.6);color:#fff;border:none;
+  width:24px;height:24px;border-radius:7px;cursor:pointer;font-size:13px}
+.dropzone{border:2px dashed var(--border-strong);border-radius:12px;padding:26px;text-align:center;
+  color:var(--muted);cursor:pointer;background:var(--surface-2);transition:.15s}
+.dropzone:hover{border-color:var(--primary);color:var(--primary-ink)}
+
+/* ---------- Vitals ---------- */
+.vitgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.vit{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.vit .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);font-weight:600}
+.vit .val{font-family:var(--serif);font-size:30px;margin-top:3px;font-variant-numeric:tabular-nums}
+.vit .val small{font-size:14px;color:var(--muted)}
+
+/* ---------- Database groups ---------- */
+.db-group{margin-top:18px}
+.db-group h3{font-size:18px;display:flex;align-items:center;gap:9px}
+.db-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.db-chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border-strong);
+  background:var(--surface);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:500;color:var(--ink)}
+.db-chip:hover{border-color:var(--primary);color:var(--primary-ink);text-decoration:none}
+.db-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.tokens{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.token{font-size:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;
+  padding:3px 9px;color:var(--muted)}
+
+/* ---------- Callouts ---------- */
+.callout{border-radius:12px;padding:16px 18px;font-size:14.5px;line-height:1.55;border:1px solid transparent}
+.callout.warn{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 30%,transparent);color:var(--ink)}
+.callout.info{background:var(--primary-soft);border-color:color-mix(in srgb,var(--primary) 30%,transparent);color:var(--ink)}
+.callout strong{font-family:var(--serif)}
+.step{display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--border)}
+.step:first-child{border-top:none}
+.step .n{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--accent-soft);
+  color:var(--accent);font-weight:700;display:grid;place-items:center;font-family:var(--serif)}
+.step .n.done{background:var(--good-soft);color:var(--good)}
+.step h4{font-size:16px;margin-bottom:3px}
+.step p{margin:0;color:var(--muted);font-size:14px}
+.reflist{margin:0;padding-left:20px;color:var(--muted);font-size:14px;line-height:1.7}
+.reflist li{margin:5px 0}
+.footer{margin-top:40px;padding-top:22px;border-top:1px solid var(--border);color:var(--faint);font-size:13px}
+.qrbox{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.qrbox img{width:150px;height:150px;border-radius:12px;border:1px solid var(--border);background:#fff;padding:8px}
+
+/* First-run acknowledgement gate */
+.ack{position:fixed;inset:0;z-index:200;background:var(--paper);display:none;
+  align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+.ack.show{display:flex}
+@media (prefers-reduced-motion:no-preference){.ack.show .ack-card{animation:ackIn .35s ease}}
+@keyframes ackIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.ack-card{max-width:520px;width:100%;background:var(--surface);border:1px solid var(--border);
+  border-radius:18px;box-shadow:var(--shadow);padding:32px 30px;text-align:center;margin:auto}
+.ack-mark{width:56px;height:56px;border-radius:15px;margin:0 auto 16px;
+  background:linear-gradient(150deg,var(--primary),var(--primary-ink));display:grid;place-items:center;
+  color:#fff;font-family:var(--serif);font-size:26px;box-shadow:var(--shadow)}
+.ack h2{font-size:25px;margin-bottom:4px}
+.ack-sub{color:var(--muted);font-size:13.5px;margin-bottom:14px}
+.ack-points{text-align:left;display:flex;flex-direction:column;gap:13px;margin:18px 0}
+.ack-point{display:flex;gap:12px;font-size:14.5px;color:var(--ink);line-height:1.45}
+.ack-point .i{flex:0 0 auto;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+  font-weight:700;font-size:15px;margin-top:1px}
+.ack-check{display:flex;gap:11px;align-items:flex-start;text-align:left;background:var(--surface-2);
+  border:1px solid var(--border-strong);border-radius:12px;padding:14px;margin:6px 0 16px;cursor:pointer;
+  font-size:14px;line-height:1.45}
+.ack-check input{margin-top:2px;width:18px;height:18px;accent-color:var(--primary);flex:0 0 auto}
+.ack-btn{width:100%;border:none;border-radius:11px;padding:13px;font-size:15px;font-weight:700;
+  background:var(--primary);color:#fff;cursor:pointer;transition:.15s}
+.ack-btn:not(:disabled):hover{background:var(--primary-ink)}
+.ack-btn:disabled{opacity:.45;cursor:not-allowed}
+.ack-fine{font-size:12px;color:var(--faint);margin-top:14px}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .topbar{display:flex}
+  .sidebar{position:fixed;left:0;top:0;z-index:50;width:280px;transform:translateX(-100%);
+    transition:transform .22s ease}
+  .sidebar.open{transform:none}
+  .scrim.show{display:block}
+  .main{padding:22px 18px 80px}
+  .row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="scrim" id="scrim"></div>
+
+<!-- First-run acknowledgement gate -->
+<div class="ack" id="ackScreen" role="dialog" aria-modal="true" aria-labelledby="ackTitle">
+  <div class="ack-card">
+    <div class="ack-mark">S</div>
+    <h2 id="ackTitle">Before you start</h2>
+    <div class="ack-sub">Scott M.'s Prostate Health Guide</div>
+    <div class="ack-points">
+      <div class="ack-point"><span class="i" style="background:var(--warn-soft);color:var(--warn)">!</span><div><strong>This is not medical advice.</strong> It's an educational and organizing tool. It cannot diagnose or recommend treatment, and it does not replace Scott's doctors.</div></div>
+      <div class="ack-point"><span class="i" style="background:var(--primary-soft);color:var(--primary-ink)">♥</span><div><strong>Always follow the care team.</strong> Never delay, stop, or change prescribed care because of anything you read here.</div></div>
+      <div class="ack-point"><span class="i" style="background:var(--good-soft);color:var(--good)">⌂</span><div><strong>Private to this device.</strong> What you enter is stored only here — no account, no cloud, no tracking.</div></div>
+      <div class="ack-point"><span class="i" style="background:var(--crit-soft);color:var(--crit)">+</span><div><strong>In an emergency</strong>, call your local emergency number (911 in the U.S.) right away.</div></div>
+    </div>
+    <label class="ack-check" for="ackCheck"><input type="checkbox" id="ackCheck"><span>I understand this app is for education and personal organization only, and does not provide medical advice.</span></label>
+    <button class="ack-btn" id="ackBtn" disabled>Open the guide</button>
+    <div class="ack-fine">You can reopen this anytime from the <strong>Disclaimers</strong> section.</div>
+  </div>
+</div>
+<div class="app">
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="brand">
+      <div class="mark">S</div>
+      <div class="who"><strong>Scott M.'s</strong>Prostate Health Guide</div>
+    </div>
+    <div id="nav"></div>
+    <div class="theme-toggle">
+      <span>Appearance</span>
+      <button class="tbtn" id="themeBtn">Auto</button>
+    </div>
+  </nav>
+
+  <div>
+    <div class="topbar">
+      <button class="hamb" id="hamb" aria-label="Open menu">☰</button>
+      <strong style="font-family:var(--serif)">Scott M.'s Prostate Health Guide</strong>
+    </div>
+    <main class="main" id="main"></main>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   Scott M.'s Prostate Health Guide  —  single-file app
+   Educational only. Not medical advice. Data stays on device.
+   ============================================================ */
+
+/* ---------- Reference content (data-driven) ----------
+   Each item: name, tag, text (plain, with an 8th-grade metaphor).
+   The "Listen" button reads `text` aloud via the browser's speech engine. */
+
+const DRUGS = {
+  intro:"Common medicines used in prostate cancer care, grouped by what they do. Which ones fit Scott depends on his stage, genes, and his oncologist's plan.",
+  items:[
+    {name:"Leuprolide (Lupron)", tag:"Hormone therapy · LHRH agonist",
+     text:"Prostate cancer often grows on testosterone, like a fire feeding on wood. Leuprolide tells the body's control center to stop shipping that wood. After a short early flare, testosterone drops and the fire loses its fuel."},
+    {name:"Degarelix (Firmagon)", tag:"Hormone therapy · GnRH antagonist",
+     text:"This one also cuts off the testosterone fuel supply, but it does it right away, like flipping a switch off instead of slowly turning a dial. Because of that, it skips the early flare-up that some other hormone shots cause."},
+    {name:"Bicalutamide (Casodex)", tag:"Anti-androgen",
+     text:"Testosterone works by plugging into 'sockets' on cancer cells. Bicalutamide is like a plastic safety cap pushed into those sockets, so testosterone can't plug in and switch the cell on."},
+    {name:"Enzalutamide (Xtandi)", tag:"Androgen-receptor inhibitor",
+     text:"A stronger, smarter socket-blocker. It not only caps the socket but also stops it from moving into the cell's control room to give orders. Used when cancer keeps growing even with low testosterone."},
+    {name:"Apalutamide (Erleada)", tag:"Androgen-receptor inhibitor",
+     text:"A cousin of enzalutamide that jams the same testosterone sockets. It's often used earlier, to keep quiet cancer from waking up and spreading."},
+    {name:"Darolutamide (Nubeqa)", tag:"Androgen-receptor inhibitor",
+     text:"Another socket-blocker built to mostly stay out of the brain, which can mean fewer thinking-and-mood side effects for some men. It's chosen to delay cancer spreading."},
+    {name:"Abiraterone (Zytiga)", tag:"CYP17 inhibitor",
+     text:"Testosterone is made in more than one factory, not just the testicles. Abiraterone shuts down the hidden backup factories — including ones inside the tumor itself — so almost no fuel gets made anywhere."},
+    {name:"Docetaxel (Taxotere)", tag:"Chemotherapy",
+     text:"Cells copy themselves by pulling apart on tiny 'ropes.' Docetaxel freezes those ropes stiff so fast-dividing cancer cells can't split, and they die. It travels the whole body, so it also causes broader side effects."},
+    {name:"Cabazitaxel (Jevtana)", tag:"Chemotherapy",
+     text:"A backup rope-freezing chemo used when docetaxel stops working. Some tumors learn to pump docetaxel out like bouncers at a door; cabazitaxel slips past those bouncers."},
+    {name:"Abiraterone + prednisone", tag:"Combination",
+     text:"Shutting off all the testosterone factories can throw other hormones out of balance, like turning off one machine and flooding the room. A small steroid, prednisone, is added to mop up that flood."},
+    {name:"Olaparib (Lynparza)", tag:"PARP inhibitor · targeted",
+     text:"Cells fix broken DNA with repair crews. Some tumors (with BRCA-type mutations) have already lost one crew. Olaparib benches the backup crew too, so the cancer's DNA damage piles up until the cell collapses."},
+    {name:"Rucaparib (Rubraca)", tag:"PARP inhibitor · targeted",
+     text:"Works like olaparib — it takes away the tumor's second repair crew. It's used for cancers with certain DNA-repair gene changes, so genetic testing helps decide if it fits."},
+    {name:"Sipuleucel-T (Provenge)", tag:"Immunotherapy · vaccine",
+     text:"This treatment takes Scott's own immune 'soldiers' out, shows them a wanted-poster of the cancer, trains them, and puts them back. Now they recognize the tumor and attack it."},
+    {name:"Pembrolizumab (Keytruda)", tag:"Immunotherapy · checkpoint",
+     text:"Cancer can wave a fake 'friendly' flag that tells immune cells to stand down. Pembrolizumab tears that flag away so the immune system sees the enemy. It mainly helps tumors with specific DNA-repair flaws (MSI-high)."},
+    {name:"Radium-223 (Xofigo)", tag:"Radiopharmaceutical",
+     text:"Prostate cancer often moves into bone. Radium-223 looks like calcium, so bone soaks it up right where the cancer is hiding — then it releases a tiny, very short-range spark of radiation that burns only the nearby tumor."},
+    {name:"Lutetium-177 PSMA (Pluvicto)", tag:"Radioligand therapy",
+     text:"Prostate cells wear a specific badge called PSMA. This medicine is a homing missile: one end locks onto the PSMA badge, and the other end carries a tiny radioactive payload that destroys the cell it's stuck to."},
+  ],
+  actions:[
+    "Ask which category (hormone, chemo, targeted, immune, radiopharmaceutical) fits Scott's current stage.",
+    "Request the specific goal of each drug: cure, control, slow spread, or ease symptoms.",
+    "Ask for the most common and the most serious side effects, in plain language.",
+    "Confirm whether genetic testing (BRCA, ATM, MSI) is needed before targeted or immune drugs.",
+    "Get the schedule: pills daily, shots every few months, or infusions — and for how long.",
+    "Ask how each drug will be monitored (PSA, scans, blood tests) and how often.",
+    "Bring a full list of Scott's current medicines and supplements to check for interactions.",
+    "Ask about bone health (calcium, vitamin D, bone-strengthening drugs) with hormone therapy.",
+    "Ask what to do and who to call if a side effect appears at home.",
+    "Request the cost/insurance path and whether patient-assistance programs exist.",
+    "Ask whether a clinical trial offers a newer option for Scott's situation.",
+    "Confirm which symptoms mean 'go to the ER' versus 'call the clinic.'",
+  ]
+};
+
+const TREATMENTS = {
+  intro:"Broad approaches a care team may combine. The right plan depends on Scott's Gleason/grade group, stage, PSA, genes, age, and personal priorities.",
+  items:[
+    {name:"Active surveillance", tag:"Monitoring",
+     text:"For slow, low-risk cancer, this is like keeping a close eye on a small, calm campfire instead of dumping water on it. Regular PSA tests, scans, and biopsies watch for any change, and treatment starts only if it wakes up."},
+    {name:"Watchful waiting", tag:"Monitoring",
+     text:"A lighter-touch watch, usually for men where the cancer is unlikely to cause trouble in their lifetime. The focus is comfort and quality of life, treating symptoms only if they appear."},
+    {name:"Radical prostatectomy", tag:"Surgery",
+     text:"Surgeons remove the whole prostate, like taking out a factory that's making trouble. Often done with robot-assisted tools through small cuts for a faster recovery."},
+    {name:"External beam radiation (EBRT)", tag:"Radiation",
+     text:"Invisible beams aimed from outside the body, like sunlight through a magnifying glass focused on the tumor to burn it while sparing the skin around it."},
+    {name:"Brachytherapy", tag:"Radiation",
+     text:"Tiny radioactive 'seeds' are placed right inside the prostate, like putting a space heater in the exact cold room instead of heating the whole house. The radiation stays very local."},
+    {name:"Androgen deprivation therapy (ADT)", tag:"Hormone therapy",
+     text:"Lowering testosterone starves the cancer of its main fuel. Often paired with radiation to make the beams work better, like turning down a fire before hosing it down."},
+    {name:"ADT + androgen-receptor drug (ARPI)", tag:"Combination",
+     text:"Cut off the fuel and block the sockets at the same time. Using both together hits the cancer from two directions and, for advanced disease, helps men live longer than one alone."},
+    {name:"Chemotherapy + ADT", tag:"Combination",
+     text:"For cancer that has spread widely, adding rope-freezing chemo to hormone therapy early can knock the disease back harder than hormones alone."},
+    {name:"PARP inhibitor therapy", tag:"Targeted",
+     text:"For tumors with DNA-repair mutations (like BRCA2), taking away the backup repair crew makes the cancer fall apart. Genetic testing points to who this fits."},
+    {name:"Immunotherapy", tag:"Immune",
+     text:"Turning Scott's own immune system into the treatment — either training soldiers (Provenge) or removing the cancer's fake friendly flag (Keytruda for MSI-high tumors)."},
+    {name:"Radioligand therapy (PSMA)", tag:"Targeted radiation",
+     text:"Homing-missile medicine (Pluvicto) that hunts down the PSMA badge on prostate cells anywhere in the body and delivers radiation right to them."},
+    {name:"Focal therapy (HIFU / cryotherapy)", tag:"Emerging",
+     text:"Instead of treating the whole prostate, focal therapy zaps only the tumor spot with heat (focused ultrasound) or cold (freezing), like patching one bad board instead of rebuilding the deck. Still being studied for long-term results."},
+    {name:"Clinical trials", tag:"Research",
+     text:"Studies that offer tomorrow's treatments today, under close watch. They can be a strong option, especially when standard choices are running low."},
+  ],
+  actions:[
+    "Ask for Scott's risk group (very-low, low, intermediate, high, or metastatic) in plain words.",
+    "Ask which options aim to cure versus control the cancer.",
+    "Request the pros, cons, and side effects of surgery versus radiation for his case.",
+    "Ask whether active surveillance is safe given his numbers.",
+    "Get the expected effect of each option on urination, continence, and sexual function.",
+    "Ask how hormone therapy would fit and for how long.",
+    "Request whether genetic or PSMA-PET testing would change the plan.",
+    "Ask about the recovery time and daily-life impact of each option.",
+    "Ask which nearby centers have the most experience with the chosen treatment.",
+    "Request a clear monitoring plan after treatment (PSA schedule, scans).",
+    "Ask whether a clinical trial is a good fit and how to find one.",
+    "Ask for a written summary and a second opinion before deciding.",
+  ]
+};
+
+const RADIATION = {
+  intro:"Ways radiation can be delivered. A radiation oncologist chooses based on tumor size, grade, spread, and Scott's anatomy and preferences.",
+  items:[
+    {name:"IMRT (intensity-modulated)", tag:"External beam",
+     text:"Many small beams, each dialed to its own strength, layered so the strong dose lands on the tumor and weak edges fall on healthy tissue — like several flashlights overlapping brightest on one spot."},
+    {name:"VMAT (volumetric arc)", tag:"External beam",
+     text:"A version of IMRT where the machine sweeps in an arc around the body while shaping the beam the whole way, painting the dose smoothly and finishing each session in just a couple of minutes."},
+    {name:"SBRT (stereotactic body RT)", tag:"External beam",
+     text:"A few very precise, very strong sessions instead of many small ones — like a handful of pinpoint laser hits over one to two weeks instead of daily visits for two months."},
+    {name:"Proton therapy", tag:"Particle beam",
+     text:"Protons can be set to stop at a chosen depth, dropping their energy and then halting, like a car that brakes exactly at the curb. That can spare tissue sitting just behind the tumor."},
+    {name:"LDR brachytherapy (seeds)", tag:"Internal · low-dose",
+     text:"Permanent rice-grain seeds placed in the prostate give off a gentle dose over weeks to months, staying put like tiny long-burning candles inside the gland."},
+    {name:"HDR brachytherapy", tag:"Internal · high-dose",
+     text:"A single strong radioactive source is threaded in through thin tubes for a few minutes, then removed — nothing stays behind. Like briefly holding a bright torch to the exact spot and taking it away."},
+    {name:"PSMA-guided radiotherapy", tag:"Image-guided",
+     text:"A PSMA-PET scan first lights up where prostate cells actually are, so the beams can be aimed at the real targets instead of guessing from a shadow."},
+    {name:"Adjuvant radiation", tag:"After surgery",
+     text:"Radiation given soon after surgery when the pathology suggests some cells may be left behind — sweeping the area to catch stragglers before they regroup."},
+    {name:"Salvage radiation", tag:"After recurrence",
+     text:"If PSA creeps back up after surgery, salvage radiation targets the prostate bed to knock down returning cancer, ideally caught early while it's small."},
+    {name:"Whole-pelvic radiation", tag:"Nodal",
+     text:"When nearby lymph nodes may be involved, the treatment field is widened to cover the pelvis, like watering the whole garden bed instead of one plant because seeds may have drifted."},
+    {name:"Hypofractionation", tag:"Schedule",
+     text:"Fewer visits, bigger doses each time. Modern studies show this can work as well as the old drawn-out schedule while saving weeks of daily trips."},
+    {name:"Radiation + ADT", tag:"Combination",
+     text:"Adding hormone therapy lowers the cancer's defenses so the beams land harder — turning down the fire before aiming the hose."},
+  ],
+  actions:[
+    "Ask which radiation type fits Scott's tumor and why.",
+    "Ask how many sessions and over how many weeks.",
+    "Request the short-term side effects (fatigue, urinary, bowel) to expect.",
+    "Ask about long-term risks to bladder, bowel, and sexual function.",
+    "Ask whether hormone therapy will be combined, and for how long.",
+    "Request whether a PSMA-PET scan should guide planning.",
+    "Ask how the target is mapped and how daily positioning is checked.",
+    "Ask about fiducial markers or spacer gel to protect healthy tissue.",
+    "Request the PSA follow-up schedule after radiation.",
+    "Ask what the PSA 'nadir' is and what a rise would mean later.",
+    "Ask how radiation would affect a future surgery option, if ever needed.",
+    "Ask which center and machine (proton, VMAT, HDR) are available nearby.",
+  ]
+};
+
+const NUTRITION = {
+  intro:"Eating patterns studied in prostate health (PubMed, Cochrane, EPIC, PLCO, NIH ODS). Food is supportive care, not a treatment — always coordinate with the care team.",
+  items:[
+    {name:"Mediterranean diet", tag:"Eating pattern",
+     text:"Lots of vegetables, fruit, beans, whole grains, fish, and olive oil, with little processed meat — like giving the body clean, high-quality fuel. It's tied to better overall health and heart protection, which matters during treatment."},
+    {name:"Ketogenic / low-carb", tag:"Eating pattern",
+     text:"Very low carbs so the body burns fat instead of sugar. The idea is to lower insulin, a growth signal, like turning down a thermostat. Evidence in prostate cancer is early and mixed — only try under medical guidance."},
+    {name:"Lycopene (tomatoes)", tag:"Food compound",
+     text:"The red pigment in cooked tomatoes acts like a rust-remover for cells, mopping up damaging 'sparks' (free radicals). Cooking with a little oil helps the body absorb it. Studies are promising but not proof."},
+    {name:"Cruciferous vegetables", tag:"Food group",
+     text:"Broccoli, cauliflower, and cabbage carry compounds that help the body's cleanup and detox crews work better — like handing the janitors sharper tools. Population studies link them to lower risk."},
+    {name:"Omega-3 fats (fish)", tag:"Food compound",
+     text:"The healthy fats in salmon and sardines calm the body's inflammation, like lowering a simmer on the stove. Good for the heart; effects specific to prostate cancer are still being studied."},
+    {name:"Vitamin D", tag:"Nutrient",
+     text:"A hormone-like nutrient from sunlight and food that helps cells behave normally, like a supervisor keeping workers on task. Many men run low; a blood test can check Scott's level."},
+    {name:"Calcium (moderation)", tag:"Nutrient · caution",
+     text:"Needed for bones, but some studies link very high calcium intake to higher prostate risk — a case where more is not better. Aim for the recommended amount, not mega-doses."},
+    {name:"Selenium (caution)", tag:"Mineral · caution",
+     text:"Once hoped to prevent prostate cancer, but the large SELECT trial found selenium supplements did not help and may harm some men. Getting it from food is fine; pills are not recommended for prevention."},
+    {name:"Weight & obesity", tag:"Body composition",
+     text:"Extra body fat acts like a hormone factory that can feed cancer and raise inflammation. Reaching a healthier weight lowers that background noise and helps treatments and recovery."},
+    {name:"Exercise", tag:"Lifestyle",
+     text:"Movement is medicine you can dose daily. It fights the fatigue and muscle loss from hormone therapy, lifts mood, and is linked to better outcomes — like keeping the engine tuned instead of letting it rust."},
+    {name:"Green tea", tag:"Beverage",
+     text:"Green tea holds plant compounds (catechins) studied for slowing cancer-cell growth in the lab. Human proof is limited, but it's a low-risk swap for sugary drinks."},
+    {name:"Limit processed & red meat", tag:"Pattern",
+     text:"Charred and processed meats can create damaging compounds, like scorching food into something the body struggles with. Cutting back and cooking gentler lowers that load."},
+  ],
+  actions:[
+    "Ask the care team or a dietitian before big diet changes during treatment.",
+    "Get Scott's vitamin D level checked and ask if he needs to correct it.",
+    "Build meals around vegetables, beans, whole grains, and fish (Mediterranean style).",
+    "Add cooked tomatoes and cruciferous veggies to the weekly rotation.",
+    "Aim for recommended calcium from food, not high-dose supplements.",
+    "Avoid selenium and high-dose vitamin E pills for 'prevention.'",
+    "Cut back on processed meat and heavily charred grilling.",
+    "Set a realistic, gradual weight goal if needed, with the doctor.",
+    "Plan regular exercise (walking, resistance) especially on hormone therapy.",
+    "Swap sugary drinks for water, green tea, or unsweetened options.",
+    "Keep a simple food-and-symptom log to spot what helps or hurts.",
+    "Ask a registered dietitian who specializes in oncology for a tailored plan.",
+  ]
+};
+
+const SUPPLEMENTS = {
+  intro:"Supplements men often ask about (NIH Office of Dietary Supplements, PubMed, Cochrane). Important: some supplements interfere with treatment. Always clear them with the oncologist first.",
+  items:[
+    {name:"Vitamin D3", tag:"May help if low",
+     text:"If Scott's blood level is low, replacing vitamin D helps bones and general health, like topping off oil in an engine that's running dry. It is not a cancer cure — the goal is a normal level."},
+    {name:"Lycopene", tag:"Promising, unproven",
+     text:"The tomato pigment in pill form is studied as a cell-protector. Signals are hopeful but not conclusive, and eating cooked tomatoes may work just as well."},
+    {name:"Omega-3 fish oil", tag:"Heart-supportive",
+     text:"Concentrated healthy fats that calm inflammation and support the heart. Note: high doses can thin the blood, which matters before surgery."},
+    {name:"Green tea extract", tag:"Caution · liver",
+     text:"Concentrated catechins studied for anti-cancer effects, but high-dose extracts have sometimes stressed the liver. Brewed tea is far safer than strong pills."},
+    {name:"Selenium", tag:"Not recommended",
+     text:"The big SELECT trial showed no benefit and possible harm for prevention. This is a 'skip the pill' item — don't supplement without a proven deficiency and medical advice."},
+    {name:"Vitamin E", tag:"Not recommended",
+     text:"Also from SELECT: men taking vitamin E had a higher rate of prostate cancer. High-dose vitamin E supplements are discouraged."},
+    {name:"Pomegranate", tag:"Unproven",
+     text:"Early studies hinted pomegranate juice might slow PSA rise, but larger trials didn't confirm it. Fine as a food, not proven as medicine."},
+    {name:"Curcumin (turmeric)", tag:"Experimental",
+     text:"The yellow spice compound is studied for calming inflammation, but the body absorbs it poorly and it can interact with drugs. Treat as experimental, not established."},
+    {name:"Modified citrus pectin", tag:"Experimental",
+     text:"A fiber from citrus peels studied in small trials for slowing PSA changes. Evidence is thin; discuss before spending money on it."},
+    {name:"Soy isoflavones", tag:"Mixed evidence",
+     text:"Plant estrogens that may gently influence hormone activity. Some studies suggest modest benefit; whole soy foods are a reasonable, low-risk choice."},
+    {name:"Zinc", tag:"Caution",
+     text:"The prostate is rich in zinc, but studies of high-dose zinc pills found no benefit and possible higher risk. Get zinc from food, not mega-doses."},
+    {name:"Multivitamin", tag:"Neutral",
+     text:"A basic daily multivitamin is usually harmless, but 'more is better' does not apply — very high doses of single nutrients can backfire, as SELECT showed."},
+  ],
+  actions:[
+    "Bring every supplement bottle to the oncologist before continuing them.",
+    "Ask specifically what could interfere with radiation, chemo, or targeted drugs.",
+    "Stop blood-thinning supplements (fish oil, high vitamin E) before surgery as advised.",
+    "Avoid selenium and vitamin E supplements taken for 'prevention.'",
+    "Correct a true vitamin D deficiency only to a normal level, guided by labs.",
+    "Prefer whole foods (tomatoes, soy, tea) over concentrated extracts when possible.",
+    "Buy only third-party-tested brands (USP, NSF) to avoid contaminants.",
+    "Watch for liver-stress signs with green tea or high-dose extracts.",
+    "Don't replace proven treatment with any supplement.",
+    "Track what he takes, the dose, and why, in one list.",
+    "Re-check the list at every treatment change.",
+    "Ask about cost — spend on food and proven care first.",
+  ]
+};
+
+const SURGERY = {
+  intro:"Recovery guidance after prostate surgery (radical prostatectomy). General education — follow the surgical team's specific instructions, which always come first.",
+  items:[
+    {name:"Catheter care", tag:"First 1–2 weeks",
+     text:"A thin tube drains the bladder while the area heals, like a temporary bypass around fresh road work. Keep it clean, keep the bag below the bladder, and know the date it comes out."},
+    {name:"Pelvic-floor exercises (Kegels)", tag:"Continence",
+     text:"The muscles that control urine are like a drawstring on a bag. Surgery loosens the drawstring; Kegels retrain it. Starting them (as advised) speeds the return of bladder control."},
+    {name:"Continence timeline", tag:"Expectations",
+     text:"Leaking after surgery is normal and usually improves over weeks to months as the muscles wake up. Pads help in the meantime; most men steadily get drier."},
+    {name:"Erectile rehabilitation", tag:"Sexual recovery",
+     text:"Nerves near the prostate can be bruised by surgery and need time to recover, like a leg that's fallen asleep. A 'penile rehab' plan (medicines, devices) keeps the tissue healthy while nerves heal."},
+    {name:"Activity & lifting limits", tag:"First 4–6 weeks",
+     text:"Heavy lifting strains healing stitches inside, like tugging a wound that's trying to knit. Gentle walking is encouraged; save the heavy work until cleared."},
+    {name:"Incision / wound care", tag:"Healing",
+     text:"Keep small cuts clean and dry and watch for spreading redness, swelling, or drainage — the warning lights that mean call the surgeon."},
+    {name:"Blood-clot prevention", tag:"Safety",
+     text:"Sitting still after surgery lets blood pool and clot, like water going stagnant. Frequent short walks keep it moving. Sudden leg swelling or chest pain is an emergency."},
+    {name:"Diet, hydration & constipation", tag:"Comfort",
+     text:"Pain medicines slow the gut. Fluids, fiber, and gentle movement keep things flowing so straining doesn't stress the surgical area."},
+    {name:"PSA after surgery", tag:"Monitoring",
+     text:"With the prostate gone, PSA should fall to nearly zero — the 'undetectable' target. Regular tests watch that it stays down; a rise would prompt a next-step conversation."},
+    {name:"Follow-up appointments", tag:"Monitoring",
+     text:"Scheduled visits check healing, review the final pathology, and plan any further treatment. Write questions down beforehand so none are forgotten."},
+    {name:"Emotional & mental health", tag:"Whole-person",
+     text:"Changes in control and intimacy can hit hard. Support groups, a counselor, and honest talks with loved ones are part of healing, not a sign of weakness."},
+    {name:"When to call the doctor", tag:"Red flags",
+     text:"Fever, heavy bleeding, a blocked or painful catheter, calf swelling, chest pain, or trouble breathing mean call right away — these are the smoke alarms, not the time to wait."},
+  ],
+  actions:[
+    "Get written discharge instructions and a direct number to call.",
+    "Learn catheter care and the exact removal date before leaving the hospital.",
+    "Start pelvic-floor (Kegel) exercises only when the team says it's safe.",
+    "Ask about a penile-rehabilitation plan and when to begin.",
+    "Confirm lifting and driving limits and when they lift.",
+    "Set up walking goals each day to prevent clots.",
+    "Stock pads, loose clothing, and stool softeners before surgery.",
+    "Schedule the first post-op PSA and follow-up visit.",
+    "Write down the final pathology questions (margins, nodes, grade).",
+    "Line up help at home for the first week or two.",
+    "Know the exact red-flag symptoms that mean call or go to the ER.",
+    "Ask about a support group or counselor for the emotional side.",
+  ]
+};
+
+const GENES = {
+  intro:"Genes sometimes altered in prostate cancer (PharmGKB, CPIC, ClinVar, dbSNP, TCGA, cBioPortal). Some are inherited (family risk), some appear only in the tumor. Genetic testing and counseling guide their use.",
+  items:[
+    {name:"BRCA2", tag:"DNA repair · high impact",
+     text:"BRCA2 is a master DNA-repair mechanic. When it's broken, damage isn't fixed and cancer can be more aggressive. But that same weakness is a target: PARP-inhibitor drugs finish the job. Also raises family risk."},
+    {name:"BRCA1", tag:"DNA repair",
+     text:"A cousin of BRCA2 in the same repair crew. A fault raises risk and can make certain targeted drugs work, and it matters for relatives who may want testing."},
+    {name:"ATM", tag:"DNA damage sensor",
+     text:"ATM is the alarm that spots DNA damage and calls the repair crew. If the alarm is broken, damage slips by. Tumors with ATM faults may respond to PARP inhibitors."},
+    {name:"CHEK2", tag:"Checkpoint control",
+     text:"CHEK2 is a quality checkpoint that pauses a cell to fix mistakes before it copies. A fault lets flawed cells through, modestly raising risk."},
+    {name:"HOXB13", tag:"Inherited risk",
+     text:"HOXB13 helps guide normal prostate development. A specific inherited change runs in some families and raises prostate cancer risk across generations."},
+    {name:"PALB2", tag:"DNA repair partner",
+     text:"PALB2 is the partner that brings BRCA2 to the repair site — think of it as the coworker who hands over the tools. A fault behaves like a BRCA problem and can point to PARP drugs."},
+    {name:"TP53", tag:"Guardian gene",
+     text:"TP53 is the cell's 'guardian' that orders a damaged cell to stop or self-destruct. When it fails, dangerous cells survive and multiply. Its loss often signals a tougher cancer."},
+    {name:"PTEN", tag:"Growth brake",
+     text:"PTEN is a brake pedal on a growth pathway (PI3K/AKT). Lose the brake and the cell speeds up. PTEN loss is common in aggressive prostate cancer and points to growth-pathway drugs in trials."},
+    {name:"CDK12", tag:"Genome stability",
+     text:"CDK12 keeps the genome tidy. When it breaks, the DNA gets scrambled in a pattern that may make the tumor more visible to the immune system, hinting at immunotherapy."},
+    {name:"MSH2", tag:"Mismatch repair (Lynch)",
+     text:"MSH2 is a spell-checker that fixes typos when DNA is copied. A fault lets errors pile up (MSI-high) — which can make immunotherapy work well. It's part of inherited Lynch syndrome."},
+    {name:"MSH6", tag:"Mismatch repair (Lynch)",
+     text:"Another spell-checker in the same crew as MSH2. Faults raise typo buildup and family-cancer risk, and may open the door to immunotherapy."},
+    {name:"MLH1", tag:"Mismatch repair (Lynch)",
+     text:"The lead spell-checker of the mismatch-repair team. Loss causes high typo counts (MSI-high) that immune-checkpoint drugs can exploit, and signals inherited Lynch syndrome."},
+  ],
+  actions:[
+    "Ask whether Scott should have germline (inherited) genetic testing.",
+    "Ask whether the tumor should have somatic (tissue) genetic testing.",
+    "Request genetic counseling to understand results and family impact.",
+    "Ask if any mutation opens a targeted drug (PARP inhibitor) option.",
+    "Ask if MSI-high or mismatch-repair loss means immunotherapy could help.",
+    "Discuss what a BRCA/ATM result means for children and siblings.",
+    "Ask how results change screening for relatives.",
+    "Request that results be documented for future treatment decisions.",
+    "Ask whether a clinical trial matches his specific mutation.",
+    "Confirm insurance coverage for genetic testing and counseling.",
+    "Ask about privacy and how genetic data is stored and shared.",
+    "Re-test the tumor if the cancer changes or progresses later.",
+  ]
+};
+
+const TERMS = {
+  intro:"Plain-language definitions of words Scott may hear. Keep this handy to decode reports and conversations.",
+  items:[
+    {name:"PSA (prostate-specific antigen)", tag:"Blood test",
+     text:"A protein the prostate makes that shows up in blood. Think of it as smoke: a rising level can signal 'something's going on,' but smoke alone doesn't tell you exactly what. Trends over time matter more than one reading."},
+    {name:"Gleason score", tag:"Pathology",
+     text:"A pathologist grades how disorganized the cancer cells look under the microscope, adds the two most common patterns, and gets a score from 6 to 10. Higher means more unruly, faster-behaving cells."},
+    {name:"ISUP grade group", tag:"Pathology",
+     text:"A simpler 1-to-5 relabeling of Gleason. Group 1 is the calmest; Group 5 is the most aggressive. It's the newer, clearer way to say the same thing."},
+    {name:"TNM stage", tag:"Staging",
+     text:"A three-part map of the cancer: T = tumor size/local reach, N = nearby lymph nodes, M = spread to distant places. Together they describe how far things have gone."},
+    {name:"Biopsy", tag:"Procedure",
+     text:"Taking tiny tissue samples from the prostate with a needle so a pathologist can look directly, like taking core samples from the ground to see what's underneath."},
+    {name:"PI-RADS", tag:"MRI score",
+     text:"A 1-to-5 score on prostate MRI rating how suspicious a spot looks. 1 means 'almost surely fine'; 5 means 'very suspicious' and likely needs a biopsy."},
+    {name:"PSMA-PET scan", tag:"Imaging",
+     text:"A scan using a tracer that sticks to the PSMA badge on prostate cells, lighting them up like glow-in-the-dark paint so doctors can see where cancer is hiding."},
+    {name:"ADT (androgen deprivation)", tag:"Treatment",
+     text:"Lowering testosterone to starve the cancer of fuel — the umbrella term for the hormone shots and pills that do this."},
+    {name:"Castration-resistant", tag:"Disease state",
+     text:"When cancer keeps growing even though testosterone is already very low — it has found a workaround, like a plant learning to grow with almost no water. It needs a different class of treatment."},
+    {name:"Metastasis", tag:"Spread",
+     text:"Cancer cells that have traveled from the prostate to set up colonies elsewhere, often bone or lymph nodes — like seeds blown to a new field."},
+    {name:"Biochemical recurrence", tag:"Follow-up",
+     text:"A rising PSA after treatment that signals cancer activity before any scan can see it — an early warning bell, not a full picture yet."},
+    {name:"PSA nadir", tag:"Follow-up",
+     text:"The lowest point PSA reaches after treatment — the 'bottom of the valley.' How low it goes, and whether it climbs back, helps judge how well treatment worked."},
+    {name:"Positive margin", tag:"Surgery pathology",
+     text:"After surgery, cancer cells found right at the cut edge, meaning some may have been left behind — like frosting that reaches the very edge of the cut cake. It may prompt added treatment."},
+    {name:"Active surveillance", tag:"Strategy",
+     text:"Closely watching low-risk cancer with regular tests instead of treating right away, stepping in only if it changes."},
+    {name:"Androgen receptor", tag:"Biology",
+     text:"The 'socket' on prostate cells that testosterone plugs into to switch on growth. Many treatments work by blocking this socket or removing what plugs into it."},
+  ],
+  actions:[
+    "Ask the doctor to define any unfamiliar word in plain English.",
+    "Request a written copy of every pathology and imaging report.",
+    "Ask for Scott's exact PSA, Gleason/ISUP grade, and TNM stage in writing.",
+    "Have someone take notes or record (with permission) at appointments.",
+    "Ask what each number means for his specific plan.",
+    "Keep a running glossary of terms used about his case.",
+    "Ask which numbers to watch over time and their target ranges.",
+    "Bring this guide to appointments to check terms in real time.",
+    "Ask for reputable reading (NCI, ACS) matched to his stage.",
+    "Confirm the meaning of any change before worrying about it.",
+    "Ask how often each test repeats and why.",
+    "Request a plain-language summary after major results.",
+  ]
+};
+
+/* ---------- Research databases (grouped exactly as provided) ---------- */
+const DBGROUPS = [
+  {cat:"Nutrition", icon:"🥗",
+   dbs:[["PubMed","https://pubmed.ncbi.nlm.nih.gov/"],["Cochrane Library","https://www.cochranelibrary.com/"],
+        ["NIH Office of Dietary Supplements","https://ods.od.nih.gov/"],["EPIC Study","https://epic.iarc.fr/"],
+        ["PLCO Trial","https://prevention.cancer.gov/major-programs/prostate-lung-colorectal-and-ovarian-cancer-screening-trial"]],
+   tokens:["Mediterranean diet","Ketogenic diets","Lycopene","Cruciferous vegetables","Omega-3","Vitamin D","Calcium","Selenium","Obesity","Exercise"]},
+  {cat:"Pharmacogenetics", icon:"🧬",
+   dbs:[["PharmGKB","https://www.pharmgkb.org/"],["CPIC","https://cpicpgx.org/"],["PharmVar","https://www.pharmvar.org/"],
+        ["ClinVar","https://www.ncbi.nlm.nih.gov/clinvar/"],["dbSNP","https://www.ncbi.nlm.nih.gov/snp/"],
+        ["TCGA","https://www.cancer.gov/ccg/research/genome-sequencing/tcga"],["cBioPortal","https://www.cbioportal.org/"]],
+   tokens:["BRCA1","BRCA2","ATM","CHEK2","HOXB13","PALB2","TP53","PTEN","CDK12","MSH2","MSH6","MLH1"]},
+  {cat:"Pharmacodynamics", icon:"💊",
+   dbs:[["DrugBank","https://go.drugbank.com/"],["ChEMBL","https://www.ebi.ac.uk/chembl/"],
+        ["FDA Drug Labels (DailyMed)","https://dailymed.nlm.nih.gov/"],["KEGG","https://www.genome.jp/kegg/"],
+        ["Reactome","https://reactome.org/"]],
+   tokens:["Androgen receptor","CYP17","PARP","PSMA","DNA repair pathways","PI3K/AKT/mTOR"]},
+  {cat:"Tumor biology", icon:"🔬",
+   dbs:[["TCGA","https://www.cancer.gov/ccg/research/genome-sequencing/tcga"],["cBioPortal","https://www.cbioportal.org/"],
+        ["GDC","https://gdc.cancer.gov/"],["COSMIC","https://cancer.sanger.ac.uk/cosmic"],
+        ["Human Protein Atlas","https://www.proteinatlas.org/"],["GEO","https://www.ncbi.nlm.nih.gov/geo/"]],
+   tokens:["RNA expression","DNA methylation","Whole-exome sequencing","Proteomics","Copy number variation","Tumor microenvironment","Immune infiltration"]},
+  {cat:"Tumor size & pathology", icon:"📏",
+   dbs:[["SEER","https://seer.cancer.gov/"],["National Cancer Database (NCDB)","https://www.facs.org/quality-programs/cancer-programs/national-cancer-database/"],
+        ["PI-RADS (ACR)","https://www.acr.org/Clinical-Resources/Reporting-and-Data-Systems/PI-RADS"],
+        ["TCIA (Cancer Imaging Archive)","https://www.cancerimagingarchive.net/"]],
+   tokens:["MRI","PET imaging","Tumor volume","Gleason grade","ISUP grade","TNM stage","Surgical pathology"]},
+  {cat:"Radiation oncology", icon:"☢️",
+   dbs:[["ASTRO","https://www.astro.org/"],["NRG Oncology","https://www.nrgoncology.org/"],
+        ["RTOG (legacy, via NRG)","https://www.nrgoncology.org/"],
+        ["SEER-Medicare","https://healthcaredelivery.cancer.gov/seermedicare/"],
+        ["ClinicalTrials.gov","https://clinicaltrials.gov/"]],
+   tokens:["IMRT","Proton therapy","SBRT","Brachytherapy","PSMA-guided radiotherapy"]},
+  {cat:"Surgery", icon:"🩺",
+   dbs:[["National Cancer Database","https://www.facs.org/quality-programs/cancer-programs/national-cancer-database/"],
+        ["SEER","https://seer.cancer.gov/"],["ACS NSQIP","https://www.facs.org/quality-programs/data-and-registries/acs-nsqip/"],
+        ["PCORnet","https://pcornet.org/"]],
+   tokens:["Robotic prostatectomy","Open surgery","Positive margins","Continence","Erectile function","Long-term survival"]},
+  {cat:"Population health", icon:"🌍",
+   dbs:[["SEER","https://seer.cancer.gov/"],["CDC WONDER","https://wonder.cdc.gov/"],
+        ["WHO Cancer Observatory","https://gco.iarc.who.int/"],["GLOBOCAN","https://gco.iarc.who.int/today/"],
+        ["UK Biobank","https://www.ukbiobank.ac.uk/"],
+        ["PLCO Trial","https://prevention.cancer.gov/major-programs/prostate-lung-colorectal-and-ovarian-cancer-screening-trial"]],
+   tokens:["Race","Ethnicity","Socioeconomic status","Geography","Mortality","Incidence","Screening uptake","Environmental exposures"]},
+  {cat:"Toxicology & environment", icon:"⚠️",
+   dbs:[["ATSDR","https://www.atsdr.cdc.gov/"],["EPA IRIS","https://www.epa.gov/iris"],
+        ["Comparative Toxicogenomics DB (CTD)","https://ctdbase.org/"],["NIEHS","https://www.niehs.nih.gov/"],
+        ["Tox21","https://tox21.gov/"],["ToxCast","https://www.epa.gov/comptox-tools/toxicity-forecasting-toxcast"]],
+   tokens:["PFAS","Cadmium","Agent Orange","BPA","Pesticides","Heavy metals","Air pollution","Endocrine disruptors"]},
+];
+
+const ULTIMATE = [
+  ["SEER","https://seer.cancer.gov/"],["TCGA-PRAD","https://portal.gdc.cancer.gov/projects/TCGA-PRAD"],
+  ["cBioPortal","https://www.cbioportal.org/"],["GDC","https://gdc.cancer.gov/"],
+  ["ICGC","https://dcc.icgc.org/"],["COSMIC","https://cancer.sanger.ac.uk/cosmic"],
+  ["GEO","https://www.ncbi.nlm.nih.gov/geo/"],["DrugBank","https://go.drugbank.com/"],
+  ["PharmGKB","https://www.pharmgkb.org/"],["ClinVar","https://www.ncbi.nlm.nih.gov/clinvar/"],
+  ["ClinicalTrials.gov","https://clinicaltrials.gov/"],["PubMed","https://pubmed.ncbi.nlm.nih.gov/"],
+  ["Cochrane Library","https://www.cochranelibrary.com/"],["Human Protein Atlas","https://www.proteinatlas.org/"],
+  ["TCIA","https://www.cancerimagingarchive.net/"],["SEER-Medicare","https://healthcaredelivery.cancer.gov/seermedicare/"],
+  ["NCDB","https://www.facs.org/quality-programs/cancer-programs/national-cancer-database/"],
+  ["PLCO","https://prevention.cancer.gov/major-programs/prostate-lung-colorectal-and-ovarian-cancer-screening-trial"],
+  ["UK Biobank","https://www.ukbiobank.ac.uk/"],["ClinicalTrials.gov","https://clinicaltrials.gov/"],
+];
+
+const SCHOLARLY = [
+  ["National Cancer Institute — Prostate Cancer","https://www.cancer.gov/types/prostate"],
+  ["NCCN Guidelines for Patients — Prostate Cancer","https://www.nccn.org/patientresources/patient-resources/guidelines-for-patients"],
+  ["American Cancer Society — Prostate Cancer","https://www.cancer.org/cancer/types/prostate-cancer.html"],
+  ["American Urological Association (AUA)","https://www.auanet.org/guidelines-and-quality"],
+  ["ASCO / Cancer.Net — Prostate Cancer","https://www.cancer.net/cancer-types/prostate-cancer"],
+  ["Prostate Cancer Foundation","https://www.pcf.org/"],
+  ["Cochrane Library — Systematic Reviews","https://www.cochranelibrary.com/"],
+  ["PubMed — Peer-reviewed literature","https://pubmed.ncbi.nlm.nih.gov/"],
+  ["ClinicalTrials.gov — Trial finder","https://clinicaltrials.gov/"],
+  ["MedlinePlus — Prostate Cancer (plain language)","https://medlineplus.gov/prostatecancer.html"],
+];
+
+/* ---------- Clinical trials (real snapshot from ClinicalTrials.gov) ----------
+   Captured 2026-07-17. Trials change constantly — treat as examples to discuss
+   with the care team, and use the live-search links for the current list. */
+const TRIALS = {
+  captured:"July 17, 2026",
+  items:[
+    {nct:"NCT06320067", name:"STAMPEDE2", focus:"Metastatic prostate cancer",
+     text:"A large 'platform' trial testing several add-ons to hormone therapy (ADT) — including targeted radiation (SABR), the PSMA homing-missile drug 177Lu-PSMA, and androgen-receptor blockers — to see which combinations help most.",
+     phase:"Phase 3", sponsor:"University College London", n:3360},
+    {nct:"NCT06952803", name:"EvoPAR-Prostate02", focus:"High-risk, BRCA-mutated, localized",
+     text:"For men with an inherited BRCA change and high-risk local disease, this adds the PARP-inhibitor saruparib to radiation plus hormone therapy — testing whether removing the tumor's backup DNA-repair crew improves cure rates.",
+     phase:"Phase 3", sponsor:"AstraZeneca", n:700},
+    {nct:"NCT06780670", name:"PSMAcTION", focus:"PSMA-positive, castration-resistant",
+     text:"For cancer that has kept growing after the Pluvicto (177Lu-PSMA) radioligand, this compares a next-generation PSMA-targeted therapy (AAA817) against standard care.",
+     phase:"Phase 2/3", sponsor:"Novartis", n:443},
+    {nct:"NCT05946213", name:"High Five Trial", focus:"High-risk, localized",
+     text:"Tests whether just five precise, high-dose radiation sessions (SBRT) work as well as many weeks of daily treatment for high-risk prostate cancer — far fewer trips for the same goal.",
+     phase:"Phase 3", sponsor:"NRG Oncology", n:1209},
+    {nct:"NCT03903835", name:"ProBio", focus:"Metastatic",
+     text:"A biomarker-driven study: the tumor's genetic profile helps pick which treatment each man gets, testing whether matching the drug to the biology beats the usual one-size approach.",
+     phase:"Phase 3", sponsor:"Karolinska Institutet", n:750},
+    {nct:"NCT06650579", name:"REVELUTION-2", focus:"Advanced, recurrent",
+     text:"Compares two ways to lower testosterone — an injection (leuprolide) versus a daily pill (relugolix) — both combined with abiraterone, looking at effectiveness and heart-related safety.",
+     phase:"Phase 3", sponsor:"Emory University", n:72},
+    {nct:"NCT05019846", name:"SPA Trial", focus:"Localized",
+     text:"Asks whether adding short hormone therapy to stereotactic (SBRT) radiation improves outcomes, or whether the radiation alone is enough — helping men avoid hormone side effects when possible.",
+     phase:"Phase 3", sponsor:"Multi-center (Italy)", n:310},
+    {nct:"NCT06626022", name:"MUSIC-Screen", focus:"Screening / detection",
+     text:"Compares a newer high-resolution 'micro-ultrasound' against standard MRI for finding prostate cancer — testing a faster, cheaper way to spot disease early.",
+     phase:"Phase 3", sponsor:"University of Alberta", n:1284},
+  ],
+  actions:[
+    "Ask the oncologist whether a clinical trial is appropriate for Scott right now.",
+    "Ask which trials match his exact stage, genes, and prior treatments.",
+    "Confirm eligibility rules can be complex — let the trial team check, don't self-exclude.",
+    "Ask about the potential benefits, risks, and extra visits a trial involves.",
+    "Ask whether standard treatment is delayed or continued during a trial.",
+    "Search ClinicalTrials.gov (link below) filtered to his location for nearby sites.",
+    "Bring the NCT number of any trial of interest to the next appointment.",
+    "Ask if genetic/biomarker testing is needed to qualify for targeted-therapy trials.",
+    "Ask who covers the costs (sponsor vs. insurance) and about travel support.",
+    "Ask the care team for a referral to a trial coordinator or nurse navigator.",
+    "Check that any trial is registered and has ethics-board (IRB) approval.",
+    "Ask what happens after the trial ends and whether treatment continues.",
+  ]
+};
+
+/* ---------- Navigation model ---------- */
+const NAV = [
+  {group:"Scott's records", items:[
+    {id:"home", label:"Overview", icon:"◆"},
+    {id:"images", label:"Imaging & scans", icon:"▤"},
+    {id:"biopsy", label:"Biopsy & diagnosis", icon:"✎"},
+    {id:"history", label:"Health history", icon:"❤"},
+    {id:"vitals", label:"Vitals", icon:"◔"},
+    {id:"backup", label:"Backup & print", icon:"⤓"},
+  ]},
+  {group:"Quick reference", items:[
+    {id:"drugs", label:"Medications", icon:"💊"},
+    {id:"treatments", label:"Treatment plans", icon:"◈"},
+    {id:"radiation", label:"Radiation plans", icon:"☢"},
+    {id:"nutrition", label:"Nutrition", icon:"🥗"},
+    {id:"supplements", label:"Supplements", icon:"◉"},
+    {id:"surgery", label:"Surgery recovery", icon:"✚"},
+    {id:"genes", label:"Genetic variations", icon:"🧬"},
+    {id:"terms", label:"Medical terms", icon:"🔤"},
+  ]},
+  {group:"Research & trust", items:[
+    {id:"trials", label:"Clinical trials", icon:"⚗"},
+    {id:"databases", label:"Research databases", icon:"🗄"},
+    {id:"scholarly", label:"Scholarly resources", icon:"📚"},
+    {id:"review", label:"Review & publishing", icon:"✔"},
+    {id:"disclaimer", label:"Disclaimers", icon:"⚖"},
+  ]},
+];
+
+/* ============================================================
+   Rendering
+   ============================================================ */
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ============================================================
+   Illustrations — vivid inline SVG "flashcards" for each metaphor.
+   Self-contained (no external images), crisp in light & dark.
+   ============================================================ */
+const A=(bg,inner)=>({bg, svg:`<svg viewBox="0 0 240 120" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true">${inner}</svg>`});
+function artBox(a,cls){return a?`<div class="${cls}" style="background:${a.bg}">${a.svg}</div>`:`<div class="${cls}"></div>`;}
+const rays=(cx,cy,col)=>{let s='';for(let i=0;i<8;i++){const a=i*Math.PI/4,x1=cx+Math.cos(a)*30,y1=cy+Math.sin(a)*30,x2=cx+Math.cos(a)*40,y2=cy+Math.sin(a)*40;s+=`<path d="M${x1.toFixed(0)} ${y1.toFixed(0)} L${x2.toFixed(0)} ${y2.toFixed(0)}"/>`;}return `<g stroke="${col}" stroke-width="6" stroke-linecap="round">${s}</g>`;};
+const dnaHelix=()=>`<path d="M104 22 C86 42 122 52 104 72 C86 92 122 102 104 118" stroke="#7c6cf0" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M136 22 C154 42 118 52 136 72 C154 92 118 102 136 118" stroke="#4aa3f0" stroke-width="5" fill="none" stroke-linecap="round"/><g class="twinkle" stroke="#46c46e" stroke-width="4" stroke-linecap="round"><path d="M110 34 h20"/><path d="M114 52 h12"/><path d="M110 72 h20"/><path d="M114 90 h12"/></g>`;
+const shieldPath=(col)=>`<path d="M120 24 l36 13 v22 c0 27 -19 42 -36 49 c-17 -7 -36 -22 -36 -49 v-22 z" fill="${col}"/>`;
+
+const ART = {
+  fire: A('#ffe9d6', `<rect x="86" y="88" width="68" height="12" rx="6" fill="#a6672e"/><rect x="78" y="99" width="84" height="12" rx="6" fill="#8a531f"/><path d="M120 26 C144 52 140 78 120 90 C100 78 96 52 120 26 Z" fill="#ff7a3d"/><path d="M120 44 C134 60 132 76 120 84 C108 76 106 60 120 44 Z" fill="#ffd23f"/>`),
+  socket: A('#e8e6ff', `<rect x="64" y="34" width="74" height="56" rx="14" fill="#7c6cf0"/><circle cx="88" cy="62" r="6.5" fill="#efeaff"/><circle cx="116" cy="62" r="6.5" fill="#efeaff"/><rect x="150" y="50" width="36" height="26" rx="9" fill="#ff6b6b"/><rect x="138" y="55" width="14" height="6" rx="3" fill="#ff6b6b"/><rect x="138" y="65" width="14" height="6" rx="3" fill="#ff6b6b"/>`),
+  factory: A('#dfeffe', `<rect x="70" y="62" width="100" height="40" rx="4" fill="#6aa0d8"/><rect x="150" y="42" width="14" height="24" fill="#4f82ba"/><path d="M70 62 l16 -12 v12 z M92 62 l16 -12 v12 z" fill="#4f82ba"/><circle cx="120" cy="46" r="15" fill="#fff"/><circle cx="120" cy="46" r="12" fill="none" stroke="#ff6b6b" stroke-width="4"/><path d="M111 55 l18 -18" stroke="#ff6b6b" stroke-width="4"/>`),
+  ropes: A('#d9f7f2', `<g stroke="#4aa3f0" stroke-width="7" stroke-linecap="round" fill="none"><path d="M92 28 V92"/><path d="M120 28 V92"/><path d="M148 28 V92"/></g><g stroke="#2f6fb0" stroke-width="3" stroke-linecap="round"><path d="M176 34 v22 M165 45 h22 M168 37 l16 16 M184 37 l-16 16"/></g>`),
+  repair: A('#ffe0e6', dnaHelix()+`<g transform="translate(158,64) rotate(35)"><rect x="0" y="-4" width="30" height="9" rx="4" fill="#5c6d6b"/><path d="M0 0 m-4 -9 a9 9 0 1 0 0 18 a5 5 0 0 1 0 -18" fill="#5c6d6b"/></g>`),
+  dna: A('#e9e6ff', dnaHelix()),
+  target: A('#e6ffe9', `<circle cx="116" cy="60" r="40" fill="#ff6b6b"/><circle cx="116" cy="60" r="28" fill="#fff"/><circle cx="116" cy="60" r="16" fill="#ff6b6b"/><circle cx="116" cy="60" r="6" fill="#fff"/><path d="M186 20 L128 54" stroke="#2fb8a8" stroke-width="6" stroke-linecap="round"/><path d="M120 58 l16 -8 -3 14 z" fill="#2fb8a8"/>`),
+  bone: A('#eef1f4', `<g transform="translate(120,60) rotate(40)"><rect x="-38" y="-7" width="76" height="14" rx="7" fill="#f4efe2" stroke="#cdbf9f" stroke-width="3"/><circle cx="-38" cy="-7" r="10" fill="#f4efe2" stroke="#cdbf9f" stroke-width="3"/><circle cx="-38" cy="7" r="10" fill="#f4efe2" stroke="#cdbf9f" stroke-width="3"/><circle cx="38" cy="-7" r="10" fill="#f4efe2" stroke="#cdbf9f" stroke-width="3"/><circle cx="38" cy="7" r="10" fill="#f4efe2" stroke="#cdbf9f" stroke-width="3"/></g><path d="M176 30 l4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4 z" fill="#ffd23f"/>`),
+  immune: A('#e6f0ff', shieldPath('#4aa3f0')+`<path d="M103 60 l12 13 23 -27" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`),
+  shield: A('#fff0dc', shieldPath('#ffb03a')+`<path d="M120 44 l6 13 14 1 -11 9 4 14 -13 -8 -13 8 4 -14 -11 -9 14 -1 z" fill="#fff"/>`),
+  flag: A('#ffe9ec', `<rect x="94" y="26" width="6" height="72" rx="3" fill="#8a531f"/><path d="M100 30 h56 l-11 11 11 11 h-56 z" fill="#fff" stroke="#d7ccbf" stroke-width="2"/><path d="M116 34 l28 22 M144 34 l-28 22" stroke="#ff6b6b" stroke-width="5" stroke-linecap="round"/>`),
+  brake: A('#ffe6e6', `<circle cx="120" cy="60" r="40" fill="#ff6b6b"/><circle cx="120" cy="60" r="40" fill="none" stroke="#fff" stroke-width="4"/><rect x="98" y="52" width="44" height="16" rx="4" fill="#fff"/>`),
+  checkpoint: A('#e6f0ff', `<rect x="72" y="86" width="96" height="10" rx="4" fill="#9fb0ab"/><rect x="78" y="46" width="10" height="42" rx="4" fill="#6c7ae0"/><rect x="86" y="52" width="76" height="12" rx="6" fill="#ffb03a"/><g stroke="#e0912a" stroke-width="3"><path d="M96 52 v12 M112 52 v12 M128 52 v12 M144 52 v12"/></g><circle cx="150" cy="40" r="15" fill="#46c46e"/><path d="M143 40 l5 6 9 -11" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`),
+  spellcheck: A('#e6f7ff', `<g stroke="#9fb0ab" stroke-width="5" stroke-linecap="round"><path d="M64 42 h72"/><path d="M64 58 h84"/><path d="M64 74 h56"/></g><rect x="112" y="50" width="30" height="12" rx="3" fill="#ff6b6b" opacity=".35"/><circle cx="150" cy="76" r="18" fill="none" stroke="#2fb8a8" stroke-width="6"/><path d="M163 89 l16 16" stroke="#2fb8a8" stroke-width="7" stroke-linecap="round"/>`),
+  beams: A('#ede7ff', `<g class="shimmer" stroke="#a26cf0" stroke-width="7" stroke-linecap="round" opacity=".85"><path d="M120 10 V64"/><path d="M78 14 L114 64"/><path d="M162 14 L126 64"/></g><circle cx="120" cy="78" r="22" fill="#ff6b6b"/><circle cx="120" cy="78" r="11" fill="#fff"/><circle class="pulse" cx="120" cy="78" r="4" fill="#ff6b6b"/>`),
+  seeds: A('#efe7db', `<ellipse cx="120" cy="62" rx="42" ry="30" fill="#f6d9c0" stroke="#e0b48c" stroke-width="3"/><g fill="#ff6b6b"><rect x="100" y="50" width="12" height="5" rx="2.5" transform="rotate(20 106 52)"/><rect x="124" y="48" width="12" height="5" rx="2.5" transform="rotate(-15 130 50)"/><rect x="110" y="68" width="12" height="5" rx="2.5" transform="rotate(-25 116 70)"/><rect x="130" y="70" width="12" height="5" rx="2.5" transform="rotate(30 136 72)"/><rect x="118" y="60" width="12" height="5" rx="2.5"/></g>`),
+  plate: A('#eafbe6', `<circle cx="120" cy="62" r="42" fill="#fff" stroke="#dbe6d5" stroke-width="3"/><circle cx="106" cy="52" r="11" fill="#46c46e"/><circle cx="133" cy="50" r="9" fill="#ff6b6b"/><circle cx="121" cy="73" r="10" fill="#ffb03a"/><ellipse cx="138" cy="72" rx="13" ry="7" fill="#8fb8e0"/><circle cx="101" cy="70" r="6" fill="#2fb8a8"/>`),
+  tomato: A('#ffe6e0', `<circle cx="120" cy="66" r="30" fill="#ff5a4d"/><ellipse cx="110" cy="58" rx="7" ry="9" fill="#ff8577" opacity=".7"/><path d="M104 40 q16 -12 32 0 q-16 8 -32 0 z" fill="#46c46e"/><rect x="117" y="34" width="6" height="10" rx="3" fill="#46c46e"/>`),
+  broccoli: A('#e6f7e6', `<g fill="#3f9e57"><circle cx="106" cy="46" r="14"/><circle cx="126" cy="42" r="15"/><circle cx="138" cy="54" r="13"/><circle cx="116" cy="56" r="14"/></g><path d="M110 62 h22 l-4 34 h-14 z" fill="#a7d89a"/>`),
+  fish: A('#dff1ff', `<ellipse cx="112" cy="62" rx="34" ry="20" fill="#4aa3f0"/><path d="M146 62 l22 -15 v30 z" fill="#4aa3f0"/><circle cx="95" cy="56" r="4" fill="#fff"/><circle cx="95" cy="56" r="2" fill="#123"/><path d="M108 62 q10 -8 22 0 q-10 8 -22 0" fill="#7cc0f5"/>`),
+  sun: A('#fff3d6', rays(120,60,'#ffb03a')+`<circle cx="120" cy="60" r="26" fill="#ffd23f"/>`),
+  dumbbell: A('#e9edf2', `<rect x="98" y="53" width="44" height="12" rx="4" fill="#5c6d6b"/><rect x="80" y="42" width="14" height="34" rx="5" fill="#374a48"/><rect x="66" y="48" width="12" height="22" rx="4" fill="#5c6d6b"/><rect x="146" y="42" width="14" height="34" rx="5" fill="#374a48"/><rect x="162" y="48" width="12" height="22" rx="4" fill="#5c6d6b"/>`),
+  cup: A('#e6f4ea', `<path d="M84 50 h56 v20 a28 28 0 0 1 -56 0 z" fill="#2fb8a8"/><path d="M140 54 h12 a12 12 0 0 1 0 24 h-12" fill="none" stroke="#2fb8a8" stroke-width="6"/><path d="M100 40 q6 -8 0 -16 M116 40 q6 -8 0 -16 M132 40 q6 -8 0 -16" stroke="#9fd8c8" stroke-width="4" fill="none" stroke-linecap="round"/>`),
+  scale: A('#eef0f4', `<rect x="82" y="50" width="76" height="52" rx="10" fill="#7c8b89"/><rect x="94" y="40" width="52" height="16" rx="8" fill="#9aa8a6"/><circle cx="120" cy="76" r="18" fill="#fff"/><path d="M120 76 L131 66" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/><g stroke="#c7d1ce" stroke-width="2"><path d="M108 70 v-4 M120 66 v-4 M132 70 v-4"/></g>`),
+  vial: A('#ffe9ec', `<rect x="104" y="30" width="24" height="66" rx="10" fill="#fff" stroke="#e3b9bf" stroke-width="3"/><path d="M107 66 h18 v22 a9 9 0 0 1 -18 0 z" fill="#ff5a5a"/><rect x="100" y="26" width="32" height="8" rx="4" fill="#e3b9bf"/><path class="pulse" d="M150 44 c8 8 8 16 0 16 c-8 0 -8 -8 0 -16 z" fill="#ff5a5a"/>`),
+  microscope: A('#e6eeff', `<path d="M92 100 h58" stroke="#4f5bbf" stroke-width="8" stroke-linecap="round"/><path d="M124 96 C102 84 102 62 118 52" stroke="#6c7ae0" stroke-width="9" fill="none" stroke-linecap="round"/><rect x="110" y="32" width="18" height="26" rx="7" fill="#4f5bbf" transform="rotate(18 119 45)"/><rect x="100" y="80" width="44" height="8" rx="3" fill="#6c7ae0"/><circle class="pulse" cx="122" cy="78" r="4" fill="#ff6b6b"/>`),
+  scan: A('#e6f7f5', `<rect x="70" y="26" width="100" height="68" rx="10" fill="#123a45"/><circle cx="118" cy="48" r="9" fill="#2fb8a8"/><rect x="108" y="58" width="20" height="28" rx="9" fill="#2fb8a8"/><circle class="pulse" cx="126" cy="70" r="6" fill="#ffd23f"/><circle class="glow" cx="126" cy="70" r="12" fill="#ffd23f" opacity=".35"/>`),
+  needle: A('#eef1f4', `<g transform="rotate(35 120 60)"><rect x="86" y="52" width="54" height="16" rx="6" fill="#cfe0dd"/><rect x="90" y="55" width="30" height="10" rx="3" fill="#8fb8e0"/><rect x="140" y="57" width="26" height="6" rx="3" fill="#9fb0ab"/><path d="M166 60 h14" stroke="#9fb0ab" stroke-width="3"/><rect x="80" y="49" width="8" height="22" rx="3" fill="#9fb0ab"/></g>`),
+  map: A('#e9f5e6', `<path d="M78 40 l28 -10 28 10 28 -10 v50 l-28 10 -28 -10 -28 10 z" fill="#bfe3b5"/><path d="M106 30 v50 M134 40 v50" stroke="#8bc47c" stroke-width="3"/><path d="M120 44 c-9 0 -16 7 -16 16 c0 12 16 26 16 26 c0 0 16 -14 16 -26 c0 -9 -7 -16 -16 -16 z" fill="#ff6b6b"/><circle cx="120" cy="60" r="6" fill="#fff"/>`),
+  plant: A('#e6f5e9', `<rect x="72" y="92" width="96" height="10" rx="4" fill="#c9a06a"/><path d="M72 92 q24 -6 48 0 q24 6 48 0" fill="none" stroke="#b08a54" stroke-width="3"/><path d="M120 92 V52" stroke="#3f9e57" stroke-width="5" stroke-linecap="round"/><path d="M120 66 q-20 -6 -26 -22 q22 0 26 18 z" fill="#46c46e"/><path d="M120 58 q18 -6 24 -20 q-20 0 -24 16 z" fill="#5cd07e"/>`),
+  bell: A('#fff2d6', `<path d="M120 32 c-18 0 -28 14 -28 34 c0 14 -8 18 -8 24 h72 c0 -6 -8 -10 -8 -24 c0 -20 -10 -34 -28 -34 z" fill="#ffb03a"/><circle cx="120" cy="30" r="6" fill="#e0912a"/><path d="M112 94 a8 8 0 0 0 16 0 z" fill="#e0912a"/><path d="M150 44 l10 -8 M156 60 l12 -2" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/>`),
+  valley: A('#e6f0ff', `<path d="M64 40 L100 84 L140 58 L176 30" fill="none" stroke="#4aa3f0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="100" cy="84" r="7" fill="#ff6b6b"/><path d="M100 84 v12" stroke="#ff6b6b" stroke-width="3" stroke-dasharray="3 3"/>`),
+  cake: A('#ffe9f0', `<rect x="82" y="60" width="76" height="34" rx="6" fill="#ffd7e6"/><path d="M82 64 q19 12 38 0 q19 -12 38 0 v-4 q-19 12 -38 0 q-19 -12 -38 0 z" fill="#fff"/><rect x="150" y="60" width="8" height="34" fill="#ff6b6b" opacity=".55"/><circle cx="120" cy="50" r="5" fill="#ff5a8a"/><rect x="118" y="50" width="4" height="12" fill="#ff8fab"/>`),
+  eye: A('#e6f2ff', `<path d="M64 60 C88 34 152 34 176 60 C152 86 88 86 64 60 Z" fill="#fff" stroke="#4aa3f0" stroke-width="4"/><circle cx="120" cy="60" r="16" fill="#4aa3f0"/><circle cx="120" cy="60" r="7" fill="#123"/><circle cx="125" cy="55" r="3" fill="#fff"/>`),
+  scalpel: A('#eef1f4', `<g transform="rotate(35 120 60)"><path d="M92 54 l40 -6 8 4 -40 12 z" fill="#cfe0dd" stroke="#9fb0ab" stroke-width="2"/><rect x="86" y="54" width="10" height="10" rx="2" fill="#5c6d6b"/></g><path d="M150 40 v18 M141 49 h18" stroke="#ff6b6b" stroke-width="5" stroke-linecap="round"/>`),
+  recovery: A('#e6f5ee', `<path class="beat" d="M120 96 C86 74 74 56 74 42 a20 20 0 0 1 46 -6 a20 20 0 0 1 46 6 c0 14 -12 32 -46 54 z" fill="#ff8fab"/><path d="M120 50 v22 M109 61 h22" stroke="#fff" stroke-width="6" stroke-linecap="round"/>`),
+  book: A('#fef0dc', `<path d="M120 40 C104 32 84 32 76 38 V92 C84 86 104 86 120 94 C136 86 156 86 164 92 V38 C156 32 136 32 120 40 Z" fill="#ffb03a"/><path d="M120 40 V94" stroke="#e0912a" stroke-width="3"/><g stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"><path d="M86 50 h22 M86 62 h22 M132 50 h22 M132 62 h22"/></g>`),
+  flask: A('#e9e6ff', `<path d="M108 30 h24 v20 l20 40 a10 10 0 0 1 -9 15 h-46 a10 10 0 0 1 -9 -15 l20 -40 z" fill="#d7d2f7" stroke="#7c6cf0" stroke-width="3"/><path d="M95 86 h50 l-9 -18 a38 38 0 0 1 -32 0 z" fill="#2fb8a8"/><circle class="rise" cx="116" cy="80" r="3" fill="#fff"/><circle class="rise2" cx="128" cy="74" r="2.5" fill="#fff"/><rect x="104" y="24" width="32" height="8" rx="4" fill="#7c6cf0"/>`),
+  pill: A('#e9ecff', `<g transform="rotate(35 120 60)"><rect x="86" y="47" width="68" height="26" rx="13" fill="#ff6b6b"/><path d="M120 47 h21 a13 13 0 0 1 0 26 h-21 z" fill="#ffd23f"/><line x1="120" y1="47" x2="120" y2="73" stroke="#fff" stroke-width="2" opacity=".6"/></g>`),
+  bottle: A('#e6f4f0', `<rect x="98" y="44" width="44" height="58" rx="8" fill="#3fb0a0"/><rect x="104" y="32" width="32" height="16" rx="4" fill="#2f8a7d"/><rect x="104" y="60" width="32" height="34" rx="4" fill="#fff"/><path d="M120 66 v20 M110 76 h20" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/>`),
+  stethoscope: A('#e6f0ff', `<path d="M84 34 v22 a18 18 0 0 0 36 0 v-6" fill="none" stroke="#4aa3f0" stroke-width="6" stroke-linecap="round"/><circle cx="84" cy="32" r="5" fill="#4aa3f0"/><circle cx="120" cy="32" r="5" fill="#4aa3f0"/><path d="M84 34 v-4 M120 34 v-4" stroke="#4aa3f0" stroke-width="6" stroke-linecap="round"/><path d="M120 78 v18 a16 16 0 0 0 32 0 v-8" fill="none" stroke="#6c7ae0" stroke-width="6"/><circle class="beat" cx="152" cy="72" r="12" fill="#ff6b6b"/>`),
+  clipboard: A('#eaf1ff', `<rect x="86" y="34" width="68" height="80" rx="8" fill="#fff" stroke="#cdd8e6" stroke-width="3"/><rect x="106" y="28" width="28" height="14" rx="5" fill="#6c7ae0"/><g stroke="#9fb0ab" stroke-width="4" stroke-linecap="round"><path d="M98 58 h44 M98 74 h44 M98 90 h30"/></g><circle class="twinkle" cx="92" cy="58" r="3" fill="#46c46e"/><circle class="twinkle2" cx="92" cy="74" r="3" fill="#46c46e"/>`),
+};
+
+/* Section default illustration + hero */
+const DEFAULT_ART={drugs:'pill',treatments:'stethoscope',radiation:'beams',nutrition:'plate',
+  supplements:'bottle',surgery:'recovery',genes:'dna',terms:'book',trials:'flask'};
+
+/* Per-item illustration overrides, keyed by exact item name */
+const ITEM_ART={
+  'Leuprolide (Lupron)':'fire','Degarelix (Firmagon)':'fire','Bicalutamide (Casodex)':'socket',
+  'Enzalutamide (Xtandi)':'socket','Apalutamide (Erleada)':'socket','Darolutamide (Nubeqa)':'socket',
+  'Abiraterone (Zytiga)':'factory','Docetaxel (Taxotere)':'ropes','Cabazitaxel (Jevtana)':'ropes',
+  'Abiraterone + prednisone':'factory','Olaparib (Lynparza)':'repair','Rucaparib (Rubraca)':'repair',
+  'Sipuleucel-T (Provenge)':'immune','Pembrolizumab (Keytruda)':'flag','Radium-223 (Xofigo)':'bone',
+  'Lutetium-177 PSMA (Pluvicto)':'target',
+  'Active surveillance':'eye','Watchful waiting':'eye','Radical prostatectomy':'scalpel',
+  'External beam radiation (EBRT)':'beams','Brachytherapy':'seeds','Androgen deprivation therapy (ADT)':'fire',
+  'ADT + androgen-receptor drug (ARPI)':'socket','Chemotherapy + ADT':'ropes','PARP inhibitor therapy':'repair',
+  'Immunotherapy':'immune','Radioligand therapy (PSMA)':'target','Focal therapy (HIFU / cryotherapy)':'target',
+  'Clinical trials':'flask',
+  'IMRT (intensity-modulated)':'beams','VMAT (volumetric arc)':'beams','SBRT (stereotactic body RT)':'beams',
+  'Proton therapy':'beams','LDR brachytherapy (seeds)':'seeds','HDR brachytherapy':'seeds',
+  'PSMA-guided radiotherapy':'target','Adjuvant radiation':'beams','Salvage radiation':'beams',
+  'Whole-pelvic radiation':'beams','Hypofractionation':'beams','Radiation + ADT':'fire',
+  'Mediterranean diet':'plate','Ketogenic / low-carb':'plate','Lycopene (tomatoes)':'tomato',
+  'Cruciferous vegetables':'broccoli','Omega-3 fats (fish)':'fish','Vitamin D':'sun',
+  'Calcium (moderation)':'bone','Selenium (caution)':'bottle','Weight & obesity':'scale','Exercise':'dumbbell',
+  'Green tea':'cup','Limit processed & red meat':'plate',
+  'Vitamin D3':'sun','Lycopene':'tomato','Omega-3 fish oil':'fish','Green tea extract':'cup',
+  'Selenium':'bottle','Vitamin E':'bottle','Pomegranate':'tomato','Curcumin (turmeric)':'bottle',
+  'Modified citrus pectin':'bottle','Soy isoflavones':'plate','Zinc':'bottle','Multivitamin':'bottle',
+  'Catheter care':'recovery','Pelvic-floor exercises (Kegels)':'dumbbell','Continence timeline':'recovery',
+  'Erectile rehabilitation':'recovery','Activity & lifting limits':'dumbbell','Incision / wound care':'recovery',
+  'Blood-clot prevention':'recovery','Diet, hydration & constipation':'plate','PSA after surgery':'vial',
+  'Follow-up appointments':'clipboard','Emotional & mental health':'recovery','When to call the doctor':'bell',
+  'BRCA2':'repair','BRCA1':'repair','ATM':'repair','CHEK2':'checkpoint','HOXB13':'dna','PALB2':'repair',
+  'TP53':'shield','PTEN':'brake','CDK12':'repair','MSH2':'spellcheck','MSH6':'spellcheck','MLH1':'spellcheck',
+  'PSA (prostate-specific antigen)':'vial','Gleason score':'microscope','ISUP grade group':'microscope',
+  'TNM stage':'map','Biopsy':'needle','PI-RADS':'scan','PSMA-PET scan':'scan','ADT (androgen deprivation)':'fire',
+  'Castration-resistant':'plant','Metastasis':'seeds','Biochemical recurrence':'bell','PSA nadir':'valley',
+  'Positive margin':'cake','Androgen receptor':'socket',
+  'STAMPEDE2':'flask','EvoPAR-Prostate02':'repair','PSMAcTION':'target','High Five Trial':'beams',
+  'ProBio':'dna','REVELUTION-2':'pill','SPA Trial':'beams','MUSIC-Screen':'scan',
+};
+function artFor(name,sectionKey){return ART[ITEM_ART[name]]||ART[DEFAULT_ART[sectionKey]]||'';}
+
+function refSection(key, data){
+  let html = `${artBox(ART[DEFAULT_ART[key]],'hero-art')}`;
+  html += `<p class="lead">${esc(data.intro)}</p>`;
+  html += `<div class="callout info section-gap">Each card has a <strong>picture</strong> of its idea and a <strong>Listen</strong> button that reads a plain-language explanation aloud (your device's built-in voice). Explanations use everyday comparisons at about an eighth-grade reading level.</div>`;
+  html += `<div class="grid cols-2 section-gap">`;
+  data.items.forEach((it,i)=>{
+    const id = `${key}-${i}`;
+    html += `<article class="ref-card">
+      ${artBox(artFor(it.name,key),'art')}
+      <span class="tag">${esc(it.tag)}</span>
+      <h3>${esc(it.name)}</h3>
+      <p>${esc(it.text)}</p>
+      <button class="listen" data-say="${id}" aria-label="Listen to explanation of ${esc(it.name)}">
+        <span class="wave"><i></i><i></i><i></i><i></i></span> Listen
+      </button>
+    </article>`;
+  });
+  html += `</div>`;
+  // action items
+  html += `<h2 class="section-gap" style="font-size:22px;margin-bottom:6px">Action items — bring these to the care team</h2>`;
+  html += `<details class="actions-d" open><summary>${data.actions.length} things Scott (and family) can do or ask <span class="chev">›</span></summary><ul class="checklist">`;
+  data.actions.forEach((a,i)=>{
+    html += `<li><input type="checkbox" id="${key}-act-${i}" data-persist="chk-${key}-${i}"><label for="${key}-act-${i}">${esc(a)}</label></li>`;
+  });
+  html += `</ul></details>`;
+  return {html, sayMap:data.items.map(it=>it.name+". "+it.text)};
+}
+
+const SAY = {}; // id -> text
+
+function buildView(id){
+  if(id==="home") return viewHome();
+  if(id==="images") return viewImages();
+  if(id==="biopsy") return viewBiopsy();
+  if(id==="history") return viewHistory();
+  if(id==="vitals") return viewVitals();
+  if(id==="backup") return viewBackup();
+  if(id==="trials") return viewTrials();
+  if(id==="databases") return viewDatabases();
+  if(id==="scholarly") return viewScholarly();
+  if(id==="review") return viewReview();
+  if(id==="disclaimer") return viewDisclaimer();
+  const map = {drugs:DRUGS,treatments:TREATMENTS,radiation:RADIATION,nutrition:NUTRITION,
+    supplements:SUPPLEMENTS,surgery:SURGERY,genes:GENES,terms:TERMS};
+  const titles = {drugs:["Medications","Common medicines in prostate cancer care"],
+    treatments:["Treatment plans","Common approaches, alone or combined"],
+    radiation:["Radiation plans","How radiation can be delivered"],
+    nutrition:["Nutrition","Eating patterns studied in prostate health"],
+    supplements:["Supplements","What men ask about — and the cautions"],
+    surgery:["Surgery recovery","Healing after prostate surgery"],
+    genes:["Genetic variations","Genes that can shape risk and treatment"],
+    terms:["Medical terms","Plain-language definitions"]};
+  const d = map[id]; const t = titles[id];
+  const r = refSection(id, d);
+  r.sayMap.forEach((txt,i)=>SAY[`${id}-${i}`]=txt);
+  return `<div class="eyebrow">Quick reference</div>
+    <h1 class="page-h">${t[0]}</h1><p class="lead">${t[1]}.</p>${r.html}${footerHTML()}`;
+}
+
+function footerHTML(){
+  return `<div class="footer" id="appFooter">
+    <p><strong style="font-family:var(--serif);color:var(--muted)">Educational use only.</strong>
+    This guide does not diagnose, treat, or replace Scott's medical team. Always follow his doctors' advice.</p>
+    <div id="qrSlot"></div>
+  </div>`;
+}
+
+/* ---------- Record views (data stays on device) ---------- */
+const store = {
+  get:(k,def)=>{try{const v=localStorage.getItem("phg_"+k);return v==null?def:JSON.parse(v)}catch(e){return def}},
+  set:(k,v)=>{try{localStorage.setItem("phg_"+k,JSON.stringify(v))}catch(e){}},
+};
+
+/* ---------- Personalization engine ----------
+   Reads what's typed into the diagnosis/history fields and highlights the most
+   relevant sections. Purely keyword-based on the user's own text — educational,
+   never a recommendation. Updates live as Scott's real report is entered. */
+function analyzeProfile(){
+  const gl=store.get('gleason','')||'', is=store.get('isup','')||'', st=store.get('stage','')||'';
+  const txt=((store.get('dxSummary','')||'')+' '+st+' '+gl+' '+is+' '+(store.get('family','')||'')+' '+(store.get('meds','')||'')).toLowerCase();
+  const flags=new Set(), genes=[];
+  ['BRCA1','BRCA2','ATM','CHEK2','HOXB13','PALB2','TP53','PTEN','CDK12','MSH2','MSH6','MLH1']
+    .forEach(g=>{if(new RegExp('\\b'+g+'\\b','i').test(txt))genes.push(g);});
+  const brcaLike=genes.some(g=>['BRCA1','BRCA2','ATM','PALB2','CDK12'].includes(g));
+  const lynch=genes.some(g=>['MSH2','MSH6','MLH1'].includes(g));
+  if(/msi[-\s]?high|microsatellite|mismatch[-\s]repair|dmmr|mmr[-\s]deficien/i.test(txt)||lynch)flags.add('msi');
+  let gsum=null; let m=gl.match(/(\d)\s*\+\s*(\d)/); if(m)gsum=+m[1]+ +m[2];
+  if(gsum==null){m=gl.match(/(\d{1,2})\s*$/); if(m)gsum=+m[1];}
+  const isup=parseInt((is.match(/[1-5]/)||[])[0]||'0',10);
+  if(/gleason\s*(8|9|10)|[45]\s*\+\s*[45]|4\s*\+\s*4/i.test(txt)||gsum>=8||isup>=4)flags.add('high');
+  else if(gsum===7||isup===2||isup===3||/gleason\s*7|3\s*\+\s*4|4\s*\+\s*3/i.test(txt))flags.add('intermediate');
+  else if(gsum===6||isup===1||/gleason\s*6|3\s*\+\s*3/i.test(txt))flags.add('low');
+  if(/metasta|\bm1\b|stage\s*(iv|4)|\bspread|bone (metas|lesion)|distant (metas|disease)/i.test(txt))flags.add('metastatic');
+  if(/\bn1\b|lymph node|node[-\s]positive/i.test(txt))flags.add('node');
+  if(/castrat\w*[-\s]resistant|crpc/i.test(txt))flags.add('crpc');
+  if(/psma/i.test(txt))flags.add('psma');
+  return {flags,genes,brcaLike,lynch,gsum,isup,hasData:txt.trim().length>3};
+}
+function personalizeHTML(){
+  const p=analyzeProfile();
+  if(!p.hasData || (p.flags.size===0 && p.genes.length===0)){
+    return `<div class="card section-gap" style="border-style:dashed">
+      <h3 style="font-size:19px;margin-bottom:6px">Personalize this guide</h3>
+      <p style="color:var(--muted);font-size:14.5px;margin:0">Paste Scott's diagnosis in <a href="#biopsy">Biopsy &amp; diagnosis</a> (Gleason, ISUP, stage, and any gene results). This page will then automatically highlight the sections that matter most for his specific case.</p></div>`;
+  }
+  // detected chips
+  let chips='';
+  const gradeLbl = p.flags.has('high')?['High grade','crit']:p.flags.has('intermediate')?['Intermediate grade','warn']:p.flags.has('low')?['Low grade','good']:null;
+  if(gradeLbl)chips+=`<span class="pill ${gradeLbl[1]}">${gradeLbl[0]}</span>`;
+  if(p.flags.has('metastatic'))chips+=`<span class="pill crit">Possible spread noted</span>`;
+  if(p.flags.has('node'))chips+=`<span class="pill warn">Lymph node mention</span>`;
+  if(p.flags.has('crpc'))chips+=`<span class="pill warn">Castration-resistant</span>`;
+  if(p.flags.has('msi'))chips+=`<span class="pill info">MSI / mismatch-repair</span>`;
+  p.genes.forEach(g=>chips+=`<span class="pill info">${g}</span>`);
+  // build focus cards
+  const cards=[]; const seen=new Set();
+  const add=(tag,title,why,href)=>{if(seen.has(title))return;seen.add(title);cards.push({tag,title,why,href});};
+  if(p.brcaLike){add('Targeted therapy','PARP inhibitors may be relevant','A DNA-repair gene ('+p.genes.filter(g=>['BRCA1','BRCA2','ATM','PALB2','CDK12'].includes(g)).join(', ')+') was mentioned — ask whether a PARP inhibitor like olaparib fits.','#drugs');
+    add('Genetics','Review the gene findings','Understand what the mentioned gene(s) mean for treatment and for family members.','#genes');
+    add('Trials','BRCA-matched trials','Some trials specifically enroll men with DNA-repair mutations.','#trials');}
+  if(p.flags.has('msi')){add('Immunotherapy','Immunotherapy may be an option','MSI-high / mismatch-repair signals can make checkpoint immunotherapy (pembrolizumab) effective — ask about it.','#drugs');
+    add('Genetics','Lynch-syndrome genes','Ask about counseling — these findings affect relatives too.','#genes');}
+  if(p.flags.has('metastatic')){add('Advanced disease','Systemic & bone-directed options','With possible spread, hormone therapy combinations and bone-targeted radiopharmaceuticals (radium-223, Pluvicto) become central.','#drugs');
+    add('Radiation','PSMA-guided radiation','Ask whether PSMA imaging should guide treatment of spread.','#radiation');
+    add('Trials','Metastatic trials','Platform trials like STAMPEDE2 focus on advanced disease.','#trials');}
+  if(p.flags.has('crpc')){add('Next-line therapy','Beyond first hormone therapy','Castration-resistant disease needs a different class — AR inhibitors, chemo, PSMA radioligand, or a trial.','#drugs');}
+  if(p.flags.has('high')){add('Treatment','Discuss intensive combinations','Higher-grade disease is often treated with combined approaches — compare surgery vs. radiation + hormone therapy.','#treatments');
+    add('Radiation','Radiation planning','Review external-beam, brachytherapy, and combined options.','#radiation');}
+  if(p.flags.has('intermediate')){add('Treatment','Weigh the main options','Compare surgery, radiation, and (sometimes) surveillance for intermediate-risk disease.','#treatments');}
+  if(p.flags.has('low')){add('Treatment','Active surveillance may fit','Low-grade cancer is often watched closely rather than treated right away — ask if it applies.','#treatments');
+    add('Terms','Learn the monitoring terms','Understand PSA trends, nadir, and what would trigger treatment.','#terms');}
+  // always-useful supportive care
+  add('Supportive','Nutrition & exercise','Supportive habits that help through any treatment path.','#nutrition');
+  let cardsHTML=cards.slice(0,8).map((c,i)=>`<a class="step" href="${c.href}" style="text-decoration:none;color:inherit">
+    <div class="n">${i+1}</div><div><h4>${esc(c.title)}</h4><p><span style="color:var(--accent);font-weight:600">${esc(c.tag)}.</span> ${esc(c.why)}</p></div></a>`).join('');
+  return `<div class="card section-gap" style="border-color:var(--primary)">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px">
+      <h3 style="font-size:20px">Scott's focus areas</h3><span class="pill info">Auto-generated from entered records</span></div>
+    <p style="color:var(--muted);font-size:14px;margin:0 0 4px">Detected in the diagnosis text:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">${chips||'<span class="pill">—</span>'}</div>
+    ${cardsHTML}
+    <div class="callout warn" style="margin-top:14px;font-size:13.5px">This panel is built automatically from the words you typed — it is <strong>not</strong> a diagnosis, recommendation, or eligibility check. It only points to relevant reading. Every decision belongs with Scott's care team.</div>
+  </div>`;
+}
+
+function viewHome(){
+  const name = store.get("patientName","Scott M.");
+  const dx = store.get("dxSummary","");
+  const psa = store.get("vit_psa","");
+  return `<div class="eyebrow">Personal companion</div>
+  <h1 class="page-h">Welcome — this is ${esc(name)}'s guide</h1>
+  <p class="lead">A calm, private place to keep records in one spot and to understand the words, drugs, and choices along the way. Everything you type or upload stays on this device only.</p>
+  ${artBox(ART.stethoscope,'hero-art')}
+
+  <div class="callout warn section-gap"><strong>Please read:</strong> This app is an educational and organizing tool made with love — not a medical device, and not medical advice. It cannot diagnose or recommend treatment. Every decision belongs with ${esc(name)} and his licensed care team.</div>
+
+  <div class="grid cols-3 section-gap">
+    <div class="card"><div class="vit"><div class="lbl">Latest PSA (you enter)</div><div class="val">${psa?esc(psa):"—"} <small>ng/mL</small></div></div></div>
+    <div class="card"><div class="vit"><div class="lbl">Records saved locally</div><div class="val">${countRecords()}</div></div></div>
+    <div class="card"><div class="vit"><div class="lbl">Reference topics</div><div class="val">9 <small>with audio</small></div></div></div>
+  </div>
+
+  ${personalizeHTML()}
+
+  <div class="grid cols-2 section-gap">
+    <div class="card">
+      <h3 style="font-size:19px;margin-bottom:8px">Start here</h3>
+      <div class="step"><div class="n">1</div><div><h4>Save the basics</h4><p>Enter the diagnosis in <a href="#biopsy">Biopsy &amp; diagnosis</a> and add vitals.</p></div></div>
+      <div class="step"><div class="n">2</div><div><h4>Add scans &amp; reports</h4><p>Upload images in <a href="#images">Imaging &amp; scans</a> — they never leave this device.</p></div></div>
+      <div class="step"><div class="n">3</div><div><h4>Learn the language</h4><p>Use <a href="#terms">Medical terms</a> and tap Listen to hear plain-language explanations.</p></div></div>
+      <div class="step"><div class="n">4</div><div><h4>Prepare for visits</h4><p>Check off <a href="#treatments">action items</a> to bring the right questions to appointments.</p></div></div>
+    </div>
+    <div class="card">
+      <h3 style="font-size:19px;margin-bottom:8px">A note for the family</h3>
+      <p style="color:var(--muted);font-size:14.5px">A prostate cancer diagnosis brings a flood of new words and hard choices. This guide gathers trustworthy, plain-language background and keeps Scott's own records close, so appointments feel less overwhelming and everyone can be on the same page.</p>
+      <p style="color:var(--muted);font-size:14.5px">The audio explanations use everyday comparisons — fires and fuel, sockets and switches, spell-checkers and repair crews — to make biology click without a medical degree.</p>
+      <div class="callout info" style="margin-top:6px">Private by design: no account, no cloud, no tracking. Clearing the browser's data for this site erases everything, so keep the reports elsewhere too.</div>
+    </div>
+  </div>
+  ${footerHTML()}`;
+}
+function countRecords(){
+  let n=0; ["patientName","dxSummary","history","vit_psa","vit_bp","vit_hr","vit_wt","vit_temp"].forEach(k=>{if(store.get(k,""))n++});
+  n += (store.get("images_meta",[])||[]).length;
+  return n;
+}
+
+function viewImages(){
+  return `<div class="eyebrow">Scott's records</div>
+  <h1 class="page-h">Imaging &amp; scans</h1>
+  <p class="lead">Keep MRI, X-ray, PET/PSMA, CT, and bone-scan pictures together with short notes. Files are stored only in this browser on this device — nothing is uploaded anywhere.</p>
+  ${artBox(ART.scan,'hero-art')}
+  <div class="callout warn section-gap"><strong>Privacy:</strong> These are sensitive medical images. They stay on this device. Keep original copies with the medical team's records too, since clearing browser data will remove them here.</div>
+  <div class="card section-gap">
+    <div class="field"><label for="imgNote">Note for the next image (e.g. "PSMA-PET, June 2026, right pelvic node")</label>
+      <input id="imgNote" placeholder="Short description, date, body area"></div>
+    <label class="dropzone" for="imgInput" id="dropzone">
+      <strong>Tap to add an image</strong><br><span style="font-size:13px">JPG, PNG, or a photo of a printed scan or report</span>
+    </label>
+    <input id="imgInput" type="file" accept="image/*" multiple style="display:none">
+    <div class="imguploads" id="imgGallery"></div>
+  </div>${footerHTML()}`;
+}
+
+function viewBiopsy(){
+  return `<div class="eyebrow">Scott's records</div>
+  <h1 class="page-h">Biopsy &amp; diagnosis</h1>
+  <p class="lead">Copy and paste the pathology report or the doctor's written diagnosis here so it's always at hand. Not sure what a word means? Check <a href="#terms">Medical terms</a>.</p>
+  ${artBox(ART.microscope,'hero-art')}
+  <div class="card section-gap">
+    <div class="field"><label for="patientName">Patient name</label><input id="patientName" data-save="patientName" placeholder="Scott M."></div>
+    <div class="row">
+      <div class="field"><label for="gleason">Gleason score</label><input id="gleason" data-save="gleason" placeholder="e.g. 3+4 = 7"></div>
+      <div class="field"><label for="isup">ISUP grade group</label><input id="isup" data-save="isup" placeholder="1–5"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="stage">TNM stage</label><input id="stage" data-save="stage" placeholder="e.g. T2c N0 M0"></div>
+      <div class="field"><label for="dxDate">Diagnosis date</label><input id="dxDate" type="date" data-save="dxDate"></div>
+    </div>
+    <div class="field"><label for="dxSummary">Full diagnosis / pathology report (paste here)</label>
+      <textarea id="dxSummary" data-save="dxSummary" placeholder="Paste the biopsy pathology report or the written diagnosis exactly as given by the doctor…" style="min-height:200px"></textarea></div>
+    <button class="btn primary" id="saveBiopsy">Save to this device</button>
+    <span class="saved-note" id="biopsySaved">Saved ✓</span>
+  </div>${footerHTML()}`;
+}
+
+function viewHistory(){
+  return `<div class="eyebrow">Scott's records</div>
+  <h1 class="page-h">Health history</h1>
+  <p class="lead">A place for the background a care team asks about again and again — so it's ready in one paste.</p>
+  ${artBox(ART.clipboard,'hero-art')}
+  <div class="card section-gap">
+    <div class="field"><label for="conditions">Other medical conditions</label><textarea id="conditions" data-save="conditions" placeholder="Diabetes, heart disease, blood pressure, etc."></textarea></div>
+    <div class="field"><label for="meds">Current medications</label><textarea id="meds" data-save="meds" placeholder="Name, dose, and how often — include supplements"></textarea></div>
+    <div class="field"><label for="allergies">Allergies</label><input id="allergies" data-save="allergies" placeholder="Medicines, foods, latex…"></div>
+    <div class="field"><label for="family">Family history (esp. prostate, breast, ovarian, colon cancer)</label><textarea id="family" data-save="family" placeholder="Relatives, cancer type, age at diagnosis — this can matter for genetic testing"></textarea></div>
+    <div class="field"><label for="surg">Past surgeries &amp; procedures</label><textarea id="surg" data-save="surg" placeholder="What and when"></textarea></div>
+    <div class="field"><label for="lifestyle">Lifestyle notes (exercise, smoking, alcohol, diet)</label><textarea id="lifestyle" data-save="lifestyle"></textarea></div>
+    <div class="field"><label for="careteam">Care team &amp; contacts</label><textarea id="careteam" data-save="careteam" placeholder="Urologist, oncologist, radiation oncologist, nurse navigator — names and phone numbers"></textarea></div>
+    <button class="btn primary" id="saveHistory">Save to this device</button>
+    <span class="saved-note" id="historySaved">Saved ✓</span>
+  </div>${footerHTML()}`;
+}
+
+function viewVitals(){
+  return `<div class="eyebrow">Scott's records</div>
+  <h1 class="page-h">Vitals</h1>
+  <p class="lead">Track the numbers that come up most. Enter what you have; leave the rest blank. For trends over time, note the date in the log below.</p>
+  ${artBox(ART.vial,'hero-art')}
+  <div class="card section-gap">
+    <div class="vitgrid">
+      <div class="field"><label for="vit_psa">PSA (ng/mL)</label><input id="vit_psa" data-save="vit_psa" inputmode="decimal"></div>
+      <div class="field"><label for="vit_bp">Blood pressure</label><input id="vit_bp" data-save="vit_bp" placeholder="120/80"></div>
+      <div class="field"><label for="vit_hr">Heart rate (bpm)</label><input id="vit_hr" data-save="vit_hr" inputmode="numeric"></div>
+      <div class="field"><label for="vit_wt">Weight</label><input id="vit_wt" data-save="vit_wt"></div>
+      <div class="field"><label for="vit_temp">Temperature</label><input id="vit_temp" data-save="vit_temp"></div>
+      <div class="field"><label for="vit_o2">Oxygen (SpO₂ %)</label><input id="vit_o2" data-save="vit_o2" inputmode="numeric"></div>
+    </div>
+    <button class="btn primary" id="saveVitals">Save to this device</button>
+    <span class="saved-note" id="vitalsSaved">Saved ✓</span>
+  </div>
+  <div class="card section-gap">
+    <h3 style="font-size:18px;margin-bottom:8px">Trend log</h3>
+    <div class="row">
+      <div class="field"><label for="logDate">Date</label><input id="logDate" type="date"></div>
+      <div class="field"><label for="logPsa">PSA that day</label><input id="logPsa" inputmode="decimal" placeholder="e.g. 4.2"></div>
+    </div>
+    <div class="field"><label for="logNote">Note</label><input id="logNote" placeholder="e.g. after 3 months of ADT"></div>
+    <button class="btn ghost" id="addLog">Add to log</button>
+    <div id="logList" style="margin-top:14px"></div>
+  </div>${footerHTML()}`;
+}
+
+function viewTrials(){
+  const liveBase="https://clinicaltrials.gov/search?cond=Prostate%20Cancer&aggFilters=status:rec";
+  let html=`<div class="eyebrow">Research &amp; trust</div>
+  <h1 class="page-h">Clinical trials</h1>
+  ${artBox(ART.flask,'hero-art')}
+  <p class="lead">Studies offering tomorrow's treatments today, under close medical supervision. Below is a real snapshot of major recruiting trials pulled from ClinicalTrials.gov, kept here as concrete examples to raise with the care team.</p>
+  <div class="callout warn section-gap"><strong>Important:</strong> This is not a recommendation or an eligibility check. Trial rules are detailed and change often. Only Scott's care team and the trial coordinators can say whether a study fits him. Snapshot captured <strong>${esc(TRIALS.captured)}</strong> — always confirm the current list with the live links.</div>
+  <div class="grid cols-2 section-gap">`;
+  TRIALS.items.forEach((t,i)=>{
+    const id=`trials-${i}`;
+    html+=`<article class="ref-card">
+      ${artBox(artFor(t.name,'trials'),'art')}
+      <span class="tag">${esc(t.phase)} · ${esc(t.focus)}</span>
+      <h3>${esc(t.name)}</h3>
+      <p>${esc(t.text)}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:2px">
+        <span class="pill info">${esc(t.nct)}</span>
+        <span class="pill">${esc(t.sponsor)}</span>
+        <span class="pill">~${t.n.toLocaleString()} enrolling</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+        <a class="db-chip" href="https://clinicaltrials.gov/study/${esc(t.nct)}" target="_blank" rel="noopener noreferrer">View on ClinicalTrials.gov ↗</a>
+        <button class="listen" data-say="${id}" aria-label="Listen to explanation of ${esc(t.name)}"><span class="wave"><i></i><i></i><i></i><i></i></span> Listen</button>
+      </div>
+    </article>`;
+    SAY[id]=t.name+". "+t.text;
+  });
+  html+=`</div>
+  <div class="card section-gap">
+    <h3 style="font-size:19px;margin-bottom:8px">Find current trials near Scott</h3>
+    <p style="color:var(--muted);font-size:14.5px;margin:0 0 12px">These open ClinicalTrials.gov pre-filtered to recruiting prostate cancer studies. Add a city or state on the site to find nearby sites.</p>
+    <div class="db-list">
+      <a class="db-chip" href="${liveBase}" target="_blank" rel="noopener noreferrer"><span class="dot"></span>All recruiting prostate cancer trials ↗</a>
+      <a class="db-chip" href="${liveBase}&term=BRCA" target="_blank" rel="noopener noreferrer"><span class="dot"></span>BRCA / DNA-repair targeted ↗</a>
+      <a class="db-chip" href="${liveBase}&term=PSMA" target="_blank" rel="noopener noreferrer"><span class="dot"></span>PSMA-targeted therapy ↗</a>
+      <a class="db-chip" href="${liveBase}&term=radiation" target="_blank" rel="noopener noreferrer"><span class="dot"></span>Radiation approaches ↗</a>
+    </div>
+  </div>
+  <h2 class="section-gap" style="font-size:22px;margin-bottom:6px">Action items — bring these to the care team</h2>
+  <details class="actions-d" open><summary>${TRIALS.actions.length} things Scott (and family) can do or ask <span class="chev">›</span></summary><ul class="checklist">`;
+  TRIALS.actions.forEach((a,i)=>{
+    html+=`<li><input type="checkbox" id="trials-act-${i}" data-persist="chk-trials-${i}"><label for="trials-act-${i}">${esc(a)}</label></li>`;
+  });
+  html+=`</ul></details>${footerHTML()}`;
+  return html;
+}
+
+function viewBackup(){
+  return `<div class="eyebrow">Scott's records</div>
+  <h1 class="page-h">Backup &amp; print</h1>
+  <p class="lead">Because everything is stored only on this device, keeping a backup matters. Export a file you can save to email, a drive, or a USB stick — and restore it on any device that opens this app.</p>
+  <div class="callout warn section-gap"><strong>Protect his data:</strong> Clearing this browser's site data, switching devices, or reinstalling will erase what's here. Export a backup after adding important records, and keep original reports with the medical team too.</div>
+
+  <div class="grid cols-2 section-gap">
+    <div class="card">
+      <h3 style="font-size:19px;margin-bottom:8px">Backup &amp; restore</h3>
+      <p style="color:var(--muted);font-size:14.5px">The backup file includes typed records, vitals, the PSA log, checked action items, and uploaded images.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn primary" id="exportBtn">⤓ Export backup (.json)</button>
+        <label class="btn ghost" for="importInput" style="cursor:pointer">⤒ Restore from backup</label>
+        <input id="importInput" type="file" accept="application/json,.json" style="display:none">
+      </div>
+      <div class="saved-note" id="backupNote" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3 style="font-size:19px;margin-bottom:8px">Appointment summary</h3>
+      <p style="color:var(--muted);font-size:14.5px">Generate a clean, one-page summary of Scott's diagnosis, vitals, history, and the questions he's checked off — ready to print or save as a PDF to hand to the care team.</p>
+      <div style="margin-top:12px"><button class="btn primary" id="printBtn">🖨 Open printable summary</button></div>
+    </div>
+  </div>
+
+  <div class="card section-gap">
+    <h3 style="font-size:19px;margin-bottom:8px">Danger zone</h3>
+    <p style="color:var(--muted);font-size:14.5px">Erase everything stored on this device (records, vitals, images, checked items). This cannot be undone — export a backup first.</p>
+    <button class="btn ghost" id="wipeBtn" style="margin-top:10px;border-color:var(--crit);color:var(--crit)">Erase all data on this device</button>
+  </div>${footerHTML()}`;
+}
+
+async function collectBackup(){
+  const data={version:1, exported:new Date().toISOString(), local:{}, images:[]};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('phg_'))data.local[k]=localStorage.getItem(k);}
+  const meta=store.get('images_meta',[]);
+  for(const m of meta){const rec=await getImg(m.id);if(rec)data.images.push({meta:m,data:rec.data});}
+  return data;
+}
+async function restoreBackup(data){
+  if(!data||data.version!==1)throw new Error('This file is not a valid backup.');
+  Object.entries(data.local||{}).forEach(([k,v])=>{if(k.startsWith('phg_'))localStorage.setItem(k,v);});
+  for(const img of (data.images||[])){await putImg({id:img.meta.id,data:img.data});}
+}
+
+function viewDatabases(){
+  let html = `<div class="eyebrow">Research &amp; trust</div>
+  <h1 class="page-h">Research databases</h1>
+  <p class="lead">The major scientific and clinical databases behind prostate cancer research, organized by category. These are professional and research resources — powerful, but written for clinicians and scientists. Use them alongside the plain-language reading in <a href="#scholarly">Scholarly resources</a>.</p>
+  <div class="callout info section-gap">These links open official external websites in a new tab. This app does not pull live data from them; it points you to the trusted source.</div>`;
+  DBGROUPS.forEach(g=>{
+    html += `<div class="card db-group"><h3><span>${g.icon}</span> ${esc(g.cat)}</h3>
+      <div class="db-list">`;
+    g.dbs.forEach(([n,u])=>{html += `<a class="db-chip" href="${u}" target="_blank" rel="noopener noreferrer"><span class="dot"></span>${esc(n)} ↗</a>`});
+    html += `</div><div class="tokens">`;
+    g.tokens.forEach(t=>html += `<span class="token">${esc(t)}</span>`);
+    html += `</div></div>`;
+  });
+  html += `<h2 class="section-gap" style="font-size:23px;margin-bottom:6px">The "ultimate platform" database set</h2>
+    <p class="lead">If one were to integrate everything into a single research platform, these are the twenty sources — gathered here as a quick launchpad.</p>
+    <div class="card section-gap"><div class="db-list">`;
+  const seen=new Set();
+  ULTIMATE.forEach(([n,u])=>{const key=n+u;if(seen.has(key))return;seen.add(key);
+    html += `<a class="db-chip" href="${u}" target="_blank" rel="noopener noreferrer"><span class="dot"></span>${esc(n)} ↗</a>`});
+  html += `</div></div>${footerHTML()}`;
+  return html;
+}
+
+function viewScholarly(){
+  let html = `<div class="eyebrow">Research &amp; trust</div>
+  <h1 class="page-h">Scholarly resources</h1>
+  <p class="lead">Trusted, patient-friendly and professional sources for prostate cancer. Prefer guideline bodies (NCCN, AUA, ASCO), government cancer institutes (NCI), and systematic reviews (Cochrane) over individual blogs or forums.</p>
+  <div class="card section-gap"><ul class="reflist">`;
+  SCHOLARLY.forEach(([n,u])=>html += `<li><a href="${u}" target="_blank" rel="noopener noreferrer">${esc(n)} ↗</a></li>`);
+  html += `</ul></div>
+  <div class="callout info section-gap"><strong>How to judge a source:</strong> Look for national guideline organizations, peer-reviewed journals (found through PubMed), and systematic reviews (Cochrane) that pool many studies. Be cautious with single anecdotes, products that promise cures, and anything that tells Scott to stop his prescribed treatment.</div>
+  ${footerHTML()}`;
+  return html;
+}
+
+function viewReview(){
+  return `<div class="eyebrow">Research &amp; trust</div>
+  <h1 class="page-h">Peer review &amp; publishing roadmap</h1>
+  <p class="lead">You asked for this guide to be peer reviewed, built only on systematic evidence, and prepared for the Apple App Store. Here is an honest map of what that actually takes — the parts a person or company must do, which an app builder cannot do on anyone's behalf.</p>
+
+  <div class="callout warn section-gap"><strong>Honest status:</strong> This guide has <em>not</em> been peer reviewed or legally cleared, and it is not on the App Store. It's a caring, private educational tool. The steps below are the real path to change that.</div>
+
+  <div class="card section-gap">
+    <h3 style="font-size:20px;margin-bottom:6px">Grounding it in systematic evidence</h3>
+    <div class="step"><div class="n">1</div><div><h4>Anchor every claim to a guideline or systematic review</h4><p>Map each statement to NCCN, AUA, or ASCO guidelines and Cochrane reviews, with citations. This app already leans on those bodies and keeps content general.</p></div></div>
+    <div class="step"><div class="n">2</div><div><h4>Add versioned references</h4><p>Give each topic a "last reviewed" date and source list, because cancer care changes quickly.</p></div></div>
+  </div>
+
+  <div class="card section-gap">
+    <h3 style="font-size:20px;margin-bottom:6px">Clinical peer review</h3>
+    <div class="step"><div class="n">3</div><div><h4>Recruit licensed reviewers</h4><p>A urologist, a medical oncologist, a radiation oncologist, and an oncology dietitian should review the content for accuracy and safety.</p></div></div>
+    <div class="step"><div class="n">4</div><div><h4>Document the review</h4><p>Keep a signed record of who reviewed what and when, and revise until reviewers sign off. This is the real meaning of "peer reviewed."</p></div></div>
+    <div class="step"><div class="n">5</div><div><h4>Add a patient-safety read</h4><p>Have a nurse navigator or patient advocate check that the language is safe, clear, and never discourages prescribed care.</p></div></div>
+  </div>
+
+  <div class="card section-gap">
+    <h3 style="font-size:20px;margin-bottom:6px">Legal &amp; regulatory</h3>
+    <div class="step"><div class="n">6</div><div><h4>Talk to a healthcare attorney</h4><p>Confirm the app stays "general wellness/education" and does not become a regulated medical device. Diagnosing or recommending treatment can trigger FDA oversight.</p></div></div>
+    <div class="step"><div class="n">7</div><div><h4>Privacy review</h4><p>Because it can hold health data, review HIPAA relevance, write a clear privacy policy, and (as built) keep data on-device with no server.</p></div></div>
+    <div class="step"><div class="n">8</div><div><h4>Add formal disclaimers &amp; consent</h4><p>An attorney-approved disclaimer and terms of use, shown on first launch.</p></div></div>
+  </div>
+
+  <div class="card section-gap">
+    <h3 style="font-size:20px;margin-bottom:6px">Apple App Store submission</h3>
+    <div class="step"><div class="n">9</div><div><h4>Enroll in the Apple Developer Program</h4><p>A person or company registers (about US$99/year) and accepts the developer agreement.</p></div></div>
+    <div class="step"><div class="n">10</div><div><h4>Package the app</h4><p>Wrap this web app (e.g. with Capacitor — this repo already includes a starter) into a native iOS build in Xcode, with an app icon and screenshots.</p></div></div>
+    <div class="step"><div class="n">11</div><div><h4>Meet Apple's health-app rules</h4><p>Apple's guidelines (esp. §1.4 and §5.1) require medical apps to be accurate, cite sources, name the provider, and include disclaimers. Submit through App Store Connect for review.</p></div></div>
+    <div class="step"><div class="n">12</div><div><h4>Respond to review &amp; maintain</h4><p>Address Apple's feedback, publish, then keep content current as guidelines change.</p></div></div>
+  </div>
+
+  <div class="callout info section-gap">For right now, Scott can use this today as a private web app — open the link, or "Add to Home Screen" on an iPhone to get an app-like icon without the App Store at all.</div>
+  ${footerHTML()}`;
+}
+
+function viewDisclaimer(){
+  return `<div class="eyebrow">Research &amp; trust</div>
+  <h1 class="page-h">Medical disclaimers</h1>
+  <div class="card section-gap">
+    <p><strong style="font-family:var(--serif)">Not medical advice.</strong> Scott M.'s Prostate Health Guide is an educational and personal-organizing tool. It does not provide medical advice, diagnosis, or treatment, and it is not a substitute for the judgment of licensed healthcare professionals.</p>
+    <p style="margin-top:12px"><strong style="font-family:var(--serif)">Always consult the care team.</strong> Any decision about testing, medication, surgery, radiation, diet, or supplements must be made with Scott's doctors, who know his full situation. Never delay or stop prescribed care because of anything read here.</p>
+    <p style="margin-top:12px"><strong style="font-family:var(--serif)">General information.</strong> Content is written in general terms and may not reflect the very latest research or Scott's specific case. Medicine changes quickly; details can become out of date.</p>
+    <p style="margin-top:12px"><strong style="font-family:var(--serif)">No professional relationship.</strong> Using this app creates no doctor–patient relationship with its creator.</p>
+    <p style="margin-top:12px"><strong style="font-family:var(--serif)">Your data.</strong> Everything entered stays on this device in the browser's local storage. There is no account, server, or tracking. Clearing site data erases it. Keep original records with the medical team.</p>
+    <p style="margin-top:12px"><strong style="font-family:var(--serif)">Emergencies.</strong> For any medical emergency, call local emergency services (911 in the U.S.) immediately.</p>
+  </div>
+  <div class="callout warn section-gap">Made with care for Scott and his family. Please use it as a companion to — never a replacement for — his medical team.</div>
+  <div class="section-gap"><button class="btn ghost" id="reAckBtn">Show the welcome acknowledgement again</button></div>
+  ${footerHTML()}`;
+}
+
+/* ============================================================
+   Interactivity
+   ============================================================ */
+const main = document.getElementById('main');
+const navEl = document.getElementById('nav');
+
+// build nav
+NAV.forEach(g=>{
+  const t=document.createElement('div'); t.className='navgroup'; t.textContent=g.group; navEl.appendChild(t);
+  g.items.forEach(it=>{
+    const b=document.createElement('button'); b.className='navlink'; b.dataset.id=it.id;
+    b.innerHTML=`<span class="ic">${it.icon}</span><span>${esc(it.label)}</span>`;
+    b.addEventListener('click',()=>{location.hash=it.id;closeMenu()});
+    navEl.appendChild(b);
+  });
+});
+
+function setActive(id){
+  document.querySelectorAll('.navlink').forEach(n=>n.classList.toggle('active',n.dataset.id===id));
+}
+
+function render(){
+  const id = (location.hash||'#home').slice(1);
+  const valid = NAV.some(g=>g.items.some(i=>i.id===id));
+  const useId = valid?id:'home';
+  main.innerHTML = `<div class="view active">${buildView(useId)}</div>`;
+  setActive(useId);
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  wireView(useId);
+  injectQR();
+  main.scrollTop=0; window.scrollTo(0,0);
+}
+
+/* ---- speech ---- */
+let curBtn=null;
+function speak(text, btn){
+  if(!('speechSynthesis' in window)){alert('This device/browser does not support built-in speech. Try Safari or Chrome.');return;}
+  const synth=window.speechSynthesis;
+  if(curBtn===btn && synth.speaking){synth.cancel();stopBtn();return;}
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=0.96; u.pitch=1;
+  const vs=synth.getVoices();
+  const pref=vs.find(v=>/en-US|en_GB|en-GB/.test(v.lang)&&/female|Samantha|Karen|Zira|Google US/i.test(v.name))||vs.find(v=>/^en/i.test(v.lang));
+  if(pref)u.voice=pref;
+  u.onend=stopBtn; u.onerror=stopBtn;
+  curBtn=btn; btn.classList.add('speaking');
+  setBtnLabel(btn,'Stop');
+  synth.speak(u);
+}
+function stopBtn(){ if(curBtn){curBtn.classList.remove('speaking');setBtnLabel(curBtn,'Listen');curBtn=null;} }
+function setBtnLabel(btn,txt){
+  // keep the wave span, replace trailing text
+  const wave=btn.querySelector('.wave');
+  btn.innerHTML=''; btn.appendChild(wave); btn.appendChild(document.createTextNode(' '+txt));
+}
+
+function wireView(id){
+  // Listen buttons
+  main.querySelectorAll('.listen').forEach(btn=>{
+    btn.addEventListener('click',()=>{const t=SAY[btn.dataset.say];if(t)speak(t,btn);});
+  });
+  // persisted checkboxes
+  main.querySelectorAll('input[data-persist]').forEach(cb=>{
+    cb.checked=!!store.get(cb.dataset.persist,false);
+    cb.addEventListener('change',()=>store.set(cb.dataset.persist,cb.checked));
+  });
+  // auto-save text fields
+  main.querySelectorAll('[data-save]').forEach(el=>{
+    const k=el.dataset.save; const v=store.get(k,'');
+    if(v!==''&&v!=null) el.value=v;
+    el.addEventListener('input',()=>store.set(k,el.value));
+  });
+  // explicit save buttons -> flash note
+  [['saveBiopsy','biopsySaved'],['saveHistory','historySaved'],['saveVitals','vitalsSaved']].forEach(([b,n])=>{
+    const bt=document.getElementById(b); if(bt)bt.addEventListener('click',()=>{
+      const note=document.getElementById(n); if(note){note.classList.add('show');setTimeout(()=>note.classList.remove('show'),1600);}
+    });
+  });
+  if(id==='images') wireImages();
+  if(id==='vitals') wireVitals();
+  if(id==='backup') wireBackup();
+  if(id==='disclaimer'){const rb=document.getElementById('reAckBtn');if(rb)rb.addEventListener('click',showAck);}
+}
+
+function flashNote(el,msg,ok){if(!el)return;el.textContent=msg;el.style.color=ok===false?'var(--crit)':'var(--good)';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600);}
+
+function wireBackup(){
+  const note=document.getElementById('backupNote');
+  document.getElementById('exportBtn').addEventListener('click',async()=>{
+    const data=await collectBackup();
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='scott-prostate-guide-backup-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    flashNote(note,'Backup downloaded ✓');
+  });
+  document.getElementById('importInput').addEventListener('change',async e=>{
+    const f=e.target.files[0]; if(!f)return;
+    try{const data=JSON.parse(await f.text()); await restoreBackup(data);
+      flashNote(note,'Backup restored ✓ Reloading…');
+      setTimeout(()=>location.reload(),900);
+    }catch(err){flashNote(note,'Could not restore: '+err.message,false);}
+    e.target.value='';
+  });
+  document.getElementById('printBtn').addEventListener('click',printSummary);
+  document.getElementById('wipeBtn').addEventListener('click',async()=>{
+    if(!confirm('Erase ALL data on this device? This cannot be undone. Make sure you exported a backup first.'))return;
+    const keys=[]; for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('phg_'))keys.push(k);}
+    keys.forEach(k=>localStorage.removeItem(k));
+    for(const m of (store.get('images_meta',[])||[])){await delImg(m.id);}
+    flashNote(note,'All data erased. Reloading…'); setTimeout(()=>location.reload(),900);
+  });
+}
+
+function printSummary(){
+  const g=k=>store.get(k,'')||'—';
+  const name=store.get('patientName','Scott M.')||'Scott M.';
+  const checked=[];
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('phg_chk-')&&localStorage.getItem(k)==='true')checked.push(k);}
+  // map checked keys back to action text
+  const ALL={drugs:DRUGS,treatments:TREATMENTS,radiation:RADIATION,nutrition:NUTRITION,supplements:SUPPLEMENTS,surgery:SURGERY,genes:GENES,terms:TERMS,trials:TRIALS};
+  const qs=[];
+  checked.forEach(k=>{const m=k.match(/^phg_chk-(.+)-(\d+)$/);if(m&&ALL[m[1]]&&ALL[m[1]].actions[m[2]])qs.push(ALL[m[1]].actions[m[2]]);});
+  const log=store.get('psaLog',[]);
+  const esc2=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const row=(l,v)=>`<tr><th>${l}</th><td>${esc2(v)}</td></tr>`;
+  const html=`<!doctype html><html><head><meta charset="utf-8"><title>${esc2(name)} — Summary</title>
+  <style>
+   body{font:15px/1.5 -apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#152; max-width:760px;margin:32px auto;padding:0 20px}
+   h1{font:600 24px Georgia,serif;margin:0 0 2px} .sub{color:#666;font-size:13px;margin-bottom:18px}
+   h2{font:600 16px Georgia,serif;margin:22px 0 6px;border-bottom:2px solid #2f7d76;padding-bottom:3px;color:#215a55}
+   table{width:100%;border-collapse:collapse;margin:6px 0} th{text-align:left;width:170px;vertical-align:top;color:#555;font-weight:600;padding:4px 8px 4px 0}
+   td{padding:4px 0;white-space:pre-wrap} ul{margin:6px 0;padding-left:20px} li{margin:3px 0}
+   .note{font-size:11.5px;color:#888;margin-top:26px;border-top:1px solid #ddd;padding-top:10px}
+   @media print{body{margin:0}}
+  </style></head><body onload="window.print()">
+  <h1>${esc2(name)} — Health Summary</h1>
+  <div class="sub">Prepared ${new Date().toLocaleDateString()} · Educational personal record — not a medical document</div>
+  <h2>Diagnosis</h2><table>
+   ${row('Gleason score',g('gleason'))}${row('ISUP grade group',g('isup'))}${row('TNM stage',g('stage'))}${row('Diagnosis date',g('dxDate'))}
+  </table>
+  <div style="white-space:pre-wrap;background:#f5f7f6;padding:10px;border-radius:6px;font-size:13.5px">${esc2(store.get('dxSummary','(no diagnosis text entered)'))}</div>
+  <h2>Vitals</h2><table>
+   ${row('PSA (ng/mL)',g('vit_psa'))}${row('Blood pressure',g('vit_bp'))}${row('Heart rate',g('vit_hr'))}${row('Weight',g('vit_wt'))}${row('Temperature',g('vit_temp'))}${row('Oxygen (SpO₂)',g('vit_o2'))}
+  </table>
+  ${log.length?`<h2>PSA trend</h2><table>${log.map(e=>`<tr><th>${esc2(e.d||'—')}</th><td>PSA ${esc2(e.p||'—')} ${e.n?'· '+esc2(e.n):''}</td></tr>`).join('')}</table>`:''}
+  <h2>Health history</h2><table>
+   ${row('Conditions',g('conditions'))}${row('Medications',g('meds'))}${row('Allergies',g('allergies'))}${row('Family history',g('family'))}${row('Past surgeries',g('surg'))}${row('Care team',g('careteam'))}
+  </table>
+  ${qs.length?`<h2>Questions for the care team</h2><ul>${qs.map(q=>`<li>${esc2(q)}</li>`).join('')}</ul>`:''}
+  <div class="note">Generated by Scott M.'s Prostate Health Guide, a personal educational tool. This is not a medical record and not medical advice. Confirm all information with the licensed care team.</div>
+  </body></html>`;
+  const w=window.open('','_blank');
+  if(!w){alert('Please allow pop-ups to open the printable summary.');return;}
+  w.document.write(html); w.document.close();
+}
+
+/* ---- images via IndexedDB ---- */
+let db=null;
+function openDB(){return new Promise(res=>{
+  if(db)return res(db);
+  const r=indexedDB.open('phg_images',1);
+  r.onupgradeneeded=e=>{e.target.result.createObjectStore('imgs',{keyPath:'id'})};
+  r.onsuccess=e=>{db=e.target.result;res(db)};
+  r.onerror=()=>res(null);
+});}
+async function putImg(rec){const d=await openDB();if(!d)return;return new Promise(r=>{const t=d.transaction('imgs','readwrite');t.objectStore('imgs').put(rec);t.oncomplete=()=>r();});}
+async function getImg(id){const d=await openDB();if(!d)return null;return new Promise(r=>{const req=d.transaction('imgs').objectStore('imgs').get(id);req.onsuccess=()=>r(req.result);});}
+async function delImg(id){const d=await openDB();if(!d)return;return new Promise(r=>{const t=d.transaction('imgs','readwrite');t.objectStore('imgs').delete(id);t.oncomplete=()=>r();});}
+
+function wireImages(){
+  const input=document.getElementById('imgInput');
+  const dz=document.getElementById('dropzone');
+  const gal=document.getElementById('imgGallery');
+  const noteEl=document.getElementById('imgNote');
+  renderGallery();
+  input.addEventListener('change',async e=>{
+    const files=[...e.target.files];
+    for(const f of files){
+      if(!f.type.startsWith('image/'))continue;
+      const dataUrl=await fileToDataURL(f);
+      const id='img_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+      await putImg({id,data:dataUrl});
+      const meta=store.get('images_meta',[]);
+      meta.unshift({id,note:noteEl.value||f.name,date:new Date().toISOString().slice(0,10)});
+      store.set('images_meta',meta);
+    }
+    noteEl.value=''; input.value=''; renderGallery();
+  });
+  async function renderGallery(){
+    const meta=store.get('images_meta',[]);
+    gal.innerHTML='';
+    for(const m of meta){
+      const rec=await getImg(m.id);
+      const tile=document.createElement('div'); tile.className='imgtile';
+      tile.innerHTML=`<img src="${rec?rec.data:''}" alt="${esc(m.note)}"><div class="cap">${esc(m.note)}<br><span style="opacity:.7">${esc(m.date)}</span></div><button class="del" title="Delete" aria-label="Delete image">✕</button>`;
+      tile.querySelector('.del').addEventListener('click',async()=>{
+        await delImg(m.id);
+        store.set('images_meta',store.get('images_meta',[]).filter(x=>x.id!==m.id));
+        renderGallery();
+      });
+      gal.appendChild(tile);
+    }
+    if(meta.length===0)gal.innerHTML='<p style="color:var(--faint);font-size:14px">No images yet.</p>';
+  }
+}
+function fileToDataURL(f){return new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f);});}
+
+function wireVitals(){
+  const list=document.getElementById('logList');
+  render();
+  document.getElementById('addLog').addEventListener('click',()=>{
+    const d=document.getElementById('logDate').value, p=document.getElementById('logPsa').value, n=document.getElementById('logNote').value;
+    if(!d&&!p&&!n)return;
+    const log=store.get('psaLog',[]); log.unshift({d,p,n}); store.set('psaLog',log);
+    document.getElementById('logDate').value='';document.getElementById('logPsa').value='';document.getElementById('logNote').value='';
+    render();
+  });
+  function render(){
+    const log=store.get('psaLog',[]);
+    if(!log.length){list.innerHTML='<p style="color:var(--faint);font-size:14px">No entries yet.</p>';return;}
+    list.innerHTML='<table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="text-align:left;color:var(--faint)"><th style="padding:6px 8px">Date</th><th>PSA</th><th>Note</th><th></th></tr></thead><tbody>'+
+      log.map((e,i)=>`<tr style="border-top:1px solid var(--border)"><td style="padding:8px 8px;font-variant-numeric:tabular-nums">${esc(e.d||'—')}</td><td style="font-variant-numeric:tabular-nums">${esc(e.p||'—')}</td><td style="color:var(--muted)">${esc(e.n||'')}</td><td><button class="del" data-i="${i}" style="position:static;background:none;color:var(--crit);border:none;cursor:pointer">✕</button></td></tr>`).join('')+
+      '</tbody></table>';
+    list.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>{
+      const log=store.get('psaLog',[]); log.splice(+b.dataset.i,1); store.set('psaLog',log); render();
+    }));
+  }
+}
+
+/* ---- QR / URL slot (filled after publishing) ---- */
+const SHARE_URL = "https://claude.ai/code/artifact/c0ce29d2-8db8-4c62-ae43-a86a830104bb"; // set when hosted
+const QR_DATA_URI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUoAAAFKAQMAAABB54RGAAAABlBMVEUhWlX////nWWG0AAADAUlEQVR42u1bQW4EIQyLygPmSXydJ/EApJTYDruXSntt2NWoQjNcEoJjG2r+6W/Yd+p3atmpw/bvib973Hz4tPW4Pb4H+82KzzH4sY9//2lqhLYzsZ6BYHuk4ok87PF+ucPf2cCcyhlAmDtq31G3iWe/jFQ46iFyckEGnKufNb+zYTv8nY17MrCfNveLjtfdZwcs+A0ZEA5guVn8AQLIAzNTHgfYC9ZfT/1eoL6Ide8o+wCBPUBn7GdC4QxkLxjkA6f+d/jEhFWdD3DpDa0wshFgGA/X/kBB7V3ARoAO2IH8LACOB8lhZSR8kiIDCiJehM+GqCSUzkDQAOBA9EHE24AAzSkWoBFq8wEAfmyEIMPOdT+fLN7Xx4GAwQxf0mCmYJy9Og5AAkT3d7DBCHkZ90UoowZuXH4XoPeJD6MpdC59IyOa9f2BEy8wsJMQtmlCxecGTuhQAd7EA1Ubbb7oYmVOSAL8kP5BJIIQYvUHjYLifABJYAE0pWK0pEPrAl0QrI8gAAokbThN3Li+LgAnNHa9kXYB9HKaA9X9AQUO9ktXhPwQz2SzGBfgwGDIxyTXV3rF5T2iKTQAE34ZAg5kOEVS2ys22WLe0jZ0MEOZhOgLpVmxJQg4LbJ3e1DEuDgOuHSBURK+YJDWGb8WxoEmAqyaJzM0ESRrF3jF3ALnyCzRz7Mp9OpI6CZnzGgaN4piqkUmqDgSShvCGXa1ANrFaBM0i+r7hJCBcsYQPq0SFyT26jggLYAucHQB8NBkj1xQA9KGPDcEG9TSe5pFlbuhzkfE/Uz476maYRsW7wUkP3YOTKUIxBXrnxuCE1qGLG9cJMGu0IbcAk3HQ0NooMtFlMz1T04X658uWfaFN5bol9whoTqmLmBTyINjv+AeEXd9z4OD0dIewfiGO6WyBLkd1us07QqfcL0BPvGfbklyA7vgHpGx1CEJcZF4yjtiI2h31AA9onSKojNa3qryS3BAvMglDfD+kIE7ekEUPw8KcXcCQmnyot0Nd0q//47ynXrt1F+EWHmfjvmfHgAAAABJRU5ErkJggg=="; // set when hosted
+function injectQR(){
+  const slot=document.getElementById('qrSlot'); if(!slot)return;
+  if(SHARE_URL){
+    slot.innerHTML=`<div class="qrbox" style="margin-top:14px">
+      ${QR_DATA_URI?`<img src="${QR_DATA_URI}" alt="QR code linking to this app">`:''}
+      <div><div style="font-size:13px;color:var(--muted);margin-bottom:4px">Scan to open this guide</div>
+      <a href="${SHARE_URL}" style="font-size:13.5px;word-break:break-all">${esc(SHARE_URL)}</a></div></div>`;
+  }
+}
+
+/* ---- theme toggle ---- */
+const themeBtn=document.getElementById('themeBtn');
+let themeMode=store.get('theme','auto');
+function applyTheme(){
+  const root=document.documentElement;
+  if(themeMode==='auto'){root.removeAttribute('data-theme');themeBtn.textContent='Auto';}
+  else{root.setAttribute('data-theme',themeMode);themeBtn.textContent=themeMode==='dark'?'Dark':'Light';}
+}
+themeBtn.addEventListener('click',()=>{
+  themeMode = themeMode==='auto'?'light':themeMode==='light'?'dark':'auto';
+  store.set('theme',themeMode); applyTheme();
+});
+applyTheme();
+
+/* ---- mobile menu ---- */
+const sidebar=document.getElementById('sidebar'), scrim=document.getElementById('scrim');
+function closeMenu(){sidebar.classList.remove('open');scrim.classList.remove('show');}
+document.getElementById('hamb').addEventListener('click',()=>{sidebar.classList.toggle('open');scrim.classList.toggle('show');});
+scrim.addEventListener('click',closeMenu);
+
+/* ---- first-run acknowledgement ---- */
+const ACK_KEY='ack_v1';
+const ackScreen=document.getElementById('ackScreen');
+function showAck(){
+  const cb=document.getElementById('ackCheck'), bt=document.getElementById('ackBtn');
+  cb.checked=false; bt.disabled=true;
+  ackScreen.classList.add('show'); document.body.style.overflow='hidden';
+  setTimeout(()=>cb.focus(),60);
+}
+function initAck(){
+  const cb=document.getElementById('ackCheck'), bt=document.getElementById('ackBtn');
+  cb.addEventListener('change',()=>{bt.disabled=!cb.checked;});
+  bt.addEventListener('click',()=>{
+    if(!cb.checked)return;
+    store.set(ACK_KEY,true);
+    ackScreen.classList.remove('show'); document.body.style.overflow='';
+  });
+  if(!store.get(ACK_KEY,false)) showAck();
+}
+
+/* ---- boot ---- */
+if('speechSynthesis' in window){window.speechSynthesis.onvoiceschanged=()=>{};window.speechSynthesis.getVoices();}
+window.addEventListener('hashchange',render);
+render();
+initAck();
+</script>
+</body>
+</html>
