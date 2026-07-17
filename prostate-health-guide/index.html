@@ -706,6 +706,53 @@ const SCHOLARLY = [
   ["MedlinePlus — Prostate Cancer (plain language)","https://medlineplus.gov/prostatecancer.html"],
 ];
 
+/* ---------- Clinical trials (real snapshot from ClinicalTrials.gov) ----------
+   Captured 2026-07-17. Trials change constantly — treat as examples to discuss
+   with the care team, and use the live-search links for the current list. */
+const TRIALS = {
+  captured:"July 17, 2026",
+  items:[
+    {nct:"NCT06320067", name:"STAMPEDE2", focus:"Metastatic prostate cancer",
+     text:"A large 'platform' trial testing several add-ons to hormone therapy (ADT) — including targeted radiation (SABR), the PSMA homing-missile drug 177Lu-PSMA, and androgen-receptor blockers — to see which combinations help most.",
+     phase:"Phase 3", sponsor:"University College London", n:3360},
+    {nct:"NCT06952803", name:"EvoPAR-Prostate02", focus:"High-risk, BRCA-mutated, localized",
+     text:"For men with an inherited BRCA change and high-risk local disease, this adds the PARP-inhibitor saruparib to radiation plus hormone therapy — testing whether removing the tumor's backup DNA-repair crew improves cure rates.",
+     phase:"Phase 3", sponsor:"AstraZeneca", n:700},
+    {nct:"NCT06780670", name:"PSMAcTION", focus:"PSMA-positive, castration-resistant",
+     text:"For cancer that has kept growing after the Pluvicto (177Lu-PSMA) radioligand, this compares a next-generation PSMA-targeted therapy (AAA817) against standard care.",
+     phase:"Phase 2/3", sponsor:"Novartis", n:443},
+    {nct:"NCT05946213", name:"High Five Trial", focus:"High-risk, localized",
+     text:"Tests whether just five precise, high-dose radiation sessions (SBRT) work as well as many weeks of daily treatment for high-risk prostate cancer — far fewer trips for the same goal.",
+     phase:"Phase 3", sponsor:"NRG Oncology", n:1209},
+    {nct:"NCT03903835", name:"ProBio", focus:"Metastatic",
+     text:"A biomarker-driven study: the tumor's genetic profile helps pick which treatment each man gets, testing whether matching the drug to the biology beats the usual one-size approach.",
+     phase:"Phase 3", sponsor:"Karolinska Institutet", n:750},
+    {nct:"NCT06650579", name:"REVELUTION-2", focus:"Advanced, recurrent",
+     text:"Compares two ways to lower testosterone — an injection (leuprolide) versus a daily pill (relugolix) — both combined with abiraterone, looking at effectiveness and heart-related safety.",
+     phase:"Phase 3", sponsor:"Emory University", n:72},
+    {nct:"NCT05019846", name:"SPA Trial", focus:"Localized",
+     text:"Asks whether adding short hormone therapy to stereotactic (SBRT) radiation improves outcomes, or whether the radiation alone is enough — helping men avoid hormone side effects when possible.",
+     phase:"Phase 3", sponsor:"Multi-center (Italy)", n:310},
+    {nct:"NCT06626022", name:"MUSIC-Screen", focus:"Screening / detection",
+     text:"Compares a newer high-resolution 'micro-ultrasound' against standard MRI for finding prostate cancer — testing a faster, cheaper way to spot disease early.",
+     phase:"Phase 3", sponsor:"University of Alberta", n:1284},
+  ],
+  actions:[
+    "Ask the oncologist whether a clinical trial is appropriate for Scott right now.",
+    "Ask which trials match his exact stage, genes, and prior treatments.",
+    "Confirm eligibility rules can be complex — let the trial team check, don't self-exclude.",
+    "Ask about the potential benefits, risks, and extra visits a trial involves.",
+    "Ask whether standard treatment is delayed or continued during a trial.",
+    "Search ClinicalTrials.gov (link below) filtered to his location for nearby sites.",
+    "Bring the NCT number of any trial of interest to the next appointment.",
+    "Ask if genetic/biomarker testing is needed to qualify for targeted-therapy trials.",
+    "Ask who covers the costs (sponsor vs. insurance) and about travel support.",
+    "Ask the care team for a referral to a trial coordinator or nurse navigator.",
+    "Check that any trial is registered and has ethics-board (IRB) approval.",
+    "Ask what happens after the trial ends and whether treatment continues.",
+  ]
+};
+
 /* ---------- Navigation model ---------- */
 const NAV = [
   {group:"Scott's records", items:[
@@ -714,6 +761,7 @@ const NAV = [
     {id:"biopsy", label:"Biopsy & diagnosis", icon:"✎"},
     {id:"history", label:"Health history", icon:"❤"},
     {id:"vitals", label:"Vitals", icon:"◔"},
+    {id:"backup", label:"Backup & print", icon:"⤓"},
   ]},
   {group:"Quick reference", items:[
     {id:"drugs", label:"Medications", icon:"💊"},
@@ -726,6 +774,7 @@ const NAV = [
     {id:"terms", label:"Medical terms", icon:"🔤"},
   ]},
   {group:"Research & trust", items:[
+    {id:"trials", label:"Clinical trials", icon:"⚗"},
     {id:"databases", label:"Research databases", icon:"🗄"},
     {id:"scholarly", label:"Scholarly resources", icon:"📚"},
     {id:"review", label:"Review & publishing", icon:"✔"},
@@ -772,6 +821,8 @@ function buildView(id){
   if(id==="biopsy") return viewBiopsy();
   if(id==="history") return viewHistory();
   if(id==="vitals") return viewVitals();
+  if(id==="backup") return viewBackup();
+  if(id==="trials") return viewTrials();
   if(id==="databases") return viewDatabases();
   if(id==="scholarly") return viewScholarly();
   if(id==="review") return viewReview();
@@ -820,7 +871,7 @@ function viewHome(){
   <div class="grid cols-3 section-gap">
     <div class="card"><div class="vit"><div class="lbl">Latest PSA (you enter)</div><div class="val">${psa?esc(psa):"—"} <small>ng/mL</small></div></div></div>
     <div class="card"><div class="vit"><div class="lbl">Records saved locally</div><div class="val">${countRecords()}</div></div></div>
-    <div class="card"><div class="vit"><div class="lbl">Reference topics</div><div class="val">8 <small>with audio</small></div></div></div>
+    <div class="card"><div class="vit"><div class="lbl">Reference topics</div><div class="val">9 <small>with audio</small></div></div></div>
   </div>
 
   <div class="grid cols-2 section-gap">
@@ -926,6 +977,95 @@ function viewVitals(){
     <button class="btn ghost" id="addLog">Add to log</button>
     <div id="logList" style="margin-top:14px"></div>
   </div>${footerHTML()}`;
+}
+
+function viewTrials(){
+  const liveBase="https://clinicaltrials.gov/search?cond=Prostate%20Cancer&aggFilters=status:rec";
+  let html=`<div class="eyebrow">Research &amp; trust</div>
+  <h1 class="page-h">Clinical trials</h1>
+  <p class="lead">Studies offering tomorrow's treatments today, under close medical supervision. Below is a real snapshot of major recruiting trials pulled from ClinicalTrials.gov, kept here as concrete examples to raise with the care team.</p>
+  <div class="callout warn section-gap"><strong>Important:</strong> This is not a recommendation or an eligibility check. Trial rules are detailed and change often. Only Scott's care team and the trial coordinators can say whether a study fits him. Snapshot captured <strong>${esc(TRIALS.captured)}</strong> — always confirm the current list with the live links.</div>
+  <div class="grid cols-2 section-gap">`;
+  TRIALS.items.forEach((t,i)=>{
+    const id=`trials-${i}`;
+    html+=`<article class="ref-card">
+      <span class="tag">${esc(t.phase)} · ${esc(t.focus)}</span>
+      <h3>${esc(t.name)}</h3>
+      <p>${esc(t.text)}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:2px">
+        <span class="pill info">${esc(t.nct)}</span>
+        <span class="pill">${esc(t.sponsor)}</span>
+        <span class="pill">~${t.n.toLocaleString()} enrolling</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+        <a class="db-chip" href="https://clinicaltrials.gov/study/${esc(t.nct)}" target="_blank" rel="noopener noreferrer">View on ClinicalTrials.gov ↗</a>
+        <button class="listen" data-say="${id}" aria-label="Listen to explanation of ${esc(t.name)}"><span class="wave"><i></i><i></i><i></i><i></i></span> Listen</button>
+      </div>
+    </article>`;
+    SAY[id]=t.name+". "+t.text;
+  });
+  html+=`</div>
+  <div class="card section-gap">
+    <h3 style="font-size:19px;margin-bottom:8px">Find current trials near Scott</h3>
+    <p style="color:var(--muted);font-size:14.5px;margin:0 0 12px">These open ClinicalTrials.gov pre-filtered to recruiting prostate cancer studies. Add a city or state on the site to find nearby sites.</p>
+    <div class="db-list">
+      <a class="db-chip" href="${liveBase}" target="_blank" rel="noopener noreferrer"><span class="dot"></span>All recruiting prostate cancer trials ↗</a>
+      <a class="db-chip" href="${liveBase}&term=BRCA" target="_blank" rel="noopener noreferrer"><span class="dot"></span>BRCA / DNA-repair targeted ↗</a>
+      <a class="db-chip" href="${liveBase}&term=PSMA" target="_blank" rel="noopener noreferrer"><span class="dot"></span>PSMA-targeted therapy ↗</a>
+      <a class="db-chip" href="${liveBase}&term=radiation" target="_blank" rel="noopener noreferrer"><span class="dot"></span>Radiation approaches ↗</a>
+    </div>
+  </div>
+  <h2 class="section-gap" style="font-size:22px;margin-bottom:6px">Action items — bring these to the care team</h2>
+  <details class="actions-d" open><summary>${TRIALS.actions.length} things Scott (and family) can do or ask <span class="chev">›</span></summary><ul class="checklist">`;
+  TRIALS.actions.forEach((a,i)=>{
+    html+=`<li><input type="checkbox" id="trials-act-${i}" data-persist="chk-trials-${i}"><label for="trials-act-${i}">${esc(a)}</label></li>`;
+  });
+  html+=`</ul></details>${footerHTML()}`;
+  return html;
+}
+
+function viewBackup(){
+  return `<div class="eyebrow">Scott's records</div>
+  <h1 class="page-h">Backup &amp; print</h1>
+  <p class="lead">Because everything is stored only on this device, keeping a backup matters. Export a file you can save to email, a drive, or a USB stick — and restore it on any device that opens this app.</p>
+  <div class="callout warn section-gap"><strong>Protect his data:</strong> Clearing this browser's site data, switching devices, or reinstalling will erase what's here. Export a backup after adding important records, and keep original reports with the medical team too.</div>
+
+  <div class="grid cols-2 section-gap">
+    <div class="card">
+      <h3 style="font-size:19px;margin-bottom:8px">Backup &amp; restore</h3>
+      <p style="color:var(--muted);font-size:14.5px">The backup file includes typed records, vitals, the PSA log, checked action items, and uploaded images.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn primary" id="exportBtn">⤓ Export backup (.json)</button>
+        <label class="btn ghost" for="importInput" style="cursor:pointer">⤒ Restore from backup</label>
+        <input id="importInput" type="file" accept="application/json,.json" style="display:none">
+      </div>
+      <div class="saved-note" id="backupNote" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3 style="font-size:19px;margin-bottom:8px">Appointment summary</h3>
+      <p style="color:var(--muted);font-size:14.5px">Generate a clean, one-page summary of Scott's diagnosis, vitals, history, and the questions he's checked off — ready to print or save as a PDF to hand to the care team.</p>
+      <div style="margin-top:12px"><button class="btn primary" id="printBtn">🖨 Open printable summary</button></div>
+    </div>
+  </div>
+
+  <div class="card section-gap">
+    <h3 style="font-size:19px;margin-bottom:8px">Danger zone</h3>
+    <p style="color:var(--muted);font-size:14.5px">Erase everything stored on this device (records, vitals, images, checked items). This cannot be undone — export a backup first.</p>
+    <button class="btn ghost" id="wipeBtn" style="margin-top:10px;border-color:var(--crit);color:var(--crit)">Erase all data on this device</button>
+  </div>${footerHTML()}`;
+}
+
+async function collectBackup(){
+  const data={version:1, exported:new Date().toISOString(), local:{}, images:[]};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('phg_'))data.local[k]=localStorage.getItem(k);}
+  const meta=store.get('images_meta',[]);
+  for(const m of meta){const rec=await getImg(m.id);if(rec)data.images.push({meta:m,data:rec.data});}
+  return data;
+}
+async function restoreBackup(data){
+  if(!data||data.version!==1)throw new Error('This file is not a valid backup.');
+  Object.entries(data.local||{}).forEach(([k,v])=>{if(k.startsWith('phg_'))localStorage.setItem(k,v);});
+  for(const img of (data.images||[])){await putImg({id:img.meta.id,data:img.data});}
 }
 
 function viewDatabases(){
@@ -1098,6 +1238,80 @@ function wireView(id){
   });
   if(id==='images') wireImages();
   if(id==='vitals') wireVitals();
+  if(id==='backup') wireBackup();
+}
+
+function flashNote(el,msg,ok){if(!el)return;el.textContent=msg;el.style.color=ok===false?'var(--crit)':'var(--good)';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600);}
+
+function wireBackup(){
+  const note=document.getElementById('backupNote');
+  document.getElementById('exportBtn').addEventListener('click',async()=>{
+    const data=await collectBackup();
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='scott-prostate-guide-backup-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    flashNote(note,'Backup downloaded ✓');
+  });
+  document.getElementById('importInput').addEventListener('change',async e=>{
+    const f=e.target.files[0]; if(!f)return;
+    try{const data=JSON.parse(await f.text()); await restoreBackup(data);
+      flashNote(note,'Backup restored ✓ Reloading…');
+      setTimeout(()=>location.reload(),900);
+    }catch(err){flashNote(note,'Could not restore: '+err.message,false);}
+    e.target.value='';
+  });
+  document.getElementById('printBtn').addEventListener('click',printSummary);
+  document.getElementById('wipeBtn').addEventListener('click',async()=>{
+    if(!confirm('Erase ALL data on this device? This cannot be undone. Make sure you exported a backup first.'))return;
+    const keys=[]; for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('phg_'))keys.push(k);}
+    keys.forEach(k=>localStorage.removeItem(k));
+    for(const m of (store.get('images_meta',[])||[])){await delImg(m.id);}
+    flashNote(note,'All data erased. Reloading…'); setTimeout(()=>location.reload(),900);
+  });
+}
+
+function printSummary(){
+  const g=k=>store.get(k,'')||'—';
+  const name=store.get('patientName','Scott M.')||'Scott M.';
+  const checked=[];
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('phg_chk-')&&localStorage.getItem(k)==='true')checked.push(k);}
+  // map checked keys back to action text
+  const ALL={drugs:DRUGS,treatments:TREATMENTS,radiation:RADIATION,nutrition:NUTRITION,supplements:SUPPLEMENTS,surgery:SURGERY,genes:GENES,terms:TERMS,trials:TRIALS};
+  const qs=[];
+  checked.forEach(k=>{const m=k.match(/^phg_chk-(.+)-(\d+)$/);if(m&&ALL[m[1]]&&ALL[m[1]].actions[m[2]])qs.push(ALL[m[1]].actions[m[2]]);});
+  const log=store.get('psaLog',[]);
+  const esc2=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const row=(l,v)=>`<tr><th>${l}</th><td>${esc2(v)}</td></tr>`;
+  const html=`<!doctype html><html><head><meta charset="utf-8"><title>${esc2(name)} — Summary</title>
+  <style>
+   body{font:15px/1.5 -apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#152; max-width:760px;margin:32px auto;padding:0 20px}
+   h1{font:600 24px Georgia,serif;margin:0 0 2px} .sub{color:#666;font-size:13px;margin-bottom:18px}
+   h2{font:600 16px Georgia,serif;margin:22px 0 6px;border-bottom:2px solid #2f7d76;padding-bottom:3px;color:#215a55}
+   table{width:100%;border-collapse:collapse;margin:6px 0} th{text-align:left;width:170px;vertical-align:top;color:#555;font-weight:600;padding:4px 8px 4px 0}
+   td{padding:4px 0;white-space:pre-wrap} ul{margin:6px 0;padding-left:20px} li{margin:3px 0}
+   .note{font-size:11.5px;color:#888;margin-top:26px;border-top:1px solid #ddd;padding-top:10px}
+   @media print{body{margin:0}}
+  </style></head><body onload="window.print()">
+  <h1>${esc2(name)} — Health Summary</h1>
+  <div class="sub">Prepared ${new Date().toLocaleDateString()} · Educational personal record — not a medical document</div>
+  <h2>Diagnosis</h2><table>
+   ${row('Gleason score',g('gleason'))}${row('ISUP grade group',g('isup'))}${row('TNM stage',g('stage'))}${row('Diagnosis date',g('dxDate'))}
+  </table>
+  <div style="white-space:pre-wrap;background:#f5f7f6;padding:10px;border-radius:6px;font-size:13.5px">${esc2(store.get('dxSummary','(no diagnosis text entered)'))}</div>
+  <h2>Vitals</h2><table>
+   ${row('PSA (ng/mL)',g('vit_psa'))}${row('Blood pressure',g('vit_bp'))}${row('Heart rate',g('vit_hr'))}${row('Weight',g('vit_wt'))}${row('Temperature',g('vit_temp'))}${row('Oxygen (SpO₂)',g('vit_o2'))}
+  </table>
+  ${log.length?`<h2>PSA trend</h2><table>${log.map(e=>`<tr><th>${esc2(e.d||'—')}</th><td>PSA ${esc2(e.p||'—')} ${e.n?'· '+esc2(e.n):''}</td></tr>`).join('')}</table>`:''}
+  <h2>Health history</h2><table>
+   ${row('Conditions',g('conditions'))}${row('Medications',g('meds'))}${row('Allergies',g('allergies'))}${row('Family history',g('family'))}${row('Past surgeries',g('surg'))}${row('Care team',g('careteam'))}
+  </table>
+  ${qs.length?`<h2>Questions for the care team</h2><ul>${qs.map(q=>`<li>${esc2(q)}</li>`).join('')}</ul>`:''}
+  <div class="note">Generated by Scott M.'s Prostate Health Guide, a personal educational tool. This is not a medical record and not medical advice. Confirm all information with the licensed care team.</div>
+  </body></html>`;
+  const w=window.open('','_blank');
+  if(!w){alert('Please allow pop-ups to open the printable summary.');return;}
+  w.document.write(html); w.document.close();
 }
 
 /* ---- images via IndexedDB ---- */

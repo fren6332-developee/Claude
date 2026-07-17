@@ -22,6 +22,9 @@ of treatment — in plain, eighth-grade-level explanations with optional audio.
 - Biopsy & diagnosis — paste the pathology report; fields for Gleason, ISUP, TNM
 - Health history — conditions, medications, allergies, family history, care team
 - Vitals — PSA, blood pressure, heart rate, weight, plus a dated PSA trend log
+- Backup & print — export/restore all records as a JSON file (important, since data
+  lives only on the device), plus a one-page printable **appointment summary** that
+  gathers the diagnosis, vitals, history, and checked-off questions for the care team
 
 **Quick reference** — each item has a plain-language explanation, an audio "Listen"
 button (browser text-to-speech), and 10+ action items to bring to the care team:
@@ -29,6 +32,9 @@ button (browser text-to-speech), and 10+ action items to bring to the care team:
 - Surgery recovery · Genetic variations · Medical terms
 
 **Research & trust:**
+- Clinical trials — a real, dated snapshot of major recruiting Phase 3 prostate cancer
+  trials from ClinicalTrials.gov (with NCT links and plain-language explanations), plus
+  live pre-filtered search links to find current trials near the patient
 - Research databases — official links organized by category (SEER, TCGA, cBioPortal,
   PubMed, Cochrane, DrugBank, PharmGKB, ClinVar, ClinicalTrials.gov, TCIA, and more)
 - Scholarly resources — guideline bodies and systematic-review sources
