@@ -117,6 +117,12 @@ button{font-family:inherit}
 .ref-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
   padding:18px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px}
 .ref-card h3{font-size:19px}
+.art{height:116px;border-radius:12px;overflow:hidden;display:block;background:var(--surface-2);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.04)}
+.art svg{display:block;width:100%;height:100%}
+.hero-art{height:150px;border-radius:16px;overflow:hidden;margin:22px 0 2px;box-shadow:var(--shadow)}
+.hero-art svg{display:block;width:100%;height:100%}
+@media (max-width:520px){.hero-art{height:120px}}
 .ref-card .tag{font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
   font-weight:600}
 .ref-card p{margin:0;color:var(--ink);font-size:14.5px;line-height:1.5}
@@ -793,13 +799,113 @@ const NAV = [
    ============================================================ */
 const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+/* ============================================================
+   Illustrations — vivid inline SVG "flashcards" for each metaphor.
+   Self-contained (no external images), crisp in light & dark.
+   ============================================================ */
+const A=(bg,inner)=>({bg, svg:`<svg viewBox="0 0 240 120" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true">${inner}</svg>`});
+function artBox(a,cls){return a?`<div class="${cls}" style="background:${a.bg}">${a.svg}</div>`:`<div class="${cls}"></div>`;}
+const rays=(cx,cy,col)=>{let s='';for(let i=0;i<8;i++){const a=i*Math.PI/4,x1=cx+Math.cos(a)*30,y1=cy+Math.sin(a)*30,x2=cx+Math.cos(a)*40,y2=cy+Math.sin(a)*40;s+=`<path d="M${x1.toFixed(0)} ${y1.toFixed(0)} L${x2.toFixed(0)} ${y2.toFixed(0)}"/>`;}return `<g stroke="${col}" stroke-width="6" stroke-linecap="round">${s}</g>`;};
+const dnaHelix=()=>`<path d="M104 22 C86 42 122 52 104 72 C86 92 122 102 104 118" stroke="#7c6cf0" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M136 22 C154 42 118 52 136 72 C154 92 118 102 136 118" stroke="#4aa3f0" stroke-width="5" fill="none" stroke-linecap="round"/><g stroke="#46c46e" stroke-width="4" stroke-linecap="round"><path d="M110 34 h20"/><path d="M114 52 h12"/><path d="M110 72 h20"/><path d="M114 90 h12"/></g>`;
+const shieldPath=(col)=>`<path d="M120 24 l36 13 v22 c0 27 -19 42 -36 49 c-17 -7 -36 -22 -36 -49 v-22 z" fill="${col}"/>`;
+
+const ART = {
+  fire: A('#ffe9d6', `<rect x="86" y="88" width="68" height="12" rx="6" fill="#a6672e"/><rect x="78" y="99" width="84" height="12" rx="6" fill="#8a531f"/><path d="M120 26 C144 52 140 78 120 90 C100 78 96 52 120 26 Z" fill="#ff7a3d"/><path d="M120 44 C134 60 132 76 120 84 C108 76 106 60 120 44 Z" fill="#ffd23f"/>`),
+  socket: A('#e8e6ff', `<rect x="64" y="34" width="74" height="56" rx="14" fill="#7c6cf0"/><circle cx="88" cy="62" r="6.5" fill="#efeaff"/><circle cx="116" cy="62" r="6.5" fill="#efeaff"/><rect x="150" y="50" width="36" height="26" rx="9" fill="#ff6b6b"/><rect x="138" y="55" width="14" height="6" rx="3" fill="#ff6b6b"/><rect x="138" y="65" width="14" height="6" rx="3" fill="#ff6b6b"/>`),
+  factory: A('#dfeffe', `<rect x="70" y="62" width="100" height="40" rx="4" fill="#6aa0d8"/><rect x="150" y="42" width="14" height="24" fill="#4f82ba"/><path d="M70 62 l16 -12 v12 z M92 62 l16 -12 v12 z" fill="#4f82ba"/><circle cx="120" cy="46" r="15" fill="#fff"/><circle cx="120" cy="46" r="12" fill="none" stroke="#ff6b6b" stroke-width="4"/><path d="M111 55 l18 -18" stroke="#ff6b6b" stroke-width="4"/>`),
+  ropes: A('#d9f7f2', `<g stroke="#4aa3f0" stroke-width="7" stroke-linecap="round" fill="none"><path d="M92 28 V92"/><path d="M120 28 V92"/><path d="M148 28 V92"/></g><g stroke="#2f6fb0" stroke-width="3" stroke-linecap="round"><path d="M176 34 v22 M165 45 h22 M168 37 l16 16 M184 37 l-16 16"/></g>`),
+  repair: A('#ffe0e6', dnaHelix()+`<g transform="translate(158,64) rotate(35)"><rect x="0" y="-4" width="30" height="9" rx="4" fill="#5c6d6b"/><path d="M0 0 m-4 -9 a9 9 0 1 0 0 18 a5 5 0 0 1 0 -18" fill="#5c6d6b"/></g>`),
+  dna: A('#e9e6ff', dnaHelix()),
+  target: A('#e6ffe9', `<circle cx="116" cy="60" r="40" fill="#ff6b6b"/><circle cx="116" cy="60" r="28" fill="#fff"/><circle cx="116" cy="60" r="16" fill="#ff6b6b"/><circle cx="116" cy="60" r="6" fill="#fff"/><path d="M186 20 L128 54" stroke="#2fb8a8" stroke-width="6" stroke-linecap="round"/><path d="M120 58 l16 -8 -3 14 z" fill="#2fb8a8"/>`),
+  bone: A('#eef1f4', `<g transform="translate(120,60) rotate(40)"><rect x="-38" y="-7" width="76" height="14" rx="7" fill="#f4efe2" stroke="#cdbf9f" stroke-width="3"/><circle cx="-38" cy="-7" r="10" fill="#f4efe2" stroke="#cdbf9f" stroke-width="3"/><circle cx="-38" cy="7" r="10" fill="#f4efe2" stroke="#cdbf9f" stroke-width="3"/><circle cx="38" cy="-7" r="10" fill="#f4efe2" stroke="#cdbf9f" stroke-width="3"/><circle cx="38" cy="7" r="10" fill="#f4efe2" stroke="#cdbf9f" stroke-width="3"/></g><path d="M176 30 l4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4 z" fill="#ffd23f"/>`),
+  immune: A('#e6f0ff', shieldPath('#4aa3f0')+`<path d="M103 60 l12 13 23 -27" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`),
+  shield: A('#fff0dc', shieldPath('#ffb03a')+`<path d="M120 44 l6 13 14 1 -11 9 4 14 -13 -8 -13 8 4 -14 -11 -9 14 -1 z" fill="#fff"/>`),
+  flag: A('#ffe9ec', `<rect x="94" y="26" width="6" height="72" rx="3" fill="#8a531f"/><path d="M100 30 h56 l-11 11 11 11 h-56 z" fill="#fff" stroke="#d7ccbf" stroke-width="2"/><path d="M116 34 l28 22 M144 34 l-28 22" stroke="#ff6b6b" stroke-width="5" stroke-linecap="round"/>`),
+  brake: A('#ffe6e6', `<circle cx="120" cy="60" r="40" fill="#ff6b6b"/><circle cx="120" cy="60" r="40" fill="none" stroke="#fff" stroke-width="4"/><rect x="98" y="52" width="44" height="16" rx="4" fill="#fff"/>`),
+  checkpoint: A('#e6f0ff', `<rect x="72" y="86" width="96" height="10" rx="4" fill="#9fb0ab"/><rect x="78" y="46" width="10" height="42" rx="4" fill="#6c7ae0"/><rect x="86" y="52" width="76" height="12" rx="6" fill="#ffb03a"/><g stroke="#e0912a" stroke-width="3"><path d="M96 52 v12 M112 52 v12 M128 52 v12 M144 52 v12"/></g><circle cx="150" cy="40" r="15" fill="#46c46e"/><path d="M143 40 l5 6 9 -11" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`),
+  spellcheck: A('#e6f7ff', `<g stroke="#9fb0ab" stroke-width="5" stroke-linecap="round"><path d="M64 42 h72"/><path d="M64 58 h84"/><path d="M64 74 h56"/></g><rect x="112" y="50" width="30" height="12" rx="3" fill="#ff6b6b" opacity=".35"/><circle cx="150" cy="76" r="18" fill="none" stroke="#2fb8a8" stroke-width="6"/><path d="M163 89 l16 16" stroke="#2fb8a8" stroke-width="7" stroke-linecap="round"/>`),
+  beams: A('#ede7ff', `<g stroke="#a26cf0" stroke-width="7" stroke-linecap="round" opacity=".85"><path d="M120 10 V64"/><path d="M78 14 L114 64"/><path d="M162 14 L126 64"/></g><circle cx="120" cy="78" r="22" fill="#ff6b6b"/><circle cx="120" cy="78" r="11" fill="#fff"/><circle cx="120" cy="78" r="4" fill="#ff6b6b"/>`),
+  seeds: A('#efe7db', `<ellipse cx="120" cy="62" rx="42" ry="30" fill="#f6d9c0" stroke="#e0b48c" stroke-width="3"/><g fill="#ff6b6b"><rect x="100" y="50" width="12" height="5" rx="2.5" transform="rotate(20 106 52)"/><rect x="124" y="48" width="12" height="5" rx="2.5" transform="rotate(-15 130 50)"/><rect x="110" y="68" width="12" height="5" rx="2.5" transform="rotate(-25 116 70)"/><rect x="130" y="70" width="12" height="5" rx="2.5" transform="rotate(30 136 72)"/><rect x="118" y="60" width="12" height="5" rx="2.5"/></g>`),
+  plate: A('#eafbe6', `<circle cx="120" cy="62" r="42" fill="#fff" stroke="#dbe6d5" stroke-width="3"/><circle cx="106" cy="52" r="11" fill="#46c46e"/><circle cx="133" cy="50" r="9" fill="#ff6b6b"/><circle cx="121" cy="73" r="10" fill="#ffb03a"/><ellipse cx="138" cy="72" rx="13" ry="7" fill="#8fb8e0"/><circle cx="101" cy="70" r="6" fill="#2fb8a8"/>`),
+  tomato: A('#ffe6e0', `<circle cx="120" cy="66" r="30" fill="#ff5a4d"/><ellipse cx="110" cy="58" rx="7" ry="9" fill="#ff8577" opacity=".7"/><path d="M104 40 q16 -12 32 0 q-16 8 -32 0 z" fill="#46c46e"/><rect x="117" y="34" width="6" height="10" rx="3" fill="#46c46e"/>`),
+  broccoli: A('#e6f7e6', `<g fill="#3f9e57"><circle cx="106" cy="46" r="14"/><circle cx="126" cy="42" r="15"/><circle cx="138" cy="54" r="13"/><circle cx="116" cy="56" r="14"/></g><path d="M110 62 h22 l-4 34 h-14 z" fill="#a7d89a"/>`),
+  fish: A('#dff1ff', `<ellipse cx="112" cy="62" rx="34" ry="20" fill="#4aa3f0"/><path d="M146 62 l22 -15 v30 z" fill="#4aa3f0"/><circle cx="95" cy="56" r="4" fill="#fff"/><circle cx="95" cy="56" r="2" fill="#123"/><path d="M108 62 q10 -8 22 0 q-10 8 -22 0" fill="#7cc0f5"/>`),
+  sun: A('#fff3d6', rays(120,60,'#ffb03a')+`<circle cx="120" cy="60" r="26" fill="#ffd23f"/>`),
+  dumbbell: A('#e9edf2', `<rect x="98" y="53" width="44" height="12" rx="4" fill="#5c6d6b"/><rect x="80" y="42" width="14" height="34" rx="5" fill="#374a48"/><rect x="66" y="48" width="12" height="22" rx="4" fill="#5c6d6b"/><rect x="146" y="42" width="14" height="34" rx="5" fill="#374a48"/><rect x="162" y="48" width="12" height="22" rx="4" fill="#5c6d6b"/>`),
+  cup: A('#e6f4ea', `<path d="M84 50 h56 v20 a28 28 0 0 1 -56 0 z" fill="#2fb8a8"/><path d="M140 54 h12 a12 12 0 0 1 0 24 h-12" fill="none" stroke="#2fb8a8" stroke-width="6"/><path d="M100 40 q6 -8 0 -16 M116 40 q6 -8 0 -16 M132 40 q6 -8 0 -16" stroke="#9fd8c8" stroke-width="4" fill="none" stroke-linecap="round"/>`),
+  scale: A('#eef0f4', `<rect x="82" y="50" width="76" height="52" rx="10" fill="#7c8b89"/><rect x="94" y="40" width="52" height="16" rx="8" fill="#9aa8a6"/><circle cx="120" cy="76" r="18" fill="#fff"/><path d="M120 76 L131 66" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/><g stroke="#c7d1ce" stroke-width="2"><path d="M108 70 v-4 M120 66 v-4 M132 70 v-4"/></g>`),
+  vial: A('#ffe9ec', `<rect x="104" y="30" width="24" height="66" rx="10" fill="#fff" stroke="#e3b9bf" stroke-width="3"/><path d="M107 66 h18 v22 a9 9 0 0 1 -18 0 z" fill="#ff5a5a"/><rect x="100" y="26" width="32" height="8" rx="4" fill="#e3b9bf"/><path d="M150 44 c8 8 8 16 0 16 c-8 0 -8 -8 0 -16 z" fill="#ff5a5a"/>`),
+  microscope: A('#e6eeff', `<path d="M92 100 h58" stroke="#4f5bbf" stroke-width="8" stroke-linecap="round"/><path d="M124 96 C102 84 102 62 118 52" stroke="#6c7ae0" stroke-width="9" fill="none" stroke-linecap="round"/><rect x="110" y="32" width="18" height="26" rx="7" fill="#4f5bbf" transform="rotate(18 119 45)"/><rect x="100" y="80" width="44" height="8" rx="3" fill="#6c7ae0"/><circle cx="122" cy="78" r="4" fill="#ff6b6b"/>`),
+  scan: A('#e6f7f5', `<rect x="70" y="26" width="100" height="68" rx="10" fill="#123a45"/><circle cx="118" cy="48" r="9" fill="#2fb8a8"/><rect x="108" y="58" width="20" height="28" rx="9" fill="#2fb8a8"/><circle cx="126" cy="70" r="6" fill="#ffd23f"/><circle cx="126" cy="70" r="12" fill="#ffd23f" opacity=".35"/>`),
+  needle: A('#eef1f4', `<g transform="rotate(35 120 60)"><rect x="86" y="52" width="54" height="16" rx="6" fill="#cfe0dd"/><rect x="90" y="55" width="30" height="10" rx="3" fill="#8fb8e0"/><rect x="140" y="57" width="26" height="6" rx="3" fill="#9fb0ab"/><path d="M166 60 h14" stroke="#9fb0ab" stroke-width="3"/><rect x="80" y="49" width="8" height="22" rx="3" fill="#9fb0ab"/></g>`),
+  map: A('#e9f5e6', `<path d="M78 40 l28 -10 28 10 28 -10 v50 l-28 10 -28 -10 -28 10 z" fill="#bfe3b5"/><path d="M106 30 v50 M134 40 v50" stroke="#8bc47c" stroke-width="3"/><path d="M120 44 c-9 0 -16 7 -16 16 c0 12 16 26 16 26 c0 0 16 -14 16 -26 c0 -9 -7 -16 -16 -16 z" fill="#ff6b6b"/><circle cx="120" cy="60" r="6" fill="#fff"/>`),
+  plant: A('#e6f5e9', `<rect x="72" y="92" width="96" height="10" rx="4" fill="#c9a06a"/><path d="M72 92 q24 -6 48 0 q24 6 48 0" fill="none" stroke="#b08a54" stroke-width="3"/><path d="M120 92 V52" stroke="#3f9e57" stroke-width="5" stroke-linecap="round"/><path d="M120 66 q-20 -6 -26 -22 q22 0 26 18 z" fill="#46c46e"/><path d="M120 58 q18 -6 24 -20 q-20 0 -24 16 z" fill="#5cd07e"/>`),
+  bell: A('#fff2d6', `<path d="M120 32 c-18 0 -28 14 -28 34 c0 14 -8 18 -8 24 h72 c0 -6 -8 -10 -8 -24 c0 -20 -10 -34 -28 -34 z" fill="#ffb03a"/><circle cx="120" cy="30" r="6" fill="#e0912a"/><path d="M112 94 a8 8 0 0 0 16 0 z" fill="#e0912a"/><path d="M150 44 l10 -8 M156 60 l12 -2" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/>`),
+  valley: A('#e6f0ff', `<path d="M64 40 L100 84 L140 58 L176 30" fill="none" stroke="#4aa3f0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="100" cy="84" r="7" fill="#ff6b6b"/><path d="M100 84 v12" stroke="#ff6b6b" stroke-width="3" stroke-dasharray="3 3"/>`),
+  cake: A('#ffe9f0', `<rect x="82" y="60" width="76" height="34" rx="6" fill="#ffd7e6"/><path d="M82 64 q19 12 38 0 q19 -12 38 0 v-4 q-19 12 -38 0 q-19 -12 -38 0 z" fill="#fff"/><rect x="150" y="60" width="8" height="34" fill="#ff6b6b" opacity=".55"/><circle cx="120" cy="50" r="5" fill="#ff5a8a"/><rect x="118" y="50" width="4" height="12" fill="#ff8fab"/>`),
+  eye: A('#e6f2ff', `<path d="M64 60 C88 34 152 34 176 60 C152 86 88 86 64 60 Z" fill="#fff" stroke="#4aa3f0" stroke-width="4"/><circle cx="120" cy="60" r="16" fill="#4aa3f0"/><circle cx="120" cy="60" r="7" fill="#123"/><circle cx="125" cy="55" r="3" fill="#fff"/>`),
+  scalpel: A('#eef1f4', `<g transform="rotate(35 120 60)"><path d="M92 54 l40 -6 8 4 -40 12 z" fill="#cfe0dd" stroke="#9fb0ab" stroke-width="2"/><rect x="86" y="54" width="10" height="10" rx="2" fill="#5c6d6b"/></g><path d="M150 40 v18 M141 49 h18" stroke="#ff6b6b" stroke-width="5" stroke-linecap="round"/>`),
+  recovery: A('#e6f5ee', `<path d="M120 96 C86 74 74 56 74 42 a20 20 0 0 1 46 -6 a20 20 0 0 1 46 6 c0 14 -12 32 -46 54 z" fill="#ff8fab"/><path d="M120 50 v22 M109 61 h22" stroke="#fff" stroke-width="6" stroke-linecap="round"/>`),
+  book: A('#fef0dc', `<path d="M120 40 C104 32 84 32 76 38 V92 C84 86 104 86 120 94 C136 86 156 86 164 92 V38 C156 32 136 32 120 40 Z" fill="#ffb03a"/><path d="M120 40 V94" stroke="#e0912a" stroke-width="3"/><g stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"><path d="M86 50 h22 M86 62 h22 M132 50 h22 M132 62 h22"/></g>`),
+  flask: A('#e9e6ff', `<path d="M108 30 h24 v20 l20 40 a10 10 0 0 1 -9 15 h-46 a10 10 0 0 1 -9 -15 l20 -40 z" fill="#d7d2f7" stroke="#7c6cf0" stroke-width="3"/><path d="M95 86 h50 l-9 -18 a38 38 0 0 1 -32 0 z" fill="#2fb8a8"/><circle cx="116" cy="80" r="3" fill="#fff"/><circle cx="128" cy="74" r="2.5" fill="#fff"/><rect x="104" y="24" width="32" height="8" rx="4" fill="#7c6cf0"/>`),
+  pill: A('#e9ecff', `<g transform="rotate(35 120 60)"><rect x="86" y="47" width="68" height="26" rx="13" fill="#ff6b6b"/><path d="M120 47 h21 a13 13 0 0 1 0 26 h-21 z" fill="#ffd23f"/><line x1="120" y1="47" x2="120" y2="73" stroke="#fff" stroke-width="2" opacity=".6"/></g>`),
+  bottle: A('#e6f4f0', `<rect x="98" y="44" width="44" height="58" rx="8" fill="#3fb0a0"/><rect x="104" y="32" width="32" height="16" rx="4" fill="#2f8a7d"/><rect x="104" y="60" width="32" height="34" rx="4" fill="#fff"/><path d="M120 66 v20 M110 76 h20" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/>`),
+  stethoscope: A('#e6f0ff', `<path d="M84 34 v22 a18 18 0 0 0 36 0 v-6" fill="none" stroke="#4aa3f0" stroke-width="6" stroke-linecap="round"/><circle cx="84" cy="32" r="5" fill="#4aa3f0"/><circle cx="120" cy="32" r="5" fill="#4aa3f0"/><path d="M84 34 v-4 M120 34 v-4" stroke="#4aa3f0" stroke-width="6" stroke-linecap="round"/><path d="M120 78 v18 a16 16 0 0 0 32 0 v-8" fill="none" stroke="#6c7ae0" stroke-width="6"/><circle cx="152" cy="72" r="12" fill="#ff6b6b"/>`),
+  clipboard: A('#eaf1ff', `<rect x="86" y="34" width="68" height="80" rx="8" fill="#fff" stroke="#cdd8e6" stroke-width="3"/><rect x="106" y="28" width="28" height="14" rx="5" fill="#6c7ae0"/><g stroke="#9fb0ab" stroke-width="4" stroke-linecap="round"><path d="M98 58 h44 M98 74 h44 M98 90 h30"/></g><circle cx="92" cy="58" r="3" fill="#46c46e"/><circle cx="92" cy="74" r="3" fill="#46c46e"/>`),
+};
+
+/* Section default illustration + hero */
+const DEFAULT_ART={drugs:'pill',treatments:'stethoscope',radiation:'beams',nutrition:'plate',
+  supplements:'bottle',surgery:'recovery',genes:'dna',terms:'book',trials:'flask'};
+
+/* Per-item illustration overrides, keyed by exact item name */
+const ITEM_ART={
+  'Leuprolide (Lupron)':'fire','Degarelix (Firmagon)':'fire','Bicalutamide (Casodex)':'socket',
+  'Enzalutamide (Xtandi)':'socket','Apalutamide (Erleada)':'socket','Darolutamide (Nubeqa)':'socket',
+  'Abiraterone (Zytiga)':'factory','Docetaxel (Taxotere)':'ropes','Cabazitaxel (Jevtana)':'ropes',
+  'Abiraterone + prednisone':'factory','Olaparib (Lynparza)':'repair','Rucaparib (Rubraca)':'repair',
+  'Sipuleucel-T (Provenge)':'immune','Pembrolizumab (Keytruda)':'flag','Radium-223 (Xofigo)':'bone',
+  'Lutetium-177 PSMA (Pluvicto)':'target',
+  'Active surveillance':'eye','Watchful waiting':'eye','Radical prostatectomy':'scalpel',
+  'External beam radiation (EBRT)':'beams','Brachytherapy':'seeds','Androgen deprivation therapy (ADT)':'fire',
+  'ADT + androgen-receptor drug (ARPI)':'socket','Chemotherapy + ADT':'ropes','PARP inhibitor therapy':'repair',
+  'Immunotherapy':'immune','Radioligand therapy (PSMA)':'target','Focal therapy (HIFU / cryotherapy)':'target',
+  'Clinical trials':'flask',
+  'IMRT (intensity-modulated)':'beams','VMAT (volumetric arc)':'beams','SBRT (stereotactic body RT)':'beams',
+  'Proton therapy':'beams','LDR brachytherapy (seeds)':'seeds','HDR brachytherapy':'seeds',
+  'PSMA-guided radiotherapy':'target','Adjuvant radiation':'beams','Salvage radiation':'beams',
+  'Whole-pelvic radiation':'beams','Hypofractionation':'beams','Radiation + ADT':'fire',
+  'Mediterranean diet':'plate','Ketogenic / low-carb':'plate','Lycopene (tomatoes)':'tomato',
+  'Cruciferous vegetables':'broccoli','Omega-3 fats (fish)':'fish','Vitamin D':'sun',
+  'Calcium (moderation)':'bone','Selenium (caution)':'bottle','Weight & obesity':'scale','Exercise':'dumbbell',
+  'Green tea':'cup','Limit processed & red meat':'plate',
+  'Vitamin D3':'sun','Lycopene':'tomato','Omega-3 fish oil':'fish','Green tea extract':'cup',
+  'Selenium':'bottle','Vitamin E':'bottle','Pomegranate':'tomato','Curcumin (turmeric)':'bottle',
+  'Modified citrus pectin':'bottle','Soy isoflavones':'plate','Zinc':'bottle','Multivitamin':'bottle',
+  'Catheter care':'recovery','Pelvic-floor exercises (Kegels)':'dumbbell','Continence timeline':'recovery',
+  'Erectile rehabilitation':'recovery','Activity & lifting limits':'dumbbell','Incision / wound care':'recovery',
+  'Blood-clot prevention':'recovery','Diet, hydration & constipation':'plate','PSA after surgery':'vial',
+  'Follow-up appointments':'clipboard','Emotional & mental health':'recovery','When to call the doctor':'bell',
+  'BRCA2':'repair','BRCA1':'repair','ATM':'repair','CHEK2':'checkpoint','HOXB13':'dna','PALB2':'repair',
+  'TP53':'shield','PTEN':'brake','CDK12':'repair','MSH2':'spellcheck','MSH6':'spellcheck','MLH1':'spellcheck',
+  'PSA (prostate-specific antigen)':'vial','Gleason score':'microscope','ISUP grade group':'microscope',
+  'TNM stage':'map','Biopsy':'needle','PI-RADS':'scan','PSMA-PET scan':'scan','ADT (androgen deprivation)':'fire',
+  'Castration-resistant':'plant','Metastasis':'seeds','Biochemical recurrence':'bell','PSA nadir':'valley',
+  'Positive margin':'cake','Androgen receptor':'socket',
+  'STAMPEDE2':'flask','EvoPAR-Prostate02':'repair','PSMAcTION':'target','High Five Trial':'beams',
+  'ProBio':'dna','REVELUTION-2':'pill','SPA Trial':'beams','MUSIC-Screen':'scan',
+};
+function artFor(name,sectionKey){return ART[ITEM_ART[name]]||ART[DEFAULT_ART[sectionKey]]||'';}
+
 function refSection(key, data){
-  let html = `<p class="lead">${esc(data.intro)}</p>`;
-  html += `<div class="callout info section-gap">Tap <strong>Listen</strong> on any card to hear a plain-language explanation read aloud (uses your device's built-in voice). Explanations use everyday comparisons at about an eighth-grade reading level.</div>`;
+  let html = `${artBox(ART[DEFAULT_ART[key]],'hero-art')}`;
+  html += `<p class="lead">${esc(data.intro)}</p>`;
+  html += `<div class="callout info section-gap">Each card has a <strong>picture</strong> of its idea and a <strong>Listen</strong> button that reads a plain-language explanation aloud (your device's built-in voice). Explanations use everyday comparisons at about an eighth-grade reading level.</div>`;
   html += `<div class="grid cols-2 section-gap">`;
   data.items.forEach((it,i)=>{
     const id = `${key}-${i}`;
     html += `<article class="ref-card">
+      ${artBox(artFor(it.name,key),'art')}
       <span class="tag">${esc(it.tag)}</span>
       <h3>${esc(it.name)}</h3>
       <p>${esc(it.text)}</p>
@@ -943,6 +1049,7 @@ function viewHome(){
   return `<div class="eyebrow">Personal companion</div>
   <h1 class="page-h">Welcome — this is ${esc(name)}'s guide</h1>
   <p class="lead">A calm, private place to keep records in one spot and to understand the words, drugs, and choices along the way. Everything you type or upload stays on this device only.</p>
+  ${artBox(ART.stethoscope,'hero-art')}
 
   <div class="callout warn section-gap"><strong>Please read:</strong> This app is an educational and organizing tool made with love — not a medical device, and not medical advice. It cannot diagnose or recommend treatment. Every decision belongs with ${esc(name)} and his licensed care team.</div>
 
@@ -981,6 +1088,7 @@ function viewImages(){
   return `<div class="eyebrow">Scott's records</div>
   <h1 class="page-h">Imaging &amp; scans</h1>
   <p class="lead">Keep MRI, X-ray, PET/PSMA, CT, and bone-scan pictures together with short notes. Files are stored only in this browser on this device — nothing is uploaded anywhere.</p>
+  ${artBox(ART.scan,'hero-art')}
   <div class="callout warn section-gap"><strong>Privacy:</strong> These are sensitive medical images. They stay on this device. Keep original copies with the medical team's records too, since clearing browser data will remove them here.</div>
   <div class="card section-gap">
     <div class="field"><label for="imgNote">Note for the next image (e.g. "PSMA-PET, June 2026, right pelvic node")</label>
@@ -997,6 +1105,7 @@ function viewBiopsy(){
   return `<div class="eyebrow">Scott's records</div>
   <h1 class="page-h">Biopsy &amp; diagnosis</h1>
   <p class="lead">Copy and paste the pathology report or the doctor's written diagnosis here so it's always at hand. Not sure what a word means? Check <a href="#terms">Medical terms</a>.</p>
+  ${artBox(ART.microscope,'hero-art')}
   <div class="card section-gap">
     <div class="field"><label for="patientName">Patient name</label><input id="patientName" data-save="patientName" placeholder="Scott M."></div>
     <div class="row">
@@ -1018,6 +1127,7 @@ function viewHistory(){
   return `<div class="eyebrow">Scott's records</div>
   <h1 class="page-h">Health history</h1>
   <p class="lead">A place for the background a care team asks about again and again — so it's ready in one paste.</p>
+  ${artBox(ART.clipboard,'hero-art')}
   <div class="card section-gap">
     <div class="field"><label for="conditions">Other medical conditions</label><textarea id="conditions" data-save="conditions" placeholder="Diabetes, heart disease, blood pressure, etc."></textarea></div>
     <div class="field"><label for="meds">Current medications</label><textarea id="meds" data-save="meds" placeholder="Name, dose, and how often — include supplements"></textarea></div>
@@ -1035,6 +1145,7 @@ function viewVitals(){
   return `<div class="eyebrow">Scott's records</div>
   <h1 class="page-h">Vitals</h1>
   <p class="lead">Track the numbers that come up most. Enter what you have; leave the rest blank. For trends over time, note the date in the log below.</p>
+  ${artBox(ART.vial,'hero-art')}
   <div class="card section-gap">
     <div class="vitgrid">
       <div class="field"><label for="vit_psa">PSA (ng/mL)</label><input id="vit_psa" data-save="vit_psa" inputmode="decimal"></div>
@@ -1063,12 +1174,14 @@ function viewTrials(){
   const liveBase="https://clinicaltrials.gov/search?cond=Prostate%20Cancer&aggFilters=status:rec";
   let html=`<div class="eyebrow">Research &amp; trust</div>
   <h1 class="page-h">Clinical trials</h1>
+  ${artBox(ART.flask,'hero-art')}
   <p class="lead">Studies offering tomorrow's treatments today, under close medical supervision. Below is a real snapshot of major recruiting trials pulled from ClinicalTrials.gov, kept here as concrete examples to raise with the care team.</p>
   <div class="callout warn section-gap"><strong>Important:</strong> This is not a recommendation or an eligibility check. Trial rules are detailed and change often. Only Scott's care team and the trial coordinators can say whether a study fits him. Snapshot captured <strong>${esc(TRIALS.captured)}</strong> — always confirm the current list with the live links.</div>
   <div class="grid cols-2 section-gap">`;
   TRIALS.items.forEach((t,i)=>{
     const id=`trials-${i}`;
     html+=`<article class="ref-card">
+      ${artBox(artFor(t.name,'trials'),'art')}
       <span class="tag">${esc(t.phase)} · ${esc(t.focus)}</span>
       <h3>${esc(t.name)}</h3>
       <p>${esc(t.text)}</p>

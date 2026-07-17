@@ -37,10 +37,17 @@ auto-generated, and never a recommendation. It updates live as the real report i
   lives only on the device), plus a one-page printable **appointment summary** that
   gathers the diagnosis, vitals, history, and checked-off questions for the care team
 
-**Quick reference** — each item has a plain-language explanation, an audio "Listen"
-button (browser text-to-speech), and 10+ action items to bring to the care team:
+**Quick reference** — each item has a **colorful illustration** of its idea, a
+plain-language explanation, an audio "Listen" button (browser text-to-speech), and
+10+ action items to bring to the care team:
 - Medications · Treatment plans · Radiation plans · Nutrition · Supplements
 - Surgery recovery · Genetic variations · Medical terms
+
+The pictures are hand-drawn inline SVG "flashcards" that depict each metaphor (a flame
+losing its fuel for hormone therapy, a capped socket for receptor blockers, a DNA-repair
+crew with a wrench for BRCA/PARP, a homing target for PSMA drugs, a tomato for lycopene,
+sunshine for vitamin D, …). They are self-contained — no external images — and render
+crisply in both light and dark themes with zero load time.
 
 **Research & trust:**
 - Clinical trials — a real, dated snapshot of major recruiting Phase 3 prostate cancer
