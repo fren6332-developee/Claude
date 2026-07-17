@@ -244,6 +244,33 @@ details.actions-d[open]>summary .chev{transform:rotate(90deg)}
 .qrbox{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .qrbox img{width:150px;height:150px;border-radius:12px;border:1px solid var(--border);background:#fff;padding:8px}
 
+/* First-run acknowledgement gate */
+.ack{position:fixed;inset:0;z-index:200;background:var(--paper);display:none;
+  align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+.ack.show{display:flex}
+@media (prefers-reduced-motion:no-preference){.ack.show .ack-card{animation:ackIn .35s ease}}
+@keyframes ackIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.ack-card{max-width:520px;width:100%;background:var(--surface);border:1px solid var(--border);
+  border-radius:18px;box-shadow:var(--shadow);padding:32px 30px;text-align:center;margin:auto}
+.ack-mark{width:56px;height:56px;border-radius:15px;margin:0 auto 16px;
+  background:linear-gradient(150deg,var(--primary),var(--primary-ink));display:grid;place-items:center;
+  color:#fff;font-family:var(--serif);font-size:26px;box-shadow:var(--shadow)}
+.ack h2{font-size:25px;margin-bottom:4px}
+.ack-sub{color:var(--muted);font-size:13.5px;margin-bottom:14px}
+.ack-points{text-align:left;display:flex;flex-direction:column;gap:13px;margin:18px 0}
+.ack-point{display:flex;gap:12px;font-size:14.5px;color:var(--ink);line-height:1.45}
+.ack-point .i{flex:0 0 auto;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+  font-weight:700;font-size:15px;margin-top:1px}
+.ack-check{display:flex;gap:11px;align-items:flex-start;text-align:left;background:var(--surface-2);
+  border:1px solid var(--border-strong);border-radius:12px;padding:14px;margin:6px 0 16px;cursor:pointer;
+  font-size:14px;line-height:1.45}
+.ack-check input{margin-top:2px;width:18px;height:18px;accent-color:var(--primary);flex:0 0 auto}
+.ack-btn{width:100%;border:none;border-radius:11px;padding:13px;font-size:15px;font-weight:700;
+  background:var(--primary);color:#fff;cursor:pointer;transition:.15s}
+.ack-btn:not(:disabled):hover{background:var(--primary-ink)}
+.ack-btn:disabled{opacity:.45;cursor:not-allowed}
+.ack-fine{font-size:12px;color:var(--faint);margin-top:14px}
+
 @media (max-width:860px){
   .app{grid-template-columns:1fr}
   .topbar{display:flex}
@@ -258,6 +285,24 @@ details.actions-d[open]>summary .chev{transform:rotate(90deg)}
 </head>
 <body>
 <div class="scrim" id="scrim"></div>
+
+<!-- First-run acknowledgement gate -->
+<div class="ack" id="ackScreen" role="dialog" aria-modal="true" aria-labelledby="ackTitle">
+  <div class="ack-card">
+    <div class="ack-mark">S</div>
+    <h2 id="ackTitle">Before you start</h2>
+    <div class="ack-sub">Scott M.'s Prostate Health Guide</div>
+    <div class="ack-points">
+      <div class="ack-point"><span class="i" style="background:var(--warn-soft);color:var(--warn)">!</span><div><strong>This is not medical advice.</strong> It's an educational and organizing tool. It cannot diagnose or recommend treatment, and it does not replace Scott's doctors.</div></div>
+      <div class="ack-point"><span class="i" style="background:var(--primary-soft);color:var(--primary-ink)">♥</span><div><strong>Always follow the care team.</strong> Never delay, stop, or change prescribed care because of anything you read here.</div></div>
+      <div class="ack-point"><span class="i" style="background:var(--good-soft);color:var(--good)">⌂</span><div><strong>Private to this device.</strong> What you enter is stored only here — no account, no cloud, no tracking.</div></div>
+      <div class="ack-point"><span class="i" style="background:var(--crit-soft);color:var(--crit)">+</span><div><strong>In an emergency</strong>, call your local emergency number (911 in the U.S.) right away.</div></div>
+    </div>
+    <label class="ack-check" for="ackCheck"><input type="checkbox" id="ackCheck"><span>I understand this app is for education and personal organization only, and does not provide medical advice.</span></label>
+    <button class="ack-btn" id="ackBtn" disabled>Open the guide</button>
+    <div class="ack-fine">You can reopen this anytime from the <strong>Disclaimers</strong> section.</div>
+  </div>
+</div>
 <div class="app">
   <!-- Sidebar -->
   <nav class="sidebar" id="sidebar" aria-label="Main navigation">
@@ -1366,6 +1411,7 @@ function viewDisclaimer(){
     <p style="margin-top:12px"><strong style="font-family:var(--serif)">Emergencies.</strong> For any medical emergency, call local emergency services (911 in the U.S.) immediately.</p>
   </div>
   <div class="callout warn section-gap">Made with care for Scott and his family. Please use it as a companion to — never a replacement for — his medical team.</div>
+  <div class="section-gap"><button class="btn ghost" id="reAckBtn">Show the welcome acknowledgement again</button></div>
   ${footerHTML()}`;
 }
 
@@ -1451,6 +1497,7 @@ function wireView(id){
   if(id==='images') wireImages();
   if(id==='vitals') wireVitals();
   if(id==='backup') wireBackup();
+  if(id==='disclaimer'){const rb=document.getElementById('reAckBtn');if(rb)rb.addEventListener('click',showAck);}
 }
 
 function flashNote(el,msg,ok){if(!el)return;el.textContent=msg;el.style.color=ok===false?'var(--crit)':'var(--good)';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600);}
@@ -1632,10 +1679,31 @@ function closeMenu(){sidebar.classList.remove('open');scrim.classList.remove('sh
 document.getElementById('hamb').addEventListener('click',()=>{sidebar.classList.toggle('open');scrim.classList.toggle('show');});
 scrim.addEventListener('click',closeMenu);
 
+/* ---- first-run acknowledgement ---- */
+const ACK_KEY='ack_v1';
+const ackScreen=document.getElementById('ackScreen');
+function showAck(){
+  const cb=document.getElementById('ackCheck'), bt=document.getElementById('ackBtn');
+  cb.checked=false; bt.disabled=true;
+  ackScreen.classList.add('show'); document.body.style.overflow='hidden';
+  setTimeout(()=>cb.focus(),60);
+}
+function initAck(){
+  const cb=document.getElementById('ackCheck'), bt=document.getElementById('ackBtn');
+  cb.addEventListener('change',()=>{bt.disabled=!cb.checked;});
+  bt.addEventListener('click',()=>{
+    if(!cb.checked)return;
+    store.set(ACK_KEY,true);
+    ackScreen.classList.remove('show'); document.body.style.overflow='';
+  });
+  if(!store.get(ACK_KEY,false)) showAck();
+}
+
 /* ---- boot ---- */
 if('speechSynthesis' in window){window.speechSynthesis.onvoiceschanged=()=>{};window.speechSynthesis.getVoices();}
 window.addEventListener('hashchange',render);
 render();
+initAck();
 </script>
 </body>
 </html>

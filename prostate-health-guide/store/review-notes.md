@@ -29,6 +29,7 @@ Read it before you submit.
 - ✅ Content is general and educational; no dosing calculators, no diagnostic output.
 - ✅ Every reference section defers to the care team and lists "questions to ask."
 - ✅ Persistent disclaimer on the home screen and a dedicated Disclaimers screen.
+- ✅ First-run acknowledgement gate that must be accepted before use.
 - ⚠️ **You must complete a clinical review** (see below) so claims are accurate and
   current. Keep a dated record of who reviewed the content.
 
@@ -64,9 +65,10 @@ Read it before you submit.
    URLs and put those URLs in the listing.
 5. **Own the bundle ID and accounts.** Enroll in the Apple Developer Program, set your
    Team and a bundle ID you control in Xcode.
-6. **Add a first-run acknowledgement (recommended).** A one-time "I understand this is
-   not medical advice" screen strengthens the 1.4.1 position. (Not yet built — optional
-   enhancement.)
+6. **First-run acknowledgement — done.** A one-time "I understand this is not medical
+   advice" gate appears on first launch and must be accepted (checkbox + button) before
+   the app can be used; it can be reopened anytime from the Disclaimers section. This
+   strengthens the 1.4.1 position.
 
 ## Honest status
 
