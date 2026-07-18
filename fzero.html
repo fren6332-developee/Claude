@@ -927,22 +927,31 @@ function buildTrack(theme){
   // close the loop back to y=0
   addRoad(20,0,0,0, -lastY);
 
+  // checkered start/finish band a few segments ahead of the grid, so it's
+  // visible on the road right as the race begins (classic F-Zero start line)
+  for (let i=4; i<=6; i++){ if (segments[i]) segments[i].startLine = true; }
+
   return { segments, length: segments.length*SEG_LEN };
 }
 
 const TRACKS = {
+  // Palettes tuned to look like classic F-Zero SNES tracks: gradient pixel
+  // skies, a horizon silhouette band, dithered colored shoulders, bright
+  // two-tone edge bumper rails, and a black/white checkered start band.
   city: {
+    // "Port Town / White Land" orange-sunset city (ref: IMG_4043)
     name:"CITY / HIGHWAY", song:"rock",
-    sky:["#20123f","#4a2a6b","#8a4a8f"], road:{light:"#5c5c68", dark:"#525260"},
-    rumbleColors:["#c8283c","#e9e9e9"], grass:{light:"#274a2e", dark:"#213f27"},
-    laneColor:"#e9e9e9", rampColor:"#f2b23c",
+    sky:["#2a0d3a","#c0392b","#f6a13c"], road:{light:"#6a6a76", dark:"#5c5c68"},
+    rumbleColors:["#2ecc55","#eafff0"], grass:{light:"#3a2647", dark:"#312040"},
+    laneColor:"#f0f0f0", rampColor:"#f2b23c", bumperStyle:"rail",
     build: () => buildTrack("city")
   },
   desert: {
+    // warm dusk desert with orange flame boost bumpers (ref: BIG BLUE flames)
     name:"DESERT DRIFT", song:"soft",
-    sky:["#3a1a3d","#a1436b","#e8a24d"], road:{light:"#8a6a4a", dark:"#7c5f42"},
-    rumbleColors:["#e0d0a0","#c8a468"], grass:{light:"#b9843f", dark:"#a9773a"},
-    laneColor:"#f2e6c8", rampColor:"#f2b23c",
+    sky:["#3a163a","#c8564a","#f0b25a"], road:{light:"#9a7a52", dark:"#8a6c46"},
+    rumbleColors:["#ff7b1a","#ffd24a"], grass:{light:"#c08a44", dark:"#a9773a"},
+    laneColor:"#f5ecd0", rampColor:"#f2b23c", bumperStyle:"flame",
     build: () => buildTrack("desert")
   }
 };
@@ -1002,41 +1011,62 @@ function drawBackground(g, themeDef, z, width, height){
   grad.addColorStop(1, themeDef.sky[2]);
   g.fillStyle = grad;
   g.fillRect(0,0,width,height*0.62);
-  // sun/moon
-  g.fillStyle = "rgba(255,235,190,0.9)";
-  g.beginPath(); g.arc(width*0.78, height*0.28, 20, 0, Math.PI*2); g.fill();
+  // big low sunset sun, sitting just above the horizon
+  g.fillStyle = "rgba(255,224,150,0.95)";
+  g.beginPath(); g.arc(width*0.72, height*0.5, 34, 0, Math.PI*2); g.fill();
+  g.fillStyle = "rgba(255,244,210,0.9)";
+  g.beginPath(); g.arc(width*0.72, height*0.5, 24, 0, Math.PI*2); g.fill();
 
+  const horizon = height*0.62;
   const parallax = (z*0.00008) % 1;
   if (themeDef === TRACKS.city){
-    // distant skyline silhouettes, parallax scrolled
-    g.fillStyle = "#170c30";
-    for (let i=-1;i<8;i++){
-      const bx = ((i - parallax) * 60) % (width+120) - 60;
-      const bh = 30 + ((i*53)%40);
-      g.fillRect(bx, height*0.62-bh, 40, bh);
-      g.fillStyle = "#2c1a52";
-      for (let wy=0; wy<bh-6; wy+=10){
-        for (let wx=4; wx<34; wx+=8){
-          if ((wx+wy)%3!==0) g.fillRect(bx+wx, height*0.62-bh+6+wy, 3, 4);
+    // dense city skyline silhouette against the sunset (ref: IMG_4043)
+    for (let layer=0; layer<2; layer++){
+      const depth = layer===0 ? 0.5 : 1;           // back layer scrolls slower
+      const tone = layer===0 ? "#3a1330" : "#150a20";
+      const winTone = layer===0 ? "#7a2a40" : "#f6a13c";
+      const step = layer===0 ? 34 : 26;
+      for (let i=-1;i<Math.ceil(width/step)+2;i++){
+        const bx = ((i - parallax*depth) * step) % (width+step*2) - step;
+        const bh = (layer===0?18:26) + ((i*37+layer*53)%(layer===0?26:44));
+        g.fillStyle = tone;
+        g.fillRect(bx, horizon-bh, step-4, bh);
+        // lit windows
+        g.fillStyle = winTone;
+        for (let wy=4; wy<bh-3; wy+=7){
+          for (let wx=3; wx<step-7; wx+=6){
+            if ((wx*3+wy+i)%4!==0) g.fillRect(bx+wx, horizon-bh+wy, 2, 3);
+          }
         }
       }
-      g.fillStyle = "#170c30";
     }
   } else {
-    // desert mesas parallax
-    g.fillStyle = "#5c2a4a";
-    for (let i=-1;i<6;i++){
-      const bx = ((i - parallax*0.6) * 90) % (width+160) - 80;
-      g.beginPath();
-      g.moveTo(bx, height*0.62);
-      g.lineTo(bx+25, height*0.62-38);
-      g.lineTo(bx+55, height*0.62-38);
-      g.lineTo(bx+80, height*0.62);
-      g.closePath(); g.fill();
+    // layered desert mesa silhouettes at dusk
+    const tones = ["#7a2f50","#5c2444"];
+    for (let layer=0; layer<2; layer++){
+      g.fillStyle = tones[layer];
+      const depth = layer===0 ? 0.45 : 0.8;
+      const span = layer===0 ? 120 : 90;
+      const mh = layer===0 ? 30 : 44;
+      for (let i=-1;i<Math.ceil(width/span)+2;i++){
+        const bx = ((i - parallax*depth) * span) % (width+span*2) - span;
+        g.beginPath();
+        g.moveTo(bx, horizon);
+        g.lineTo(bx+span*0.28, horizon-mh);
+        g.lineTo(bx+span*0.62, horizon-mh);
+        g.lineTo(bx+span*0.9, horizon);
+        g.closePath(); g.fill();
+      }
     }
   }
-  g.fillStyle = "rgba(0,0,0,0.15)";
-  g.fillRect(0,0,width,height*0.62);
+  // bright pixel horizon band, F-Zero style
+  g.fillStyle = themeDef.sky[2];
+  g.fillRect(0, horizon-2, width, 3);
+  g.fillStyle = "rgba(255,255,255,0.25)";
+  g.fillRect(0, horizon-1, width, 1);
+
+  g.fillStyle = "rgba(0,0,0,0.12)";
+  g.fillRect(0,0,width,horizon);
 }
 
 function drawSprite(g, type, x, y, scale, width){
@@ -1459,12 +1489,24 @@ function renderRace(){
     ctx.fillStyle = grassColor;
     ctx.fillRect(0, p2.y, width, Math.max(1,p1.y-p2.y));
 
-    // road (with rumble strips + lane markers)
-    const r1w = p1.w*1.15, r2w = p2.w*1.15;
+    // bright two-tone F-Zero edge bumper rails: a wide colored band under the
+    // road whose outer margin reads as a rail running along each side
+    const r1w = p1.w*1.24, r2w = p2.w*1.24;
     polygon(ctx, p1.x-r1w,p1.y, p1.x+r1w,p1.y, p2.x+r2w,p2.y, p2.x-r2w,p2.y, rumbleColor);
     polygon(ctx, p1.x-p1.w,p1.y, p1.x+p1.w,p1.y, p2.x+p2.w,p2.y, p2.x-p2.w,p2.y, roadColor);
 
-    if (segment.color==="light"){
+    if (segment.startLine){
+      // black/white checkered start/finish band across the road
+      const cells = 10;
+      for (let c=0;c<cells;c++){
+        const f1 = -1 + 2*c/cells, f2 = -1 + 2*(c+1)/cells;
+        const dark = ((c + (segment.color==="light"?0:1)) % 2) === 0;
+        polygon(ctx,
+          p1.x+f1*p1.w, p1.y, p1.x+f2*p1.w, p1.y,
+          p2.x+f2*p2.w, p2.y, p2.x+f1*p2.w, p2.y,
+          dark ? "#141414" : "#f4f4f4");
+      }
+    } else if (segment.color==="light"){
       const lw1 = p1.w*0.05, lw2 = p2.w*0.05;
       polygon(ctx, p1.x-lw1,p1.y, p1.x+lw1,p1.y, p2.x+lw2,p2.y, p2.x-lw2,p2.y, themeDef.laneColor);
     }
