@@ -1,0 +1,15 @@
+{
+  "_readme": "Registry for the HyperFrames engine. Update only through the process in engine/hyperframes/README.md -- never hand-edit files under engine/hyperframes/src/ or bin/ as a side effect of rendering a job; changes to the engine go through this file's version bump.",
+  "engine": "hyperframes",
+  "vendored": true,
+  "source": "built in-repo at engine/hyperframes/ (first-party, not an external drop-in)",
+  "version": "0.1.0",
+  "commit": null,
+  "vendored_at": "2026-07-11",
+  "modules": ["reframe", "graphics", "b-roll", "motion", "captions"],
+  "runtime_dependencies": {
+    "node": ">=18",
+    "playwright": "^1.56.1 (drives headless Chromium for HTML frame rendering)",
+    "ffmpeg": "must be on PATH -- not bundled; used for all encode/composite steps"
+  }
+}

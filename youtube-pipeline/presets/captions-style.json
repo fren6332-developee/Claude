@@ -1,0 +1,24 @@
+{
+  "_locked": true,
+  "_update_policy": "Edit only via a deliberate design change + version bump. Skills must treat this file as read-only input, never rewrite it as a side effect of rendering a job.",
+  "preset": "captions-style",
+  "used_by": ["embedded-captions"],
+  "applies_to_formats": ["short-explainer"],
+  "position": "centered",
+  "locked_position": true,
+  "burn_in": "on-beat",
+  "typography": {
+    "font": "brand-caption",
+    "size_pct_of_frame_height": 6,
+    "weight": "bold",
+    "case": "sentence"
+  },
+  "highlight": {
+    "active_word": true,
+    "style": "color-pop"
+  },
+  "engine": {
+    "captions_template": "captions.html",
+    "captions_position": "centered"
+  }
+}

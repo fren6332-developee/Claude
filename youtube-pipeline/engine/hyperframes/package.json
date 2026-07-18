@@ -1,0 +1,19 @@
+{
+  "name": "hyperframes",
+  "version": "0.1.0",
+  "description": "HTML-based video engine for the YouTube pipeline: reframe, graphics, b-roll, motion, captions.",
+  "type": "module",
+  "bin": {
+    "hyperframes": "bin/hyperframes.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "playwright": "1.56.1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "private": true
+}
