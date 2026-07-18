@@ -667,40 +667,43 @@ const Audio1 = (function(){
 /* --------------------------------------------------------------- */
 // Cars are drawn procedurally on a small offscreen canvas grid so they
 // read as chunky 16-bit sprites when scaled up with smoothing disabled.
+// Colors/details drawn from the rear-view reference photos so each car reads
+// as its real-world counterpart from behind (the in-race 3rd-person angle):
+// white Hellcat w/ bronze wheels, silver F-150, red M3, silver Corvette.
 const CARS = [
   {
     id:"hellcat", name:"SRT HELLCAT", sub:"Supercharged Muscle",
-    body:"#141414", shadow:"#050505", highlight:"#3c3c3c", window:"#1c2733",
-    tire:"#0d0d0d", rim:"#9aa4ad", taillight:"#ff2b2b", trim:"#262626", accent:"#c81e2c",
-    stripe:"center", taillightStyle:"bar", spoiler:false, wide:true, ride:"low", bed:false,
+    body:"#e9e9ec", shadow:"#b6b6bc", highlight:"#ffffff", window:"#1b2430",
+    tire:"#0d0d0d", rim:"#b07a34", taillight:"#ff2b2b", trim:"#2a2a2e", accent:"#c81e2c",
+    stripe:"none", taillightStyle:"fullbar", exhaust:"dual-center", spoiler:false, wide:true, ride:"low", bed:false,
     stats:{ speed:5, accel:3, grip:2, weight:5 }
   },
   {
     id:"f150", name:"F-150 SINGLE CAB", sub:"Off-Road Hauler",
-    body:"#33475b", shadow:"#182430", highlight:"#5c7996", window:"#0f161d",
-    tire:"#0d0d0d", rim:"#cfd4d8", taillight:"#ff5a2b", trim:"#b8bec4", accent:"#b8bec4",
-    stripe:"none", taillightStyle:"bar-wide", spoiler:false, wide:false, ride:"high", bed:true,
+    body:"#9ba0a6", shadow:"#63686e", highlight:"#c6cbd0", window:"#0f161d",
+    tire:"#0d0d0d", rim:"#191919", taillight:"#ff2b2b", trim:"#3a3f45", accent:"#3a3f45",
+    stripe:"none", taillightStyle:"bar-wide", exhaust:"dual-right", spoiler:false, wide:false, ride:"high", bed:true,
     stats:{ speed:3, accel:2, grip:2, weight:5 }
   },
   {
     id:"m3", name:"BMW M3", sub:"Precision Sport Sedan",
-    body:"#f0f0f2", shadow:"#c4c8cc", highlight:"#ffffff", window:"#141b23",
-    tire:"#0d0d0d", rim:"#3a3f45", taillight:"#ff2b2b", trim:"#202225", accent:"#1c69d4",
-    stripe:"m", taillightStyle:"bar-slim", spoiler:false, wide:false, ride:"mid", bed:false,
+    body:"#c81f2c", shadow:"#8a1620", highlight:"#e8565e", window:"#141b23",
+    tire:"#0d0d0d", rim:"#191919", taillight:"#e0222f", trim:"#161616", accent:"#1c69d4",
+    stripe:"none", taillightStyle:"bar-slim", exhaust:"quad-split", spoiler:false, wide:false, ride:"mid", bed:false,
     stats:{ speed:4, accel:4, grip:5, weight:3 }
   },
   {
     id:"vette", name:"CORVETTE Z06", sub:"American Supercar",
-    body:"#f7d038", shadow:"#c9a415", highlight:"#ffe873", window:"#12181f",
-    tire:"#0d0d0d", rim:"#3a3a3a", taillight:"#ff2b2b", trim:"#161616", accent:"#161616",
-    stripe:"twin", taillightStyle:"quad", spoiler:true, wide:false, ride:"low", bed:false,
+    body:"#d9dbdf", shadow:"#a6a9ae", highlight:"#f2f3f5", window:"#12181f",
+    tire:"#0d0d0d", rim:"#191919", taillight:"#ff2b2b", trim:"#161616", accent:"#161616",
+    stripe:"none", taillightStyle:"quad", exhaust:"quad-center", spoiler:true, wide:true, ride:"low", bed:false,
     stats:{ speed:5, accel:5, grip:3, weight:3 }
   },
   {
     id:"cannon", name:"CANNON R2R", sub:"Track-Tuned Coupe",
     body:"#7cd62c", shadow:"#4f9012", highlight:"#a8f25c", window:"#101418",
     tire:"#0d0d0d", rim:"#ffb400", taillight:"#ff7b00", trim:"#161616", accent:"#ff7b00",
-    stripe:"side", taillightStyle:"round", spoiler:true, wide:false, ride:"low", bed:false,
+    stripe:"side", taillightStyle:"round", exhaust:"dual-center", spoiler:true, wide:false, ride:"low", bed:false,
     stats:{ speed:3, accel:5, grip:5, weight:2 }
   },
 ];
@@ -764,7 +767,11 @@ function buildCarSprite(car){
 
   // taillights
   const tlY = upperTop+1;
-  if (car.taillightStyle === "quad"){
+  if (car.taillightStyle === "fullbar"){
+    // full-width red light bar (SRT Charger) with a dark badge break in the middle
+    px(3, tlY, 16, 1, car.taillight);
+    px(10, tlY, 2, 1, "#3a0a0a");
+  } else if (car.taillightStyle === "quad"){
     px(3, tlY, 1, 1, car.taillight); px(4, tlY, 1, 1, car.taillight);
     px(3, tlY+1, 1, 1, car.taillight); px(4, tlY+1, 1, 1, car.taillight);
     px(17, tlY, 1, 1, car.taillight); px(18, tlY, 1, 1, car.taillight);
@@ -781,6 +788,19 @@ function buildCarSprite(car){
 
   // rear diffuser / trim
   px(6, upperTop+4, 10, 1, car.trim);
+
+  // exhaust tips set into the diffuser (chrome ring + dark bore)
+  const exY = upperTop+4;
+  function exhaustTip(cx){
+    px(cx, exY, 1, 1, "#c8ccd0");
+    g.fillStyle = "#0a0a0a";
+    g.fillRect(cx*PXU+PXU*0.25, exY*PXU+PXU*0.2, PXU*0.5, PXU*0.6);
+  }
+  const exLayouts = {
+    "dual-center":[9,12], "quad-center":[8,10,12,14],
+    "quad-split":[5,7,14,16], "dual-right":[14,16]
+  };
+  (exLayouts[car.exhaust]||[]).forEach(exhaustTip);
 
   // wheels
   const wheelY = upperTop+3;
@@ -927,22 +947,31 @@ function buildTrack(theme){
   // close the loop back to y=0
   addRoad(20,0,0,0, -lastY);
 
+  // checkered start/finish band a few segments ahead of the grid, so it's
+  // visible on the road right as the race begins (classic F-Zero start line)
+  for (let i=4; i<=6; i++){ if (segments[i]) segments[i].startLine = true; }
+
   return { segments, length: segments.length*SEG_LEN };
 }
 
 const TRACKS = {
+  // Palettes tuned to look like classic F-Zero SNES tracks: gradient pixel
+  // skies, a horizon silhouette band, dithered colored shoulders, bright
+  // two-tone edge bumper rails, and a black/white checkered start band.
   city: {
+    // "Port Town / White Land" orange-sunset city (ref: IMG_4043)
     name:"CITY / HIGHWAY", song:"rock",
-    sky:["#20123f","#4a2a6b","#8a4a8f"], road:{light:"#5c5c68", dark:"#525260"},
-    rumbleColors:["#c8283c","#e9e9e9"], grass:{light:"#274a2e", dark:"#213f27"},
-    laneColor:"#e9e9e9", rampColor:"#f2b23c",
+    sky:["#2a0d3a","#c0392b","#f6a13c"], road:{light:"#6a6a76", dark:"#5c5c68"},
+    rumbleColors:["#2ecc55","#eafff0"], grass:{light:"#3a2647", dark:"#312040"},
+    laneColor:"#f0f0f0", rampColor:"#f2b23c", bumperStyle:"rail",
     build: () => buildTrack("city")
   },
   desert: {
+    // warm dusk desert with orange flame boost bumpers (ref: BIG BLUE flames)
     name:"DESERT DRIFT", song:"soft",
-    sky:["#3a1a3d","#a1436b","#e8a24d"], road:{light:"#8a6a4a", dark:"#7c5f42"},
-    rumbleColors:["#e0d0a0","#c8a468"], grass:{light:"#b9843f", dark:"#a9773a"},
-    laneColor:"#f2e6c8", rampColor:"#f2b23c",
+    sky:["#3a163a","#c8564a","#f0b25a"], road:{light:"#9a7a52", dark:"#8a6c46"},
+    rumbleColors:["#ff7b1a","#ffd24a"], grass:{light:"#c08a44", dark:"#a9773a"},
+    laneColor:"#f5ecd0", rampColor:"#f2b23c", bumperStyle:"flame",
     build: () => buildTrack("desert")
   }
 };
@@ -954,6 +983,14 @@ const CAMERA_HEIGHT = 900;
 const FOV = 100;
 const CAMERA_DEPTH = 1/Math.tan((FOV/2)*Math.PI/180);
 const DRAW_DISTANCE = 180;
+// the camera trails behind the car instead of sitting on top of it, so the
+// player's own car is actually visible on screen — a 3rd-person chase view
+// rather than a 1st-person view where the camera and car occupy the same point
+const CAMERA_BEHIND = 560;
+// a car's on-screen size is derived from the same perspective math as the
+// road (rather than a fixed multiplier), so it scales correctly with distance;
+// this fraction of ROAD_WIDTH sets how wide a car reads relative to the road
+const CAR_WORLD_WIDTH = ROAD_WIDTH * 0.26;
 
 function project(p, camX, camY, camZ, width, height, roadWidth){
   p.camera.x = (p.world.x||0) - camX;
@@ -962,7 +999,14 @@ function project(p, camX, camY, camZ, width, height, roadWidth){
   const scale = CAMERA_DEPTH / Math.max(1, p.camera.z);
   p.screen.scale = scale;
   p.screen.x = Math.round(width/2 + scale*p.camera.x*width/2);
-  p.screen.y = Math.round(height/2 - scale*p.camera.y*width/2);
+  // y scales off the SHORTER of width/height, not a fixed axis: the internal
+  // resolution budget makes width and height diverge a lot between portrait
+  // and landscape, so scaling off whichever axis happens to be the long one
+  // in a given orientation pushes vertical content (camera height, hills)
+  // far outside the canvas on that orientation. The short axis keeps the
+  // vertical framing on-screen regardless of aspect ratio.
+  const vScale = Math.min(width, height);
+  p.screen.y = Math.round(height/2 - scale*p.camera.y*vScale/2);
   p.screen.w = Math.round(scale*roadWidth*width/2);
 }
 
@@ -987,41 +1031,62 @@ function drawBackground(g, themeDef, z, width, height){
   grad.addColorStop(1, themeDef.sky[2]);
   g.fillStyle = grad;
   g.fillRect(0,0,width,height*0.62);
-  // sun/moon
-  g.fillStyle = "rgba(255,235,190,0.9)";
-  g.beginPath(); g.arc(width*0.78, height*0.28, 20, 0, Math.PI*2); g.fill();
+  // big low sunset sun, sitting just above the horizon
+  g.fillStyle = "rgba(255,224,150,0.95)";
+  g.beginPath(); g.arc(width*0.72, height*0.5, 34, 0, Math.PI*2); g.fill();
+  g.fillStyle = "rgba(255,244,210,0.9)";
+  g.beginPath(); g.arc(width*0.72, height*0.5, 24, 0, Math.PI*2); g.fill();
 
+  const horizon = height*0.62;
   const parallax = (z*0.00008) % 1;
   if (themeDef === TRACKS.city){
-    // distant skyline silhouettes, parallax scrolled
-    g.fillStyle = "#170c30";
-    for (let i=-1;i<8;i++){
-      const bx = ((i - parallax) * 60) % (width+120) - 60;
-      const bh = 30 + ((i*53)%40);
-      g.fillRect(bx, height*0.62-bh, 40, bh);
-      g.fillStyle = "#2c1a52";
-      for (let wy=0; wy<bh-6; wy+=10){
-        for (let wx=4; wx<34; wx+=8){
-          if ((wx+wy)%3!==0) g.fillRect(bx+wx, height*0.62-bh+6+wy, 3, 4);
+    // dense city skyline silhouette against the sunset (ref: IMG_4043)
+    for (let layer=0; layer<2; layer++){
+      const depth = layer===0 ? 0.5 : 1;           // back layer scrolls slower
+      const tone = layer===0 ? "#3a1330" : "#150a20";
+      const winTone = layer===0 ? "#7a2a40" : "#f6a13c";
+      const step = layer===0 ? 34 : 26;
+      for (let i=-1;i<Math.ceil(width/step)+2;i++){
+        const bx = ((i - parallax*depth) * step) % (width+step*2) - step;
+        const bh = (layer===0?18:26) + ((i*37+layer*53)%(layer===0?26:44));
+        g.fillStyle = tone;
+        g.fillRect(bx, horizon-bh, step-4, bh);
+        // lit windows
+        g.fillStyle = winTone;
+        for (let wy=4; wy<bh-3; wy+=7){
+          for (let wx=3; wx<step-7; wx+=6){
+            if ((wx*3+wy+i)%4!==0) g.fillRect(bx+wx, horizon-bh+wy, 2, 3);
+          }
         }
       }
-      g.fillStyle = "#170c30";
     }
   } else {
-    // desert mesas parallax
-    g.fillStyle = "#5c2a4a";
-    for (let i=-1;i<6;i++){
-      const bx = ((i - parallax*0.6) * 90) % (width+160) - 80;
-      g.beginPath();
-      g.moveTo(bx, height*0.62);
-      g.lineTo(bx+25, height*0.62-38);
-      g.lineTo(bx+55, height*0.62-38);
-      g.lineTo(bx+80, height*0.62);
-      g.closePath(); g.fill();
+    // layered desert mesa silhouettes at dusk
+    const tones = ["#7a2f50","#5c2444"];
+    for (let layer=0; layer<2; layer++){
+      g.fillStyle = tones[layer];
+      const depth = layer===0 ? 0.45 : 0.8;
+      const span = layer===0 ? 120 : 90;
+      const mh = layer===0 ? 30 : 44;
+      for (let i=-1;i<Math.ceil(width/span)+2;i++){
+        const bx = ((i - parallax*depth) * span) % (width+span*2) - span;
+        g.beginPath();
+        g.moveTo(bx, horizon);
+        g.lineTo(bx+span*0.28, horizon-mh);
+        g.lineTo(bx+span*0.62, horizon-mh);
+        g.lineTo(bx+span*0.9, horizon);
+        g.closePath(); g.fill();
+      }
     }
   }
-  g.fillStyle = "rgba(0,0,0,0.15)";
-  g.fillRect(0,0,width,height*0.62);
+  // bright pixel horizon band, F-Zero style
+  g.fillStyle = themeDef.sky[2];
+  g.fillRect(0, horizon-2, width, 3);
+  g.fillStyle = "rgba(255,255,255,0.25)";
+  g.fillRect(0, horizon-1, width, 1);
+
+  g.fillStyle = "rgba(0,0,0,0.12)";
+  g.fillRect(0,0,width,horizon);
 }
 
 function drawSprite(g, type, x, y, scale, width){
@@ -1378,11 +1443,17 @@ function renderRace(){
   ctx.translate((Math.random()-0.5)*Game.shake*14, (Math.random()-0.5)*Game.shake*8);
 
   const player = Game.player;
-  const baseSegment = findSegment(track, player.z);
-  const basePercent = (player.z % SEG_LEN)/SEG_LEN;
-  const playerY = baseSegment.p1.world.y + (baseSegment.p2.world.y-baseSegment.p1.world.y)*basePercent;
+  const playerSeg = findSegment(track, player.z);
+  const playerPercent = (((player.z % SEG_LEN)+SEG_LEN)%SEG_LEN)/SEG_LEN;
+  const playerY = playerSeg.p1.world.y + (playerSeg.p2.world.y-playerSeg.p1.world.y)*playerPercent;
 
-  drawBackground(ctx, themeDef, player.z, width, height);
+  // the camera sits CAMERA_BEHIND world units back from the car, so rendering
+  // starts from the camera's own segment, not the car's
+  const camZWorld = player.z - CAMERA_BEHIND;
+  const baseSegment = findSegment(track, camZWorld);
+  const basePercent = (((camZWorld % SEG_LEN)+SEG_LEN)%SEG_LEN)/SEG_LEN;
+
+  drawBackground(ctx, themeDef, camZWorld, width, height);
 
   let x = 0, dx = -(baseSegment.curve*basePercent);
   let maxy = height;
@@ -1397,14 +1468,33 @@ function renderRace(){
   });
 
   const N = Math.min(DRAW_DISTANCE, track.segments.length-1);
+  const carsToDraw = [];
   for (let n=0; n<N; n++){
     const segIndex = (baseSegment.index+n) % track.segments.length;
     const segment = track.segments[segIndex];
     const looped = segIndex < baseSegment.index;
     const zOffset = looped ? track.length : 0;
 
-    project(segment.p1, player.x*ROAD_WIDTH - x, camHeight, player.z - zOffset, width, height, ROAD_WIDTH);
-    project(segment.p2, player.x*ROAD_WIDTH - (x+dx), camHeight, player.z - zOffset, width, height, ROAD_WIDTH);
+    project(segment.p1, player.x*ROAD_WIDTH - x, camHeight, camZWorld - zOffset, width, height, ROAD_WIDTH);
+    project(segment.p2, player.x*ROAD_WIDTH - (x+dx), camHeight, camZWorld - zOffset, width, height, ROAD_WIDTH);
+
+    // queue any cars whose z falls within this segment for a depth-sorted draw
+    // pass after the loop — computed here, before the road-culling checks
+    // below, so a car isn't skipped just because its segment's road polygon
+    // got culled (near-clip / hill-occlusion), and using this segment's own
+    // x/dx (before they advance to the next segment below) so the curve
+    // offset is interpolated correctly across the segment
+    const carsHere = carsBySegment.get(segIndex);
+    if (carsHere){
+      carsHere.forEach(r=>{
+        const carPercent = (((r.z % SEG_LEN)+SEG_LEN)%SEG_LEN)/SEG_LEN;
+        const carX = x + dx*carPercent;
+        const cw = {world:{x:r.x*ROAD_WIDTH, y: segment.p1.world.y, z:r.z}, camera:{}, screen:{}};
+        project(cw, player.x*ROAD_WIDTH - carX, camHeight, camZWorld - zOffset, width, height, ROAD_WIDTH);
+        if (cw.camera.z > 1) carsToDraw.push({r, cw});
+      });
+    }
+
     x += dx; dx += segment.curve;
 
     if (segment.p1.camera.z <= 1) continue;
@@ -1419,12 +1509,24 @@ function renderRace(){
     ctx.fillStyle = grassColor;
     ctx.fillRect(0, p2.y, width, Math.max(1,p1.y-p2.y));
 
-    // road (with rumble strips + lane markers)
-    const r1w = p1.w*1.15, r2w = p2.w*1.15;
+    // bright two-tone F-Zero edge bumper rails: a wide colored band under the
+    // road whose outer margin reads as a rail running along each side
+    const r1w = p1.w*1.24, r2w = p2.w*1.24;
     polygon(ctx, p1.x-r1w,p1.y, p1.x+r1w,p1.y, p2.x+r2w,p2.y, p2.x-r2w,p2.y, rumbleColor);
     polygon(ctx, p1.x-p1.w,p1.y, p1.x+p1.w,p1.y, p2.x+p2.w,p2.y, p2.x-p2.w,p2.y, roadColor);
 
-    if (segment.color==="light"){
+    if (segment.startLine){
+      // black/white checkered start/finish band across the road
+      const cells = 10;
+      for (let c=0;c<cells;c++){
+        const f1 = -1 + 2*c/cells, f2 = -1 + 2*(c+1)/cells;
+        const dark = ((c + (segment.color==="light"?0:1)) % 2) === 0;
+        polygon(ctx,
+          p1.x+f1*p1.w, p1.y, p1.x+f2*p1.w, p1.y,
+          p2.x+f2*p2.w, p2.y, p2.x+f1*p2.w, p2.y,
+          dark ? "#141414" : "#f4f4f4");
+      }
+    } else if (segment.color==="light"){
       const lw1 = p1.w*0.05, lw2 = p2.w*0.05;
       polygon(ctx, p1.x-lw1,p1.y, p1.x+lw1,p1.y, p2.x+lw2,p2.y, p2.x-lw2,p2.y, themeDef.laneColor);
     }
@@ -1440,22 +1542,20 @@ function renderRace(){
     });
 
     maxy = p1.y;
-
-    // cars on this segment (draw far-to-near naturally since loop is far->near)
-    const carsHere = carsBySegment.get(segIndex);
-    if (carsHere){
-      carsHere.forEach(r=>{
-        const cw = {world:{x:r.x*ROAD_WIDTH, y: segment.p1.world.y, z:r.z}, camera:{}, screen:{}};
-        project(cw, player.x*ROAD_WIDTH - x, camHeight, player.z - zOffset, width, height, ROAD_WIDTH);
-        if (cw.camera.z > 1){
-          const jumpP = r.jumpTimer>0 ? Math.sin(Math.PI*(1-r.jumpTimer/JUMP_DURATION)) : 0;
-          const carScale = cw.screen.scale * 2.1 * (1 + jumpP*0.1);
-          const lift = jumpP * 24 * cw.screen.scale;
-          drawCarAt(ctx, r.car, cw.screen.x, cw.screen.y - lift, carScale*0.34, r.bank);
-        }
-      });
-    }
   }
+
+  // draw cars farthest-to-nearest so a closer car correctly occludes a farther one
+  carsToDraw.sort((a,b)=> b.cw.camera.z - a.cw.camera.z);
+  carsToDraw.forEach(({r,cw})=>{
+    const jumpP = r.jumpTimer>0 ? Math.sin(Math.PI*(1-r.jumpTimer/JUMP_DURATION)) : 0;
+    // tie car size to the same perspective scale used for the road itself,
+    // so it shrinks/grows correctly with distance instead of a fixed factor
+    const carScreenW = cw.screen.scale * CAR_WORLD_WIDTH * (width/2) * (1 + jumpP*0.1);
+    const carScale = carScreenW / r.car.sprite.width;
+    const lift = jumpP * 0.5 * carScreenW;
+    drawCarAt(ctx, r.car, cw.screen.x, cw.screen.y - lift, carScale, r.bank);
+  });
+
   ctx.restore();
 }
 
