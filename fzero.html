@@ -667,40 +667,43 @@ const Audio1 = (function(){
 /* --------------------------------------------------------------- */
 // Cars are drawn procedurally on a small offscreen canvas grid so they
 // read as chunky 16-bit sprites when scaled up with smoothing disabled.
+// Colors/details drawn from the rear-view reference photos so each car reads
+// as its real-world counterpart from behind (the in-race 3rd-person angle):
+// white Hellcat w/ bronze wheels, silver F-150, red M3, silver Corvette.
 const CARS = [
   {
     id:"hellcat", name:"SRT HELLCAT", sub:"Supercharged Muscle",
-    body:"#141414", shadow:"#050505", highlight:"#3c3c3c", window:"#1c2733",
-    tire:"#0d0d0d", rim:"#9aa4ad", taillight:"#ff2b2b", trim:"#262626", accent:"#c81e2c",
-    stripe:"center", taillightStyle:"bar", spoiler:false, wide:true, ride:"low", bed:false,
+    body:"#e9e9ec", shadow:"#b6b6bc", highlight:"#ffffff", window:"#1b2430",
+    tire:"#0d0d0d", rim:"#b07a34", taillight:"#ff2b2b", trim:"#2a2a2e", accent:"#c81e2c",
+    stripe:"none", taillightStyle:"fullbar", exhaust:"dual-center", spoiler:false, wide:true, ride:"low", bed:false,
     stats:{ speed:5, accel:3, grip:2, weight:5 }
   },
   {
     id:"f150", name:"F-150 SINGLE CAB", sub:"Off-Road Hauler",
-    body:"#33475b", shadow:"#182430", highlight:"#5c7996", window:"#0f161d",
-    tire:"#0d0d0d", rim:"#cfd4d8", taillight:"#ff5a2b", trim:"#b8bec4", accent:"#b8bec4",
-    stripe:"none", taillightStyle:"bar-wide", spoiler:false, wide:false, ride:"high", bed:true,
+    body:"#9ba0a6", shadow:"#63686e", highlight:"#c6cbd0", window:"#0f161d",
+    tire:"#0d0d0d", rim:"#191919", taillight:"#ff2b2b", trim:"#3a3f45", accent:"#3a3f45",
+    stripe:"none", taillightStyle:"bar-wide", exhaust:"dual-right", spoiler:false, wide:false, ride:"high", bed:true,
     stats:{ speed:3, accel:2, grip:2, weight:5 }
   },
   {
     id:"m3", name:"BMW M3", sub:"Precision Sport Sedan",
-    body:"#f0f0f2", shadow:"#c4c8cc", highlight:"#ffffff", window:"#141b23",
-    tire:"#0d0d0d", rim:"#3a3f45", taillight:"#ff2b2b", trim:"#202225", accent:"#1c69d4",
-    stripe:"m", taillightStyle:"bar-slim", spoiler:false, wide:false, ride:"mid", bed:false,
+    body:"#c81f2c", shadow:"#8a1620", highlight:"#e8565e", window:"#141b23",
+    tire:"#0d0d0d", rim:"#191919", taillight:"#e0222f", trim:"#161616", accent:"#1c69d4",
+    stripe:"none", taillightStyle:"bar-slim", exhaust:"quad-split", spoiler:false, wide:false, ride:"mid", bed:false,
     stats:{ speed:4, accel:4, grip:5, weight:3 }
   },
   {
     id:"vette", name:"CORVETTE Z06", sub:"American Supercar",
-    body:"#f7d038", shadow:"#c9a415", highlight:"#ffe873", window:"#12181f",
-    tire:"#0d0d0d", rim:"#3a3a3a", taillight:"#ff2b2b", trim:"#161616", accent:"#161616",
-    stripe:"twin", taillightStyle:"quad", spoiler:true, wide:false, ride:"low", bed:false,
+    body:"#d9dbdf", shadow:"#a6a9ae", highlight:"#f2f3f5", window:"#12181f",
+    tire:"#0d0d0d", rim:"#191919", taillight:"#ff2b2b", trim:"#161616", accent:"#161616",
+    stripe:"none", taillightStyle:"quad", exhaust:"quad-center", spoiler:true, wide:true, ride:"low", bed:false,
     stats:{ speed:5, accel:5, grip:3, weight:3 }
   },
   {
     id:"cannon", name:"CANNON R2R", sub:"Track-Tuned Coupe",
     body:"#7cd62c", shadow:"#4f9012", highlight:"#a8f25c", window:"#101418",
     tire:"#0d0d0d", rim:"#ffb400", taillight:"#ff7b00", trim:"#161616", accent:"#ff7b00",
-    stripe:"side", taillightStyle:"round", spoiler:true, wide:false, ride:"low", bed:false,
+    stripe:"side", taillightStyle:"round", exhaust:"dual-center", spoiler:true, wide:false, ride:"low", bed:false,
     stats:{ speed:3, accel:5, grip:5, weight:2 }
   },
 ];
@@ -764,7 +767,11 @@ function buildCarSprite(car){
 
   // taillights
   const tlY = upperTop+1;
-  if (car.taillightStyle === "quad"){
+  if (car.taillightStyle === "fullbar"){
+    // full-width red light bar (SRT Charger) with a dark badge break in the middle
+    px(3, tlY, 16, 1, car.taillight);
+    px(10, tlY, 2, 1, "#3a0a0a");
+  } else if (car.taillightStyle === "quad"){
     px(3, tlY, 1, 1, car.taillight); px(4, tlY, 1, 1, car.taillight);
     px(3, tlY+1, 1, 1, car.taillight); px(4, tlY+1, 1, 1, car.taillight);
     px(17, tlY, 1, 1, car.taillight); px(18, tlY, 1, 1, car.taillight);
@@ -781,6 +788,19 @@ function buildCarSprite(car){
 
   // rear diffuser / trim
   px(6, upperTop+4, 10, 1, car.trim);
+
+  // exhaust tips set into the diffuser (chrome ring + dark bore)
+  const exY = upperTop+4;
+  function exhaustTip(cx){
+    px(cx, exY, 1, 1, "#c8ccd0");
+    g.fillStyle = "#0a0a0a";
+    g.fillRect(cx*PXU+PXU*0.25, exY*PXU+PXU*0.2, PXU*0.5, PXU*0.6);
+  }
+  const exLayouts = {
+    "dual-center":[9,12], "quad-center":[8,10,12,14],
+    "quad-split":[5,7,14,16], "dual-right":[14,16]
+  };
+  (exLayouts[car.exhaust]||[]).forEach(exhaustTip);
 
   // wheels
   const wheelY = upperTop+3;
