@@ -9,8 +9,19 @@ Read it before you submit.
 ## Notes for the App Reviewer (paste into App Store Connect → App Review Information)
 
 > This is an educational and personal-organization app for people affected by prostate
-> cancer. It does **not** diagnose, does not recommend treatment, does not perform any
-> calculation that drives a medical decision, and is not a medical device.
+> cancer. It does **not** diagnose or recommend treatment, and is not a medical device.
+>
+> The Overview screen includes an auto-generated "focus areas" panel that highlights
+> which reference sections may be relevant, based on keywords in the entered diagnosis
+> text and simple threshold checks against general adult lab reference ranges (e.g.
+> flagging that a hemoglobin value is below a typical range). This does not diagnose,
+> score risk, or recommend a treatment or dose — it only points to educational reading
+> and is labeled "auto-generated" with a persistent disclaimer that it is not a
+> recommendation or eligibility check.
+>
+> The "Chemotherapy" reference section explains what biopsy/pathology findings
+> typically factor into a chemo-eligibility conversation in general terms; it does not
+> evaluate Scott's own biopsy or state whether he should receive chemotherapy.
 >
 > All data is stored locally on the device (localStorage/IndexedDB). There is no
 > account and no server — nothing to log into. The app makes no network calls except
@@ -18,8 +29,9 @@ Read it before you submit.
 > user taps a link.
 >
 > A medical disclaimer appears on the Overview screen and in a dedicated Disclaimers
-> section. The "Clinical trials" content is a clearly dated, read-only snapshot with a
-> prominent note that it is not medical advice or an eligibility check.
+> section, and a first-run acknowledgement gate must be accepted before use. The
+> "Clinical trials" content is a clearly dated, read-only snapshot with a prominent
+> note that it is not medical advice or an eligibility check.
 >
 > No demo account is needed. To exercise features, tap through the left-hand navigation.
 
@@ -28,10 +40,14 @@ Read it before you submit.
 ### 1.4.1 — Medical apps must be accurate and not endanger users
 - ✅ Content is general and educational; no dosing calculators, no diagnostic output.
 - ✅ Every reference section defers to the care team and lists "questions to ask."
+- ✅ The "focus areas" lab/symptom flags use general threshold checks (not scoring or
+  diagnosis) and are labeled auto-generated with a persistent caveat.
 - ✅ Persistent disclaimer on the home screen and a dedicated Disclaimers screen.
 - ✅ First-run acknowledgement gate that must be accepted before use.
 - ⚠️ **You must complete a clinical review** (see below) so claims are accurate and
-  current. Keep a dated record of who reviewed the content.
+  current — this now includes reviewing the Chemotherapy section's framing, the Labs
+  reference ranges used for flags, and the Exercise & rehab protocols. Keep a dated
+  record of who reviewed the content.
 
 ### 5.1.1 — Data collection and storage / privacy
 - ✅ No data leaves the device; App Privacy label = "Data Not Collected."
