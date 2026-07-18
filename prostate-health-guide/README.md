@@ -10,10 +10,17 @@ of treatment — in plain, eighth-grade-level explanations with optional audio.
 
 ## Live app
 
-- **URL:** https://claude.ai/code/artifact/c0ce29d2-8db8-4c62-ae43-a86a830104bb
-- **QR code:** [`qr-code.png`](./qr-code.png) — scan to open on a phone.
+- **Public URL (no login — share this one):**
+  https://fren6332-developee.github.io/Claude/prostate-health-guide/
+  Served by GitHub Pages from `main` (see `.github/workflows/pages.yml`); anyone can
+  open it, and it redeploys automatically on every push to `main`.
+- **QR code:** [`qr-code.png`](./qr-code.png) — points to the public URL above.
 - On an iPhone, open the URL in Safari and choose **Share → Add to Home Screen**
   for an app-like icon without the App Store.
+- A claude.ai artifact copy also exists
+  (`https://claude.ai/code/artifact/c0ce29d2-8db8-4c62-ae43-a86a830104bb`), but that
+  one is **private to the author's Claude account** — use the public GitHub Pages URL
+  above to share with family.
 - To ship it as a real **native iOS/Android app**, see
   [`capacitor-app/`](./capacitor-app/) and the store materials in [`store/`](./store/).
 
