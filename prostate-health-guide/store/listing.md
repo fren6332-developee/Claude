@@ -28,15 +28,22 @@ contact details to your own before submitting.
 > **Keep your records together**
 > • Upload MRI, X-ray, PET/PSMA, and CT images with notes
 > • Paste the biopsy pathology report; record Gleason, ISUP grade, and TNM stage
-> • Track vitals and a PSA trend log
+> • Log labs — CBC, CMP, and other biomarkers — with a results-over-time log
+> • Daily flow sheets: vitals trend, urine output, and a symptom tracker
 > • Save your health history and care-team contacts
 > • Export a backup, or print a one-page summary for appointments
 >
 > **Understand the language**
-> Plain-language quick references — each with a "Listen" button and 10+ questions to
-> bring to your care team:
-> • Medications • Treatment plans • Radiation plans • Nutrition • Supplements
-> • Surgery recovery • Genetic variations • Medical terms
+> Plain-language quick references — each with a colorful illustration, a "Listen"
+> button, and 10+ questions to bring to your care team:
+> • Medications • Chemotherapy • Treatment plans • Radiation plans
+> • Exercise & rehab (pre- and post-surgery protocols) • Nutrition (with foods to
+>   limit or avoid) • Supplements • Surgery recovery • Genetic variations • Medical terms
+>
+> **Recommendations that adapt with you**
+> An auto-generated "focus areas" panel highlights the most relevant sections based on
+> the diagnosis, labs, and tracked symptoms you enter — including a rehab progress bar
+> that suggests next steps as more action items are checked off.
 >
 > **Research, responsibly**
 > • A current snapshot of major recruiting clinical trials, with links to

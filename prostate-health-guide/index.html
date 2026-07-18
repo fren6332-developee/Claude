@@ -388,6 +388,42 @@ const DRUGS = {
   ]
 };
 
+const CHEMO = {
+  intro:"Chemotherapy is not decided from a biopsy report alone — but the biopsy's pathology findings are some of the key inputs an oncologist weighs, alongside imaging, PSA, overall health, and genetics. This section explains what those biopsy findings typically mean for the chemo conversation, in plain language. It is educational only — it does not tell you whether Scott should receive chemotherapy. That determination belongs entirely to his oncologist.",
+  items:[
+    {name:"Gleason score / ISUP grade group", tag:"From the biopsy report",
+     text:"This is the biopsy's core finding: how disorganized the cancer cells look. Higher Gleason scores (8–10) or ISUP grade groups 4–5 describe faster, more unruly-behaving cells — the pattern most associated with oncologists considering chemotherapy sooner, especially if the disease has also spread."},
+    {name:"Extent on the biopsy cores", tag:"From the biopsy report",
+     text:"How many needle samples (cores) contain cancer, and what percent of each core, paints a picture of how much of the prostate is involved — like sampling several spots in a field to estimate how much has weeds. More extensive involvement is one more factor pointing toward more intensive treatment discussions."},
+    {name:"Perineural invasion", tag:"From the biopsy report",
+     text:"This means cancer cells were seen tracking along a nerve fiber, like ivy growing along a fence line. It's a sign the tumor may be more locally aggressive, and it feeds into the overall risk picture."},
+    {name:"Ductal or intraductal patterns", tag:"From the biopsy report",
+     text:"Some cancers grow in less common patterns (ductal, intraductal, cribriform) that pathologists flag because they tend to behave more aggressively — this specific wording on a report is often a trigger for a chemo conversation earlier than usual."},
+    {name:"Metastatic hormone-sensitive disease (mHSPC)", tag:"How grade + stage combine",
+     text:"When high-grade biopsy findings are paired with imaging showing the cancer has already spread but still responds to hormone therapy, major trials (CHAARTED, STAMPEDE) found adding chemotherapy (docetaxel) early — alongside hormone therapy — helped many men live longer."},
+    {name:"Castration-resistant disease (mCRPC)", tag:"How grade + stage combine",
+     text:"If cancer keeps growing despite low testosterone, chemotherapy (docetaxel, then cabazitaxel if needed) becomes one of the standard next-line tools, often considered alongside newer targeted or radioligand options depending on genetics."},
+    {name:"High-volume vs. low-volume disease", tag:"How grade + stage combine",
+     text:"Imaging showing many spots of spread ('high volume') versus just a few ('low volume') changes how strongly chemotherapy is favored early on — high-volume disease tends to tip the conversation toward starting chemo sooner."},
+    {name:"Overall health & organ function", tag:"Beyond the biopsy",
+     text:"Chemotherapy is processed by the liver and kidneys and affects blood cell counts, so bloodwork (CBC, CMP — see the Labs section) and overall fitness matter just as much as the biopsy grade in deciding if, when, and at what dose."},
+  ],
+  actions:[
+    "Ask the oncologist to explain, in plain terms, how Scott's Gleason/ISUP grade factored into the treatment discussion.",
+    "Ask whether imaging shows high-volume or low-volume spread, and what that means for timing.",
+    "Ask directly: 'Is chemotherapy being considered now, or only if hormone therapy stops working?'",
+    "Ask which chemo drug would be first-line (commonly docetaxel) and what comes next if needed.",
+    "Confirm what baseline bloodwork (CBC, CMP, liver/kidney function) is needed before starting.",
+    "Ask how chemo would be combined with hormone therapy or newer targeted drugs.",
+    "Ask about expected side effects and how they'll be monitored between cycles.",
+    "Ask whether genetic testing results (BRCA, etc.) could open a targeted option instead of or alongside chemo.",
+    "Ask how treatment response will be tracked (PSA, scans, symptoms).",
+    "Bring a full current medication and supplement list to check for interactions.",
+    "Ask about fertility, heart, or nerve-health precautions specific to the chemo drug proposed.",
+    "Ask whether a clinical trial changes or adds to the standard chemo options available.",
+  ]
+};
+
 const TREATMENTS = {
   intro:"Broad approaches a care team may combine. The right plan depends on Scott's Gleason/grade group, stage, PSA, genes, age, and personal priorities.",
   items:[
@@ -519,6 +555,16 @@ const NUTRITION = {
     "Swap sugary drinks for water, green tea, or unsweetened options.",
     "Keep a simple food-and-symptom log to spot what helps or hurts.",
     "Ask a registered dietitian who specializes in oncology for a tailored plan.",
+  ],
+  avoid:[
+    {name:"Charred & well-done grilled meat", text:"High heat on meat creates compounds (HCAs/PAHs) linked to cell damage — like scorching a pan until it smokes. Marinating, cooking lower and slower, and trimming char cuts this down."},
+    {name:"Processed & cured meats", text:"Bacon, sausage, deli meats, and hot dogs are preserved with compounds tied to higher cancer risk in large population studies — best treated as an occasional food, not a daily one."},
+    {name:"High-dose calcium / heavy dairy intake", text:"Getting calcium from food is fine, but very high total calcium (often from stacking dairy plus supplements) has been linked to higher risk in some studies — more is not automatically better here."},
+    {name:"Selenium & high-dose vitamin E pills", text:"The large SELECT trial found these supplements didn't prevent prostate cancer and may have raised risk for some men — a rare case where a 'health' pill can backfire."},
+    {name:"Excess alcohol", text:"Heavy drinking stresses the liver (which processes hormone-therapy drugs) and adds empty calories that work against a healthy weight. Moderation, or none during active treatment, is usually advised — ask the care team."},
+    {name:"Sugary drinks & refined carbs", text:"Soda, pastries, and white bread spike blood sugar quickly, like flooring the gas pedal and slamming the brake — over time this can worsen weight and insulin levels, both linked to cancer growth signals."},
+    {name:"Ultra-processed 'fast' food", text:"Heavily processed meals tend to pack excess salt, sugar, and unhealthy fats into few nutrients — the opposite of the nutrient-dense pattern (Mediterranean-style) that supports treatment and recovery."},
+    {name:"Unproven high-dose supplement stacking", text:"Taking many concentrated supplements at once (megadose vitamins, unverified extracts) can interact with treatment or overload the liver/kidneys — more pills is not the same as more protection."},
   ]
 };
 
@@ -607,6 +653,61 @@ const SURGERY = {
     "Line up help at home for the first week or two.",
     "Know the exact red-flag symptoms that mean call or go to the ER.",
     "Ask about a support group or counselor for the emotional side.",
+  ]
+};
+
+const REHAB = {
+  intro:"Movement is medicine before and after surgery. 'Prehab' builds a stronger starting point; rehab rebuilds strength, bladder control, and confidence afterward. Always get the surgical team's clearance before starting or advancing any exercise — these are general, educational protocols.",
+  items:[
+    {name:"Prehab — build an aerobic base", tag:"Before surgery",
+     text:"In the weeks before surgery, brisk walking, cycling, or swimming is like tuning up an engine before a long trip. A fitter body tends to handle anesthesia better, recover faster, and leave the hospital sooner. Aim for most days, at a pace where you can still talk."},
+    {name:"Prehab — start pelvic-floor training early", tag:"Before surgery",
+     text:"The muscles that control urine work like a drawstring on a bag. Learning to find and squeeze them before surgery — while they're still at full strength — means Scott already knows the moves when it's time to retrain them afterward."},
+    {name:"Prehab — strength & core", tag:"Before surgery",
+     text:"Gentle strength work (legs, hips, core) is like reinforcing the frame of a house before renovation. Stronger muscles going in mean less lost during the downtime and an easier climb back."},
+    {name:"Prehab — breathing & lung exercises", tag:"Before surgery",
+     text:"Slow deep breaths and using a simple 'incentive spirometer' keep the lungs like well-inflated balloons. Practicing beforehand lowers the chance of post-op chest infections when Scott is resting more."},
+    {name:"Prehab — optimize the whole body", tag:"Before surgery",
+     text:"Stopping smoking, easing off alcohol, eating well, and reaching a healthier weight is like clearing debris off a runway before takeoff. Even a few weeks of these changes measurably improves surgical recovery."},
+    {name:"Early post-op — walk often", tag:"First days & weeks",
+     text:"Short, frequent walks are the single most important early exercise — like keeping a stream moving so it doesn't turn stagnant. Walking wakes up the gut, prevents dangerous blood clots, and rebuilds stamina. Start slow and build up daily as cleared."},
+    {name:"Early post-op — ankle pumps & breathing", tag:"First days & weeks",
+     text:"While resting, flexing the ankles up and down pumps blood back toward the heart like squeezing a toothpaste tube, helping prevent clots. Pair it with the deep-breathing practice from prehab."},
+    {name:"Pelvic-floor rehab (Kegels)", tag:"Continence recovery",
+     text:"Once the catheter is out and the team gives the go-ahead, Kegels retrain that loosened drawstring. Squeeze as if stopping urine, hold a few seconds, relax fully — quality over quantity. Done consistently, they speed the return of bladder control over weeks to months."},
+    {name:"Bladder & continence retraining", tag:"Continence recovery",
+     text:"Alongside Kegels, spacing out bathroom trips and not rushing gently stretches the bladder back to a normal schedule, like slowly re-training a muscle that got used to short intervals. Leaks usually fade as control returns."},
+    {name:"Erectile / penile rehabilitation", tag:"Sexual recovery",
+     text:"Nerves near the prostate can be bruised and 'asleep' after surgery, like a leg that lost feeling. A rehab plan — medicines, a vacuum device, and regular blood flow — keeps the tissue healthy and oxygenated while the nerves slowly wake up, which can take many months."},
+    {name:"Return to aerobic exercise", tag:"Progressive return",
+     text:"After the early-walking phase and with clearance, gradually rebuild cardio — a little longer or brisker each week, like adding weight to a bar one plate at a time. Rushing risks strain; steady progress wins."},
+    {name:"Return to strength training", tag:"Progressive return",
+     text:"Heavy lifting too soon tugs on healing stitches inside, so most teams say wait 4–6 weeks. When cleared, restart light and build up — think re-learning to jog before sprinting — protecting the core and pelvic floor as you go."},
+    {name:"Exercise on hormone therapy (ADT)", tag:"Special situations",
+     text:"Hormone therapy can quietly thin muscle and bone, like slow rust on a frame. Combining aerobic exercise with resistance training is one of the best defenses — it protects bone, preserves muscle, lifts mood, and fights the fatigue ADT causes."},
+    {name:"Lymphedema awareness", tag:"Special situations",
+     text:"If lymph nodes were removed, fluid can sometimes pool in the legs or groin, like a drain that's partly blocked. Gentle movement and prompt reporting of new swelling help catch and manage it early."},
+    {name:"Fatigue management & pacing", tag:"Whole-person",
+     text:"Recovery fatigue is real. Pacing — alternating activity with rest, like not spending all your energy in the first hour — plus light regular movement actually reduces tiredness more than resting all day does."},
+    {name:"Return to work, driving & sport", tag:"Milestones",
+     text:"Getting back to daily life follows a timeline, not a race: usually driving and desk work within a couple of weeks, and vigorous sport later once fully cleared. Ask the team for Scott's specific green-light dates."},
+    {name:"Red flags — when to stop", tag:"Safety",
+     text:"Stop and call the team for chest pain, sudden shortness of breath, a swollen painful calf, heavy bleeding, fever, or a sharp pull at the incision. These are the smoke alarms — don't 'push through' them."},
+  ],
+  actions:[
+    "Ask the surgical team when it's safe to start prehab and post-op exercise.",
+    "Begin pelvic-floor (Kegel) practice before surgery, if the team agrees.",
+    "Build an easy aerobic routine (walking) in the weeks before surgery.",
+    "Ask for a written post-op activity timeline (walking, lifting, driving, sport).",
+    "Confirm the exact lifting weight limit and how long it lasts.",
+    "Get a referral to a pelvic-floor physical therapist if available.",
+    "Start daily short walks as soon as the team clears it after surgery.",
+    "Ask when to (re)start Kegels — usually after the catheter is removed.",
+    "Request an erectile-rehabilitation plan and when to begin it.",
+    "On hormone therapy, add resistance training to protect bone and muscle.",
+    "Report any new leg swelling, especially if lymph nodes were removed.",
+    "Learn the red-flag symptoms that mean stop exercising and call the team.",
+    "Pace activity with rest to manage fatigue instead of overdoing it.",
   ]
 };
 
@@ -835,14 +936,18 @@ const NAV = [
     {id:"home", label:"Overview", icon:"◆"},
     {id:"images", label:"Imaging & scans", icon:"▤"},
     {id:"biopsy", label:"Biopsy & diagnosis", icon:"✎"},
+    {id:"labs", label:"Labs", icon:"🧪"},
     {id:"history", label:"Health history", icon:"❤"},
     {id:"vitals", label:"Vitals", icon:"◔"},
+    {id:"flowsheets", label:"Flow sheets", icon:"📈"},
     {id:"backup", label:"Backup & print", icon:"⤓"},
   ]},
   {group:"Quick reference", items:[
     {id:"drugs", label:"Medications", icon:"💊"},
+    {id:"chemo", label:"Chemotherapy", icon:"🧫"},
     {id:"treatments", label:"Treatment plans", icon:"◈"},
     {id:"radiation", label:"Radiation plans", icon:"☢"},
+    {id:"rehab", label:"Exercise & rehab", icon:"🏃"},
     {id:"nutrition", label:"Nutrition", icon:"🥗"},
     {id:"supplements", label:"Supplements", icon:"◉"},
     {id:"surgery", label:"Surgery recovery", icon:"✚"},
@@ -916,11 +1021,20 @@ const ART = {
   bottle: A('#e6f4f0', `<rect x="98" y="44" width="44" height="58" rx="8" fill="#3fb0a0"/><rect x="104" y="32" width="32" height="16" rx="4" fill="#2f8a7d"/><rect x="104" y="60" width="32" height="34" rx="4" fill="#fff"/><path d="M120 66 v20 M110 76 h20" stroke="#ff6b6b" stroke-width="4" stroke-linecap="round"/>`),
   stethoscope: A('#e6f0ff', `<path d="M84 34 v22 a18 18 0 0 0 36 0 v-6" fill="none" stroke="#4aa3f0" stroke-width="6" stroke-linecap="round"/><circle cx="84" cy="32" r="5" fill="#4aa3f0"/><circle cx="120" cy="32" r="5" fill="#4aa3f0"/><path d="M84 34 v-4 M120 34 v-4" stroke="#4aa3f0" stroke-width="6" stroke-linecap="round"/><path d="M120 78 v18 a16 16 0 0 0 32 0 v-8" fill="none" stroke="#6c7ae0" stroke-width="6"/><circle class="beat" cx="152" cy="72" r="12" fill="#ff6b6b"/>`),
   clipboard: A('#eaf1ff', `<rect x="86" y="34" width="68" height="80" rx="8" fill="#fff" stroke="#cdd8e6" stroke-width="3"/><rect x="106" y="28" width="28" height="14" rx="5" fill="#6c7ae0"/><g stroke="#9fb0ab" stroke-width="4" stroke-linecap="round"><path d="M98 58 h44 M98 74 h44 M98 90 h30"/></g><circle class="twinkle" cx="92" cy="58" r="3" fill="#46c46e"/><circle class="twinkle2" cx="92" cy="74" r="3" fill="#46c46e"/>`),
+  walk: A('#fff0e0', `<g stroke="#e0912a" stroke-width="8" stroke-linecap="round" fill="none"><path d="M118 30 v18"/><path d="M118 48 l-16 20 v26"/><path d="M118 48 l18 16 8 26"/><path d="M102 68 l-14 10"/><path d="M136 64 l16 6"/></g><circle cx="118" cy="24" r="9" fill="#e0912a"/><g stroke="#ffcf9e" stroke-width="4" stroke-linecap="round" opacity=".8"><path d="M150 40 h20 M156 50 h18 M150 60 h14"/></g>`),
+  lungs: A('#e6f7ff', `<path d="M120 30 v26" stroke="#4aa3f0" stroke-width="6" stroke-linecap="round"/><path d="M118 50 c-10 -10 -34 -10 -38 10 c-4 20 4 40 18 40 c10 0 14 -8 16 -16 z" fill="#7cc0f5"/><path d="M122 50 c10 -10 34 -10 38 10 c4 20 -4 40 -18 40 c-10 0 -14 -8 -16 -16 z" fill="#4aa3f0"/><circle class="pulse" cx="96" cy="76" r="4" fill="#fff"/><circle class="pulse" cx="146" cy="76" r="4" fill="#fff"/>`),
+  droplet: A('#e6f3ff', `<path class="pulse" d="M120 26 C104 50 88 68 88 84 a32 32 0 0 0 64 0 c0 -16 -16 -34 -32 -58 z" fill="#4aa3f0"/><ellipse cx="107" cy="82" rx="8" ry="12" fill="#bfe0fb" opacity=".8"/>`),
+  thermo: A('#ffe9ec', `<rect x="112" y="24" width="16" height="52" rx="8" fill="#fff" stroke="#e3b9bf" stroke-width="3"/><circle class="beat" cx="120" cy="86" r="16" fill="#ff5a5a"/><rect x="116" y="46" width="8" height="34" fill="#ff5a5a"/><g stroke="#d79aa1" stroke-width="2"><path d="M132 34 h6 M132 44 h6 M132 54 h6"/></g>`),
+  chart: A('#e6f7f0', `<g stroke="#c7d6d1" stroke-width="2"><path d="M70 34 v66 M70 100 h100"/></g><path class="shimmer" d="M78 88 L100 62 L118 74 L142 40 L164 52" fill="none" stroke="#2fb8a8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle class="pulse" cx="164" cy="52" r="6" fill="#2fb8a8"/>`),
+  tubes: A('#eef0ff', `<g><rect x="82" y="34" width="18" height="50" rx="9" fill="#fff" stroke="#c9c2f2" stroke-width="3"/><rect x="85" y="54" width="12" height="28" rx="6" fill="#ff8fab"/></g><g><rect x="110" y="24" width="18" height="60" rx="9" fill="#fff" stroke="#c9c2f2" stroke-width="3"/><rect x="113" y="50" width="12" height="32" rx="6" fill="#4aa3f0"/></g><g><rect x="138" y="40" width="18" height="44" rx="9" fill="#fff" stroke="#c9c2f2" stroke-width="3"/><rect x="141" y="58" width="12" height="24" rx="6" fill="#ffd23f"/></g><rect x="72" y="88" width="96" height="10" rx="4" fill="#9aa0d8"/>`),
+  noFood: A('#ffe6e6', `<circle cx="120" cy="60" r="42" fill="#fff" stroke="#f3c9c9" stroke-width="4"/><circle cx="106" cy="52" r="9" fill="#46c46e" opacity=".55"/><circle cx="130" cy="50" r="7" fill="#ff6b6b" opacity=".55"/><ellipse cx="128" cy="70" rx="11" ry="6" fill="#8fb8e0" opacity=".55"/><circle cx="120" cy="60" r="42" fill="none" stroke="#ff5a5a" stroke-width="7"/><path d="M92 32 L148 88" stroke="#ff5a5a" stroke-width="7" stroke-linecap="round"/>`),
+  bodyPin: A('#eef1ff', `<circle cx="120" cy="38" r="14" fill="#6c7ae0"/><path d="M120 52 c-18 0 -26 14 -26 30 v18 h52 v-18 c0 -16 -8 -30 -26 -30 z" fill="#8b95e8"/><circle class="pulse" cx="120" cy="78" r="9" fill="#ff6b6b"/><circle class="glow" cx="120" cy="78" r="16" fill="#ff6b6b" opacity=".3"/>`),
 };
 
 /* Section default illustration + hero */
 const DEFAULT_ART={drugs:'pill',treatments:'stethoscope',radiation:'beams',nutrition:'plate',
-  supplements:'bottle',surgery:'recovery',genes:'dna',terms:'book',trials:'flask'};
+  supplements:'bottle',surgery:'recovery',genes:'dna',terms:'book',trials:'flask',
+  chemo:'ropes',rehab:'walk'};
 
 /* Per-item illustration overrides, keyed by exact item name */
 const ITEM_ART={
@@ -958,6 +1072,23 @@ const ITEM_ART={
   'Positive margin':'cake','Androgen receptor':'socket',
   'STAMPEDE2':'flask','EvoPAR-Prostate02':'repair','PSMAcTION':'target','High Five Trial':'beams',
   'ProBio':'dna','REVELUTION-2':'pill','SPA Trial':'beams','MUSIC-Screen':'scan',
+  'Gleason score / ISUP grade group':'microscope','Extent on the biopsy cores':'needle',
+  'Perineural invasion':'dna','Ductal or intraductal patterns':'microscope',
+  'Metastatic hormone-sensitive disease (mHSPC)':'ropes','Castration-resistant disease (mCRPC)':'plant',
+  'High-volume vs. low-volume disease':'scan','Overall health & organ function':'tubes',
+  'Prehab — build an aerobic base':'walk','Prehab — start pelvic-floor training early':'dumbbell',
+  'Prehab — strength & core':'dumbbell','Prehab — breathing & lung exercises':'lungs',
+  'Prehab — optimize the whole body':'sun','Early post-op — walk often':'walk',
+  'Early post-op — ankle pumps & breathing':'lungs','Pelvic-floor rehab (Kegels)':'dumbbell',
+  'Bladder & continence retraining':'droplet','Erectile / penile rehabilitation':'recovery',
+  'Return to aerobic exercise':'walk','Return to strength training':'dumbbell',
+  'Exercise on hormone therapy (ADT)':'dumbbell','Lymphedema awareness':'droplet',
+  'Fatigue management & pacing':'valley','Return to work, driving & sport':'walk',
+  'Red flags — when to stop':'bell',
+  'Charred & well-done grilled meat':'noFood','Processed & cured meats':'noFood',
+  'High-dose calcium / heavy dairy intake':'noFood','Selenium & high-dose vitamin E pills':'noFood',
+  'Excess alcohol':'noFood','Sugary drinks & refined carbs':'noFood',
+  'Ultra-processed \'fast\' food':'noFood','Unproven high-dose supplement stacking':'noFood',
 };
 function artFor(name,sectionKey){return ART[ITEM_ART[name]]||ART[DEFAULT_ART[sectionKey]]||'';}
 
@@ -979,6 +1110,25 @@ function refSection(key, data){
     </article>`;
   });
   html += `</div>`;
+  if(data.avoid && data.avoid.length){
+    html += `<h2 class="section-gap" style="font-size:22px;margin-bottom:6px">Foods &amp; patterns to limit or avoid</h2>`;
+    html += `<p class="lead" style="margin-bottom:12px">Nothing here is forbidden forever — these are things to eat less often or ask about, not a list of banned foods. When in doubt, ask the care team or a dietitian.</p>`;
+    html += `<div class="grid cols-2">`;
+    data.avoid.forEach((it,i)=>{
+      const id=`${key}-avoid-${i}`;
+      html += `<article class="ref-card" style="border-color:color-mix(in srgb, var(--crit) 30%, var(--border))">
+        ${artBox(ART.noFood,'art')}
+        <span class="tag" style="color:var(--crit)">Limit or avoid</span>
+        <h3>${esc(it.name)}</h3>
+        <p>${esc(it.text)}</p>
+        <button class="listen" data-say="${id}" aria-label="Listen to explanation of ${esc(it.name)}">
+          <span class="wave"><i></i><i></i><i></i><i></i></span> Listen
+        </button>
+      </article>`;
+      SAY[id]=it.name+". "+it.text;
+    });
+    html += `</div>`;
+  }
   // action items
   html += `<h2 class="section-gap" style="font-size:22px;margin-bottom:6px">Action items — bring these to the care team</h2>`;
   html += `<details class="actions-d" open><summary>${data.actions.length} things Scott (and family) can do or ask <span class="chev">›</span></summary><ul class="checklist">`;
@@ -997,17 +1147,21 @@ function buildView(id){
   if(id==="biopsy") return viewBiopsy();
   if(id==="history") return viewHistory();
   if(id==="vitals") return viewVitals();
+  if(id==="labs") return viewLabs();
+  if(id==="flowsheets") return viewFlowsheets();
   if(id==="backup") return viewBackup();
   if(id==="trials") return viewTrials();
   if(id==="databases") return viewDatabases();
   if(id==="scholarly") return viewScholarly();
   if(id==="review") return viewReview();
   if(id==="disclaimer") return viewDisclaimer();
-  const map = {drugs:DRUGS,treatments:TREATMENTS,radiation:RADIATION,nutrition:NUTRITION,
+  const map = {drugs:DRUGS,chemo:CHEMO,treatments:TREATMENTS,radiation:RADIATION,rehab:REHAB,nutrition:NUTRITION,
     supplements:SUPPLEMENTS,surgery:SURGERY,genes:GENES,terms:TERMS};
   const titles = {drugs:["Medications","Common medicines in prostate cancer care"],
+    chemo:["Chemotherapy","What biopsy findings mean for the chemo conversation"],
     treatments:["Treatment plans","Common approaches, alone or combined"],
     radiation:["Radiation plans","How radiation can be delivered"],
+    rehab:["Exercise & rehab","Pre-surgery prehab and post-surgery recovery protocols"],
     nutrition:["Nutrition","Eating patterns studied in prostate health"],
     supplements:["Supplements","What men ask about — and the cautions"],
     surgery:["Surgery recovery","Healing after prostate surgery"],
@@ -1059,12 +1213,54 @@ function analyzeProfile(){
   if(/psma/i.test(txt))flags.add('psma');
   return {flags,genes,brcaLike,lynch,gsum,isup,hasData:txt.trim().length>3};
 }
+
+/* Rehab progress — reads which rehab action items are checked, so suggestions
+   can adapt as recovery continues rather than staying static. */
+function rehabProgress(){
+  const total=REHAB.actions.length; const uncheckedIdx=[]; let checked=0;
+  for(let i=0;i<total;i++){ if(store.get('chk-rehab-'+i,false)) checked++; else uncheckedIdx.push(i); }
+  return {checked,total,uncheckedIdx};
+}
+
+/* Labs flags — simple general reference-range checks on whatever Scott has entered.
+   These are common adult reference ranges, not Scott's lab's own range — always
+   defer to the actual report and the care team. */
+function labsFlags(){
+  const num=s=>{const m=String(s||'').match(/-?\d+(\.\d+)?/); return m?parseFloat(m[0]):null;};
+  const flags=new Set();
+  const hgb=num(store.get('lab_hgb','')); if(hgb!=null&&hgb<12)flags.add('lowHgb');
+  const anc=num(store.get('lab_anc','')); if(anc!=null&&anc<1.5)flags.add('lowANC');
+  const plt=num(store.get('lab_plt','')); if(plt!=null&&plt<100)flags.add('lowPlatelets');
+  const alt=num(store.get('lab_alt','')), ast=num(store.get('lab_ast',''));
+  if((alt!=null&&alt>55)||(ast!=null&&ast>48))flags.add('liverElevated');
+  const egfr=num(store.get('lab_egfr','')); if(egfr!=null&&egfr<60)flags.add('lowEGFR');
+  const testo=num(store.get('lab_testo','')); if(testo!=null&&testo>50)flags.add('testoNotSuppressed');
+  return flags;
+}
+
+/* Symptom & urine flow flags — reads the most recent flow-sheet entries. */
+function trackerFlags(){
+  const flags=new Set();
+  (store.get('symptomLog',[])||[]).slice(0,5).forEach(e=>{
+    const sev=parseInt(e.severity,10);
+    if(!isNaN(sev)&&sev>=7)flags.add('highSeverity');
+    if(e.symptom==='Fever')flags.add('fever');
+    if(e.symptom==='Incontinence')flags.add('incontinenceLogged');
+    if(e.symptom==='Urinary urgency/frequency')flags.add('urinarySymptom');
+  });
+  (store.get('urineLog',[])||[]).slice(0,3).forEach(e=>{
+    if(e.leak&&/Heavy|Moderate/.test(e.leak))flags.add('leakage');
+  });
+  return flags;
+}
 function personalizeHTML(){
   const p=analyzeProfile();
-  if(!p.hasData || (p.flags.size===0 && p.genes.length===0)){
+  const rp=rehabProgress(); const lf=labsFlags(); const tf=trackerFlags();
+  const anySignal = p.hasData || p.flags.size || p.genes.length || rp.checked>0 || lf.size>0 || tf.size>0;
+  if(!anySignal){
     return `<div class="card section-gap" style="border-style:dashed">
       <h3 style="font-size:19px;margin-bottom:6px">Personalize this guide</h3>
-      <p style="color:var(--muted);font-size:14.5px;margin:0">Paste Scott's diagnosis in <a href="#biopsy">Biopsy &amp; diagnosis</a> (Gleason, ISUP, stage, and any gene results). This page will then automatically highlight the sections that matter most for his specific case.</p></div>`;
+      <p style="color:var(--muted);font-size:14.5px;margin:0">Paste Scott's diagnosis in <a href="#biopsy">Biopsy &amp; diagnosis</a> (Gleason, ISUP, stage, and any gene results), log labs, or check off rehab steps. This page will then automatically highlight the sections and next steps that matter most — and keep updating as more is entered.</p></div>`;
   }
   // detected chips
   let chips='';
@@ -1075,6 +1271,16 @@ function personalizeHTML(){
   if(p.flags.has('crpc'))chips+=`<span class="pill warn">Castration-resistant</span>`;
   if(p.flags.has('msi'))chips+=`<span class="pill info">MSI / mismatch-repair</span>`;
   p.genes.forEach(g=>chips+=`<span class="pill info">${g}</span>`);
+  if(lf.has('lowHgb'))chips+=`<span class="pill warn">Low hemoglobin (labs)</span>`;
+  if(lf.has('lowANC'))chips+=`<span class="pill warn">Low neutrophils (labs)</span>`;
+  if(lf.has('lowPlatelets'))chips+=`<span class="pill warn">Low platelets (labs)</span>`;
+  if(lf.has('liverElevated'))chips+=`<span class="pill warn">Elevated liver enzymes (labs)</span>`;
+  if(lf.has('lowEGFR'))chips+=`<span class="pill warn">Reduced kidney function (labs)</span>`;
+  if(lf.has('testoNotSuppressed'))chips+=`<span class="pill warn">Testosterone not fully suppressed (labs)</span>`;
+  if(tf.has('fever'))chips+=`<span class="pill crit">Fever logged</span>`;
+  if(tf.has('highSeverity'))chips+=`<span class="pill crit">High-severity symptom logged</span>`;
+  if(tf.has('incontinenceLogged')||tf.has('leakage'))chips+=`<span class="pill warn">Leakage logged</span>`;
+  if(rp.checked>0)chips+=`<span class="pill good">Rehab: ${rp.checked}/${rp.total} steps checked</span>`;
   // build focus cards
   const cards=[]; const seen=new Set();
   const add=(tag,title,why,href)=>{if(seen.has(title))return;seen.add(title);cards.push({tag,title,why,href});};
@@ -1092,17 +1298,41 @@ function personalizeHTML(){
   if(p.flags.has('intermediate')){add('Treatment','Weigh the main options','Compare surgery, radiation, and (sometimes) surveillance for intermediate-risk disease.','#treatments');}
   if(p.flags.has('low')){add('Treatment','Active surveillance may fit','Low-grade cancer is often watched closely rather than treated right away — ask if it applies.','#treatments');
     add('Terms','Learn the monitoring terms','Understand PSA trends, nadir, and what would trigger treatment.','#terms');}
+  // labs-driven cards
+  if(lf.has('lowHgb'))add('Labs','Ask about the low hemoglobin','A hemoglobin below the typical adult range can mean anemia — ask whether it affects energy, treatment timing, or dosing.','#labs');
+  if(lf.has('lowANC'))add('Safety','Ask about infection precautions','A low neutrophil count can raise infection risk, especially around chemo cycles — ask about precautions and when to call.','#chemo');
+  if(lf.has('lowPlatelets'))add('Safety','Ask about bleeding precautions','Low platelets can raise bleeding risk — relevant before any procedure, surgery, or chemo cycle.','#chemo');
+  if(lf.has('liverElevated'))add('Labs','Ask about the liver enzyme results','Elevated liver enzymes can affect how some drugs are dosed or processed — flag this before starting or continuing treatment.','#drugs');
+  if(lf.has('lowEGFR'))add('Labs','Ask about kidney function','Reduced kidney function (eGFR) can change dosing for some chemo and targeted drugs.','#drugs');
+  if(lf.has('testoNotSuppressed'))add('Hormone therapy','Confirm testosterone suppression','On hormone therapy, testosterone is usually kept very low — ask whether this level means the current approach needs adjusting.','#drugs');
+  // symptom/urine tracker cards
+  if(tf.has('fever'))add('Safety','A fever was logged','Fever is one of the classic red-flag symptoms — this is usually a same-day call to the care team, not a wait-and-see.','#surgery');
+  if(tf.has('highSeverity'))add('Symptom','A high-severity symptom was logged','Something was rated 7/10 or higher in the symptom tracker — worth flagging at the next contact with the care team, or sooner if it is new.','#flowsheets');
+  if(tf.has('incontinenceLogged')||tf.has('leakage'))add('Rehab','Leakage was logged — pelvic-floor rehab may help','Kegel and bladder-retraining exercises are the standard first step for regaining control after surgery.','#rehab');
   // always-useful supportive care
   add('Supportive','Nutrition & exercise','Supportive habits that help through any treatment path.','#nutrition');
-  let cardsHTML=cards.slice(0,8).map((c,i)=>`<a class="step" href="${c.href}" style="text-decoration:none;color:inherit">
+  let cardsHTML=cards.slice(0,9).map((c,i)=>`<a class="step" href="${c.href}" style="text-decoration:none;color:inherit">
     <div class="n">${i+1}</div><div><h4>${esc(c.title)}</h4><p><span style="color:var(--accent);font-weight:600">${esc(c.tag)}.</span> ${esc(c.why)}</p></div></a>`).join('');
+  // rehab progress block — adapts as more action items get checked off
+  let rehabHTML='';
+  if(rp.checked>0){
+    const pct=Math.round(100*rp.checked/rp.total);
+    if(rp.checked>=rp.total){
+      rehabHTML=`<div class="callout info" style="margin-top:14px"><strong>All ${rp.total} rehab action items are checked.</strong> Nice, steady progress. Next: ask the care team about advancing toward full activity, sport, and the remaining milestones in <a href="#rehab">Exercise &amp; rehab</a>.</div>`;
+    }else{
+      const nextIdx=rp.uncheckedIdx.slice(0,2);
+      const nextText=nextIdx.map(i=>REHAB.actions[i]).map(t=>`<li>${esc(t)}</li>`).join('');
+      rehabHTML=`<div class="callout info" style="margin-top:14px"><strong>Rehab progress: ${rp.checked} of ${rp.total} steps checked (${pct}%).</strong> Suggested next, based on what's not yet checked: <ul style="margin:8px 0 2px 18px">${nextText}</ul>See the full list in <a href="#rehab">Exercise &amp; rehab</a>.</div>`;
+    }
+  }
   return `<div class="card section-gap" style="border-color:var(--primary)">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px">
       <h3 style="font-size:20px">Scott's focus areas</h3><span class="pill info">Auto-generated from entered records</span></div>
-    <p style="color:var(--muted);font-size:14px;margin:0 0 4px">Detected in the diagnosis text:</p>
+    <p style="color:var(--muted);font-size:14px;margin:0 0 4px">Detected from the diagnosis, labs, and tracked records:</p>
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">${chips||'<span class="pill">—</span>'}</div>
     ${cardsHTML}
-    <div class="callout warn" style="margin-top:14px;font-size:13.5px">This panel is built automatically from the words you typed — it is <strong>not</strong> a diagnosis, recommendation, or eligibility check. It only points to relevant reading. Every decision belongs with Scott's care team.</div>
+    ${rehabHTML}
+    <div class="callout warn" style="margin-top:14px;font-size:13.5px">This panel is built automatically from what's entered — it is <strong>not</strong> a diagnosis, recommendation, or eligibility check, and lab flags use general adult reference ranges, not Scott's own lab's range. It only points to relevant reading and updates as more is entered. Every decision belongs with Scott's care team.</div>
   </div>`;
 }
 
@@ -1142,9 +1372,11 @@ function viewHome(){
   </div>
   ${footerHTML()}`;
 }
+const IMAGE_META_KEYS=['images_meta','labimg_meta'];
 function countRecords(){
   let n=0; ["patientName","dxSummary","history","vit_psa","vit_bp","vit_hr","vit_wt","vit_temp"].forEach(k=>{if(store.get(k,""))n++});
-  n += (store.get("images_meta",[])||[]).length;
+  IMAGE_META_KEYS.forEach(k=>{n += (store.get(k,[])||[]).length;});
+  n += (store.get('symptomLog',[])||[]).length + (store.get('vitalsLog',[])||[]).length + (store.get('urineLog',[])||[]).length;
   return n;
 }
 
@@ -1234,6 +1466,192 @@ function viewVitals(){
   </div>${footerHTML()}`;
 }
 
+function viewLabs(){
+  return `<div class="eyebrow">Scott's records</div>
+  <h1 class="page-h">Labs</h1>
+  <p class="lead">Keep bloodwork in one place: CBC (blood counts), CMP (metabolic panel), and other biomarkers. Fill in whatever the report gives — leave the rest blank.</p>
+  ${artBox(ART.tubes,'hero-art')}
+  <div class="card section-gap">
+    <h3 style="font-size:18px;margin-bottom:2px">CBC — Complete Blood Count</h3>
+    <p style="color:var(--muted);font-size:13.5px;margin:0 0 12px">Checks red cells, white cells, and platelets — useful baseline before chemo and to watch for infection or anemia.</p>
+    <div class="vitgrid">
+      <div class="field"><label for="lab_wbc">WBC (white cells)</label><input id="lab_wbc" data-save="lab_wbc" placeholder="e.g. 6.2 K/µL"></div>
+      <div class="field"><label for="lab_hgb">Hemoglobin</label><input id="lab_hgb" data-save="lab_hgb" placeholder="e.g. 14.5 g/dL"></div>
+      <div class="field"><label for="lab_hct">Hematocrit</label><input id="lab_hct" data-save="lab_hct" placeholder="e.g. 43 %"></div>
+      <div class="field"><label for="lab_plt">Platelets</label><input id="lab_plt" data-save="lab_plt" placeholder="e.g. 240 K/µL"></div>
+      <div class="field"><label for="lab_anc">ANC (neutrophils)</label><input id="lab_anc" data-save="lab_anc" placeholder="e.g. 3.8 K/µL"></div>
+    </div>
+  </div>
+  <div class="card section-gap">
+    <h3 style="font-size:18px;margin-bottom:2px">CMP — Comprehensive Metabolic Panel</h3>
+    <p style="color:var(--muted);font-size:13.5px;margin:0 0 12px">Checks kidney and liver function, blood sugar, and electrolytes — important before and during many treatments.</p>
+    <div class="vitgrid">
+      <div class="field"><label for="lab_creat">Creatinine</label><input id="lab_creat" data-save="lab_creat" placeholder="e.g. 1.0 mg/dL"></div>
+      <div class="field"><label for="lab_egfr">eGFR (kidney function)</label><input id="lab_egfr" data-save="lab_egfr" placeholder="e.g. 85"></div>
+      <div class="field"><label for="lab_bun">BUN</label><input id="lab_bun" data-save="lab_bun" placeholder="e.g. 14 mg/dL"></div>
+      <div class="field"><label for="lab_glucose">Glucose</label><input id="lab_glucose" data-save="lab_glucose" placeholder="e.g. 95 mg/dL"></div>
+      <div class="field"><label for="lab_alt">ALT (liver)</label><input id="lab_alt" data-save="lab_alt" placeholder="e.g. 22 U/L"></div>
+      <div class="field"><label for="lab_ast">AST (liver)</label><input id="lab_ast" data-save="lab_ast" placeholder="e.g. 20 U/L"></div>
+      <div class="field"><label for="lab_alp">Alkaline phosphatase</label><input id="lab_alp" data-save="lab_alp" placeholder="e.g. 70 U/L — bone/liver marker"></div>
+      <div class="field"><label for="lab_na">Sodium / Potassium</label><input id="lab_na" data-save="lab_na" placeholder="e.g. Na 140, K 4.2"></div>
+    </div>
+  </div>
+  <div class="card section-gap">
+    <h3 style="font-size:18px;margin-bottom:2px">Other biomarkers</h3>
+    <p style="color:var(--muted);font-size:13.5px;margin:0 0 12px">PSA lives in the Vitals section. Track other prostate-relevant markers here.</p>
+    <div class="vitgrid">
+      <div class="field"><label for="lab_testo">Testosterone</label><input id="lab_testo" data-save="lab_testo" placeholder="e.g. 12 ng/dL — should be low on ADT"></div>
+      <div class="field"><label for="lab_vitd">Vitamin D</label><input id="lab_vitd" data-save="lab_vitd" placeholder="e.g. 32 ng/mL"></div>
+      <div class="field"><label for="lab_ca">Calcium</label><input id="lab_ca" data-save="lab_ca" placeholder="e.g. 9.4 mg/dL"></div>
+    </div>
+    <button class="btn primary" id="saveLabs" style="margin-top:6px">Save to this device</button>
+    <span class="saved-note" id="labsSaved">Saved ✓</span>
+  </div>
+  <div class="card section-gap">
+    <h3 style="font-size:18px;margin-bottom:8px">Lab results log</h3>
+    <p style="color:var(--muted);font-size:13.5px;margin:0 0 10px">Log any lab value over time — great for watching trends between visits.</p>
+    <div class="row">
+      <div class="field"><label for="labLogDate">Date</label><input id="labLogDate" type="date"></div>
+      <div class="field"><label for="labLogTest">Test name</label><input id="labLogTest" placeholder="e.g. Hemoglobin, Creatinine, Testosterone"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="labLogValue">Value</label><input id="labLogValue" placeholder="e.g. 13.8 g/dL"></div>
+      <div class="field"><label for="labLogNote">Note</label><input id="labLogNote" placeholder="e.g. before cycle 2"></div>
+    </div>
+    <button class="btn ghost" id="addLabLog">Add to log</button>
+    <div id="labLogList" style="margin-top:14px"></div>
+  </div>
+  <div class="card section-gap">
+    <h3 style="font-size:18px;margin-bottom:2px">Lab report photos</h3>
+    <p style="color:var(--muted);font-size:13.5px;margin:0 0 12px">Photograph a printed lab report and keep it with a short note. Stored only on this device.</p>
+    <div class="field"><label for="labImgNote">Note for the next photo</label><input id="labImgNote" placeholder="e.g. CBC panel, July 2026"></div>
+    <label class="dropzone" for="labImgInput"><strong>Tap to add a photo</strong><br><span style="font-size:13px">JPG or PNG of a printed or emailed lab report</span></label>
+    <input id="labImgInput" type="file" accept="image/*" multiple style="display:none">
+    <div class="imguploads" id="labGallery"></div>
+  </div>${footerHTML()}`;
+}
+
+function viewFlowsheets(){
+  return `<div class="eyebrow">Scott's records</div>
+  <h1 class="page-h">Flow sheets</h1>
+  <p class="lead">Daily tracking sheets for vitals, urinary output, and symptoms — the kind of log a care team often asks for, especially around surgery, radiation, or a new medicine.</p>
+  ${artBox(ART.chart,'hero-art')}
+  <div class="callout info section-gap">Estimating urine output: count bathroom trips, or use a marked container if the care team asked for a measured amount. Consistency matters more than precision — the trend is what's useful.</div>
+  <div class="card section-gap">
+    <h3 style="font-size:18px;margin-bottom:2px">Vitals trend</h3>
+    <p style="color:var(--muted);font-size:13.5px;margin:0 0 10px">A dated log of blood pressure, heart rate, weight, temperature, and oxygen — separate from the single "current" values in Vitals.</p>
+    <div class="row">
+      <div class="field"><label for="vf_date">Date</label><input id="vf_date" type="date"></div>
+      <div class="field"><label for="vf_bp">Blood pressure</label><input id="vf_bp" placeholder="120/80"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="vf_hr">Heart rate</label><input id="vf_hr" inputmode="numeric" placeholder="bpm"></div>
+      <div class="field"><label for="vf_wt">Weight</label><input id="vf_wt" placeholder="lb/kg"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="vf_temp">Temperature</label><input id="vf_temp" placeholder="°F/°C"></div>
+      <div class="field"><label for="vf_o2">Oxygen (SpO₂ %)</label><input id="vf_o2" inputmode="numeric"></div>
+    </div>
+    <div class="field"><label for="vf_note">Note</label><input id="vf_note" placeholder="e.g. after morning walk"></div>
+    <button class="btn ghost" id="vf_add">Add to log</button>
+    <div id="vf_list" style="margin-top:14px"></div>
+  </div>
+  <div class="card section-gap">
+    <h3 style="font-size:18px;margin-bottom:2px">Urine output tracker</h3>
+    <p style="color:var(--muted);font-size:13.5px;margin:0 0 10px">Useful after surgery or with urinary symptoms. Track how often and roughly how much.</p>
+    <div class="row">
+      <div class="field"><label for="uf_date">Date</label><input id="uf_date" type="date"></div>
+      <div class="field"><label for="uf_count">Times voided (24h)</label><input id="uf_count" inputmode="numeric" placeholder="e.g. 7"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="uf_vol">Estimated volume</label><input id="uf_vol" placeholder="e.g. ~1800 mL, or 'normal'"></div>
+      <div class="field"><label for="uf_leak">Leakage / control</label><select id="uf_leak">
+        <option value="">—</option><option>None</option><option>Mild — a few drops</option>
+        <option>Moderate — pad needed</option><option>Heavy — soaked pad</option></select></div>
+    </div>
+    <div class="field"><label for="uf_note">Note</label><input id="uf_note" placeholder="e.g. color, urgency, burning, night trips"></div>
+    <button class="btn ghost" id="uf_add">Add to log</button>
+    <div id="uf_list" style="margin-top:14px"></div>
+  </div>
+  <div class="card section-gap">
+    <h3 style="font-size:18px;margin-bottom:2px">Symptom tracker</h3>
+    <p style="color:var(--muted);font-size:13.5px;margin:0 0 10px">Log how Scott feels day to day — patterns here are often more useful to the care team than any single day.</p>
+    <div class="row">
+      <div class="field"><label for="sf_date">Date</label><input id="sf_date" type="date"></div>
+      <div class="field"><label for="sf_symptom">Symptom</label><select id="sf_symptom">
+        <option value="">—</option><option>Pain</option><option>Fatigue</option><option>Urinary urgency/frequency</option>
+        <option>Incontinence</option><option>Hot flashes</option><option>Nausea</option><option>Bowel changes</option>
+        <option>Numbness / tingling</option><option>Mood / anxiety</option><option>Sleep trouble</option>
+        <option>Erectile changes</option><option>Fever</option><option>Other</option></select></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="sf_severity">Severity (0 none – 10 worst)</label><input id="sf_severity" type="number" min="0" max="10" inputmode="numeric"></div>
+      <div class="field"><label for="sf_note">Note</label><input id="sf_note" placeholder="what helped, what triggered it"></div>
+    </div>
+    <button class="btn ghost" id="sf_add">Add to log</button>
+    <div id="sf_list" style="margin-top:14px"></div>
+  </div>${footerHTML()}`;
+}
+
+function wireLogTable({prefix,storeKey,fields}){
+  const list=document.getElementById(prefix+'_list');
+  render();
+  document.getElementById(prefix+'_add').addEventListener('click',()=>{
+    const entry={}; let hasAny=false;
+    fields.forEach(f=>{const el=document.getElementById(prefix+'_'+f.key); const v=el.value; entry[f.key]=v; if(v)hasAny=true;});
+    if(!hasAny)return;
+    const log=store.get(storeKey,[]); log.unshift(entry); store.set(storeKey,log);
+    fields.forEach(f=>{document.getElementById(prefix+'_'+f.key).value='';});
+    render();
+  });
+  function render(){
+    const log=store.get(storeKey,[]);
+    if(!log.length){list.innerHTML='<p style="color:var(--faint);font-size:14px">No entries yet.</p>';return;}
+    const head=fields.map(f=>`<th>${esc(f.label)}</th>`).join('');
+    list.innerHTML='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="text-align:left;color:var(--faint)">'+head+'<th></th></tr></thead><tbody>'+
+      log.map((e,i)=>'<tr style="border-top:1px solid var(--border)">'+fields.map(f=>`<td style="padding:8px 8px${f.num?';font-variant-numeric:tabular-nums':''}">${esc(e[f.key]||'—')}</td>`).join('')+
+        `<td><button class="del" data-i="${i}" style="position:static;background:none;color:var(--crit);border:none;cursor:pointer">✕</button></td></tr>`).join('')+
+      '</tbody></table></div>';
+    list.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>{
+      const log=store.get(storeKey,[]); log.splice(+b.dataset.i,1); store.set(storeKey,log); render();
+    }));
+  }
+}
+function wireFlowsheets(){
+  wireLogTable({prefix:'vf',storeKey:'vitalsLog',fields:[
+    {key:'date',label:'Date',num:true},{key:'bp',label:'BP'},{key:'hr',label:'HR',num:true},
+    {key:'wt',label:'Weight'},{key:'temp',label:'Temp'},{key:'o2',label:'O₂'},{key:'note',label:'Note'}]});
+  wireLogTable({prefix:'uf',storeKey:'urineLog',fields:[
+    {key:'date',label:'Date',num:true},{key:'count',label:'Times',num:true},{key:'vol',label:'Volume'},
+    {key:'leak',label:'Leakage'},{key:'note',label:'Note'}]});
+  wireLogTable({prefix:'sf',storeKey:'symptomLog',fields:[
+    {key:'date',label:'Date',num:true},{key:'symptom',label:'Symptom'},{key:'severity',label:'Severity',num:true},{key:'note',label:'Note'}]});
+}
+
+function wireLabsLog(){
+  const list=document.getElementById('labLogList');
+  render();
+  document.getElementById('addLabLog').addEventListener('click',()=>{
+    const d=document.getElementById('labLogDate').value, t=document.getElementById('labLogTest').value,
+      v=document.getElementById('labLogValue').value, n=document.getElementById('labLogNote').value;
+    if(!d&&!t&&!v)return;
+    const log=store.get('labLog',[]); log.unshift({d,t,v,n}); store.set('labLog',log);
+    document.getElementById('labLogDate').value='';document.getElementById('labLogTest').value='';
+    document.getElementById('labLogValue').value='';document.getElementById('labLogNote').value='';
+    render();
+  });
+  function render(){
+    const log=store.get('labLog',[]);
+    if(!log.length){list.innerHTML='<p style="color:var(--faint);font-size:14px">No entries yet.</p>';return;}
+    list.innerHTML='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="text-align:left;color:var(--faint)"><th style="padding:6px 8px">Date</th><th>Test</th><th>Value</th><th>Note</th><th></th></tr></thead><tbody>'+
+      log.map((e,i)=>`<tr style="border-top:1px solid var(--border)"><td style="padding:8px 8px;font-variant-numeric:tabular-nums">${esc(e.d||'—')}</td><td>${esc(e.t||'—')}</td><td style="font-variant-numeric:tabular-nums">${esc(e.v||'—')}</td><td style="color:var(--muted)">${esc(e.n||'')}</td><td><button class="del" data-i="${i}" style="position:static;background:none;color:var(--crit);border:none;cursor:pointer">✕</button></td></tr>`).join('')+
+      '</tbody></table></div>';
+    list.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>{
+      const log=store.get('labLog',[]); log.splice(+b.dataset.i,1); store.set('labLog',log); render();
+    }));
+  }
+}
+
 function viewTrials(){
   const liveBase="https://clinicaltrials.gov/search?cond=Prostate%20Cancer&aggFilters=status:rec";
   let html=`<div class="eyebrow">Research &amp; trust</div>
@@ -1315,8 +1733,10 @@ function viewBackup(){
 async function collectBackup(){
   const data={version:1, exported:new Date().toISOString(), local:{}, images:[]};
   for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('phg_'))data.local[k]=localStorage.getItem(k);}
-  const meta=store.get('images_meta',[]);
-  for(const m of meta){const rec=await getImg(m.id);if(rec)data.images.push({meta:m,data:rec.data});}
+  for(const metaKey of IMAGE_META_KEYS){
+    const meta=store.get(metaKey,[]);
+    for(const m of meta){const rec=await getImg(m.id);if(rec)data.images.push({meta:m,data:rec.data});}
+  }
   return data;
 }
 async function restoreBackup(data){
@@ -1489,13 +1909,15 @@ function wireView(id){
     el.addEventListener('input',()=>store.set(k,el.value));
   });
   // explicit save buttons -> flash note
-  [['saveBiopsy','biopsySaved'],['saveHistory','historySaved'],['saveVitals','vitalsSaved']].forEach(([b,n])=>{
+  [['saveBiopsy','biopsySaved'],['saveHistory','historySaved'],['saveVitals','vitalsSaved'],['saveLabs','labsSaved']].forEach(([b,n])=>{
     const bt=document.getElementById(b); if(bt)bt.addEventListener('click',()=>{
       const note=document.getElementById(n); if(note){note.classList.add('show');setTimeout(()=>note.classList.remove('show'),1600);}
     });
   });
-  if(id==='images') wireImages();
+  if(id==='images') wireImageGallery({inputId:'imgInput',galleryId:'imgGallery',noteId:'imgNote',metaKey:'images_meta'});
+  if(id==='labs'){wireImageGallery({inputId:'labImgInput',galleryId:'labGallery',noteId:'labImgNote',metaKey:'labimg_meta'});wireLabsLog();}
   if(id==='vitals') wireVitals();
+  if(id==='flowsheets') wireFlowsheets();
   if(id==='backup') wireBackup();
   if(id==='disclaimer'){const rb=document.getElementById('reAckBtn');if(rb)rb.addEventListener('click',showAck);}
 }
@@ -1525,7 +1947,7 @@ function wireBackup(){
     if(!confirm('Erase ALL data on this device? This cannot be undone. Make sure you exported a backup first.'))return;
     const keys=[]; for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('phg_'))keys.push(k);}
     keys.forEach(k=>localStorage.removeItem(k));
-    for(const m of (store.get('images_meta',[])||[])){await delImg(m.id);}
+    for(const metaKey of IMAGE_META_KEYS){for(const m of (store.get(metaKey,[])||[])){await delImg(m.id);}}
     flashNote(note,'All data erased. Reloading…'); setTimeout(()=>location.reload(),900);
   });
 }
@@ -1536,10 +1958,13 @@ function printSummary(){
   const checked=[];
   for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('phg_chk-')&&localStorage.getItem(k)==='true')checked.push(k);}
   // map checked keys back to action text
-  const ALL={drugs:DRUGS,treatments:TREATMENTS,radiation:RADIATION,nutrition:NUTRITION,supplements:SUPPLEMENTS,surgery:SURGERY,genes:GENES,terms:TERMS,trials:TRIALS};
+  const ALL={drugs:DRUGS,chemo:CHEMO,treatments:TREATMENTS,radiation:RADIATION,rehab:REHAB,nutrition:NUTRITION,supplements:SUPPLEMENTS,surgery:SURGERY,genes:GENES,terms:TERMS,trials:TRIALS};
   const qs=[];
   checked.forEach(k=>{const m=k.match(/^phg_chk-(.+)-(\d+)$/);if(m&&ALL[m[1]]&&ALL[m[1]].actions[m[2]])qs.push(ALL[m[1]].actions[m[2]]);});
   const log=store.get('psaLog',[]);
+  const symLog=(store.get('symptomLog',[])||[]).slice(0,6);
+  const urnLog=(store.get('urineLog',[])||[]).slice(0,6);
+  const labLog=(store.get('labLog',[])||[]).slice(0,10);
   const esc2=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
   const row=(l,v)=>`<tr><th>${l}</th><td>${esc2(v)}</td></tr>`;
   const html=`<!doctype html><html><head><meta charset="utf-8"><title>${esc2(name)} — Summary</title>
@@ -1562,9 +1987,18 @@ function printSummary(){
    ${row('PSA (ng/mL)',g('vit_psa'))}${row('Blood pressure',g('vit_bp'))}${row('Heart rate',g('vit_hr'))}${row('Weight',g('vit_wt'))}${row('Temperature',g('vit_temp'))}${row('Oxygen (SpO₂)',g('vit_o2'))}
   </table>
   ${log.length?`<h2>PSA trend</h2><table>${log.map(e=>`<tr><th>${esc2(e.d||'—')}</th><td>PSA ${esc2(e.p||'—')} ${e.n?'· '+esc2(e.n):''}</td></tr>`).join('')}</table>`:''}
+  <h2>Labs</h2><table>
+   ${row('WBC',g('lab_wbc'))}${row('Hemoglobin',g('lab_hgb'))}${row('Hematocrit',g('lab_hct'))}${row('Platelets',g('lab_plt'))}${row('ANC',g('lab_anc'))}
+   ${row('Creatinine',g('lab_creat'))}${row('eGFR',g('lab_egfr'))}${row('BUN',g('lab_bun'))}${row('Glucose',g('lab_glucose'))}
+   ${row('ALT / AST',g('lab_alt')+' / '+g('lab_ast'))}${row('Alk. phosphatase',g('lab_alp'))}${row('Sodium / Potassium',g('lab_na'))}
+   ${row('Testosterone',g('lab_testo'))}${row('Vitamin D',g('lab_vitd'))}${row('Calcium',g('lab_ca'))}
+  </table>
+  ${labLog.length?`<h2>Lab results log</h2><table>${labLog.map(e=>`<tr><th>${esc2(e.d||'—')}</th><td>${esc2(e.t||'—')}: ${esc2(e.v||'—')} ${e.n?'· '+esc2(e.n):''}</td></tr>`).join('')}</table>`:''}
   <h2>Health history</h2><table>
    ${row('Conditions',g('conditions'))}${row('Medications',g('meds'))}${row('Allergies',g('allergies'))}${row('Family history',g('family'))}${row('Past surgeries',g('surg'))}${row('Care team',g('careteam'))}
   </table>
+  ${symLog.length?`<h2>Recent symptoms</h2><table>${symLog.map(e=>`<tr><th>${esc2(e.date||'—')}</th><td>${esc2(e.symptom||'—')}${e.severity?' — severity '+esc2(e.severity)+'/10':''} ${e.note?'· '+esc2(e.note):''}</td></tr>`).join('')}</table>`:''}
+  ${urnLog.length?`<h2>Recent urine output</h2><table>${urnLog.map(e=>`<tr><th>${esc2(e.date||'—')}</th><td>${esc2(e.count||'—')}x/day, ${esc2(e.vol||'—')}${e.leak?' · leakage: '+esc2(e.leak):''} ${e.note?'· '+esc2(e.note):''}</td></tr>`).join('')}</table>`:''}
   ${qs.length?`<h2>Questions for the care team</h2><ul>${qs.map(q=>`<li>${esc2(q)}</li>`).join('')}</ul>`:''}
   <div class="note">Generated by Scott M.'s Prostate Health Guide, a personal educational tool. This is not a medical record and not medical advice. Confirm all information with the licensed care team.</div>
   </body></html>`;
@@ -1586,11 +2020,10 @@ async function putImg(rec){const d=await openDB();if(!d)return;return new Promis
 async function getImg(id){const d=await openDB();if(!d)return null;return new Promise(r=>{const req=d.transaction('imgs').objectStore('imgs').get(id);req.onsuccess=()=>r(req.result);});}
 async function delImg(id){const d=await openDB();if(!d)return;return new Promise(r=>{const t=d.transaction('imgs','readwrite');t.objectStore('imgs').delete(id);t.oncomplete=()=>r();});}
 
-function wireImages(){
-  const input=document.getElementById('imgInput');
-  const dz=document.getElementById('dropzone');
-  const gal=document.getElementById('imgGallery');
-  const noteEl=document.getElementById('imgNote');
+function wireImageGallery({inputId,galleryId,noteId,metaKey}){
+  const input=document.getElementById(inputId);
+  const gal=document.getElementById(galleryId);
+  const noteEl=document.getElementById(noteId);
   renderGallery();
   input.addEventListener('change',async e=>{
     const files=[...e.target.files];
@@ -1599,14 +2032,14 @@ function wireImages(){
       const dataUrl=await fileToDataURL(f);
       const id='img_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
       await putImg({id,data:dataUrl});
-      const meta=store.get('images_meta',[]);
+      const meta=store.get(metaKey,[]);
       meta.unshift({id,note:noteEl.value||f.name,date:new Date().toISOString().slice(0,10)});
-      store.set('images_meta',meta);
+      store.set(metaKey,meta);
     }
     noteEl.value=''; input.value=''; renderGallery();
   });
   async function renderGallery(){
-    const meta=store.get('images_meta',[]);
+    const meta=store.get(metaKey,[]);
     gal.innerHTML='';
     for(const m of meta){
       const rec=await getImg(m.id);
@@ -1614,7 +2047,7 @@ function wireImages(){
       tile.innerHTML=`<img src="${rec?rec.data:''}" alt="${esc(m.note)}"><div class="cap">${esc(m.note)}<br><span style="opacity:.7">${esc(m.date)}</span></div><button class="del" title="Delete" aria-label="Delete image">✕</button>`;
       tile.querySelector('.del').addEventListener('click',async()=>{
         await delImg(m.id);
-        store.set('images_meta',store.get('images_meta',[]).filter(x=>x.id!==m.id));
+        store.set(metaKey,store.get(metaKey,[]).filter(x=>x.id!==m.id));
         renderGallery();
       });
       gal.appendChild(tile);

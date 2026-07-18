@@ -17,31 +17,69 @@ of treatment — in plain, eighth-grade-level explanations with optional audio.
 - To ship it as a real **native iOS/Android app**, see
   [`capacitor-app/`](./capacitor-app/) and the store materials in [`store/`](./store/).
 
-## Personalized focus
+## First-run acknowledgement
 
-The Overview shows a **"Scott's focus areas"** panel that reads the diagnosis text you
-enter (Gleason, ISUP, stage, and any gene results) and automatically highlights the most
-relevant sections — e.g. a BRCA2 mention surfaces PARP-inhibitor drugs, genetics, and
-matched trials; a high grade or "metastatic" surfaces intensive treatment and
-bone-directed options. It is keyword-based on your own text, clearly labeled as
-auto-generated, and never a recommendation. It updates live as the real report is added.
+On first launch, a full-screen gate states plainly that this is not medical advice,
+that the care team should always be followed, that data stays on-device, and what to
+do in an emergency. It must be explicitly accepted (checkbox + button) before the app
+is usable, and can be reopened anytime from **Disclaimers**.
+
+## Personalized, adaptive focus
+
+The Overview shows a **"Scott's focus areas"** panel that reads everything entered
+across the app — the diagnosis text (Gleason, ISUP, stage, gene results), **lab
+values**, the **symptom and urine trackers**, and **rehab progress** — and
+automatically highlights the most relevant sections and next steps:
+- A BRCA2 mention surfaces PARP-inhibitor drugs, genetics, and matched trials.
+- A high grade or "metastatic" surfaces intensive treatment and bone-directed options.
+- A low hemoglobin or elevated liver enzyme in Labs surfaces a relevant question for
+  the care team.
+- A logged fever or a high-severity symptom surfaces a same-day-call reminder.
+- Checking off rehab action items updates a **live progress bar and suggests the next
+  unchecked steps** — the recommendations genuinely evolve as recovery continues,
+  rather than staying static.
+
+It is keyword- and threshold-based on your own entered data (lab flags use general
+adult reference ranges, not Scott's own lab's range), clearly labeled as
+auto-generated, and never a diagnosis or recommendation. It updates live as more is
+entered.
 
 ## What's inside
 
 **Scott's records** (stored *only on the device*, no server, no account, no tracking):
 - Imaging & scans — upload MRI / X-ray / PET / PSMA / CT images with notes (IndexedDB)
 - Biopsy & diagnosis — paste the pathology report; fields for Gleason, ISUP, TNM
+- **Labs** — structured fields for CBC (WBC, hemoglobin, hematocrit, platelets, ANC),
+  CMP (creatinine, eGFR, BUN, glucose, liver enzymes, electrolytes), and other
+  biomarkers (testosterone, vitamin D, calcium), plus a dated lab-results log and
+  photo upload for lab report pages
 - Health history — conditions, medications, allergies, family history, care team
 - Vitals — PSA, blood pressure, heart rate, weight, plus a dated PSA trend log
+- **Flow sheets** — three daily-tracking logs: a vitals trend (BP/HR/weight/temp/O₂
+  over time), a urine output tracker (times voided, estimated volume, leakage/control),
+  and a symptom tracker (symptom type, 0–10 severity, notes)
 - Backup & print — export/restore all records as a JSON file (important, since data
   lives only on the device), plus a one-page printable **appointment summary** that
-  gathers the diagnosis, vitals, history, and checked-off questions for the care team
+  gathers the diagnosis, labs, vitals, history, recent symptoms/urine output, and
+  checked-off questions for the care team
 
 **Quick reference** — each item has a **colorful illustration** of its idea, a
 plain-language explanation, an audio "Listen" button (browser text-to-speech), and
 10+ action items to bring to the care team:
-- Medications · Treatment plans · Radiation plans · Nutrition · Supplements
+- Medications · **Chemotherapy** · Treatment plans · Radiation plans ·
+  **Exercise & rehab** · Nutrition (with a **foods-to-avoid** section) · Supplements
 - Surgery recovery · Genetic variations · Medical terms
+
+The **Chemotherapy** section explains what biopsy findings (Gleason/ISUP grade,
+extent, perineural invasion, disease volume) typically factor into the chemo
+conversation — it is explicitly educational context, not a personalized
+recommendation; that determination belongs to Scott's oncologist.
+
+The **Exercise & rehab** section covers pre-surgery "prehab" (aerobic base,
+pelvic-floor priming, strength, breathing, whole-body optimization) and post-surgery
+rehab (early walking, pelvic-floor/Kegel retraining, continence and erectile
+rehabilitation, progressive return to exercise, ADT-specific resistance training,
+lymphedema awareness, fatigue pacing, and red-flag safety signs).
 
 The pictures are hand-drawn inline SVG "flashcards" that depict each metaphor (a flame
 losing its fuel for hormone therapy, a capped socket for receptor blockers, a DNA-repair
