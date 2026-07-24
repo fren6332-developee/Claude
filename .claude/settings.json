@@ -1,0 +1,81 @@
+{
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true,
+    "codex@openai-codex": true,
+    "marketing-skills@marketingskills": true,
+    "frontend-design@claude-plugins-official": true,
+    "hyperframes@claude-plugins-official": true,
+    "claude-seo@agricidaniel-claude-seo": true,
+    "humanizer@humanizer": true,
+    "financial-analysis@claude-for-financial-services": true,
+    "investment-banking@claude-for-financial-services": true,
+    "private-equity@claude-for-financial-services": true,
+    "equity-research@claude-for-financial-services": true,
+    "wealth-management@claude-for-financial-services": true,
+    "commercial-legal@claude-for-legal": true,
+    "privacy-legal@claude-for-legal": true,
+    "product-legal@claude-for-legal": true,
+    "corporate-legal@claude-for-legal": true,
+    "employment-legal@claude-for-legal": true,
+    "regulatory-legal@claude-for-legal": true,
+    "ai-governance-legal@claude-for-legal": true,
+    "litigation-legal@claude-for-legal": true,
+    "ip-legal@claude-for-legal": true
+  },
+  "extraKnownMarketplaces": {
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    },
+    "claude-for-financial-services": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/financial-services"
+      }
+    },
+    "claude-for-legal": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-for-legal"
+      }
+    },
+    "claude-code-skills": {
+      "source": {
+        "source": "github",
+        "repo": "alirezarezvani/claude-skills"
+      }
+    },
+    "marketingskills": {
+      "source": {
+        "source": "github",
+        "repo": "coreyhaines31/marketingskills"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "agricidaniel-claude-seo": {
+      "source": {
+        "source": "github",
+        "repo": "AgriciDaniel/claude-seo"
+      }
+    },
+    "humanizer": {
+      "source": {
+        "source": "github",
+        "repo": "blader/humanizer"
+      }
+    }
+  }
+}
