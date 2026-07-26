@@ -20,7 +20,17 @@
     "regulatory-legal@claude-for-legal": true,
     "ai-governance-legal@claude-for-legal": true,
     "litigation-legal@claude-for-legal": true,
-    "ip-legal@claude-for-legal": true
+    "ip-legal@claude-for-legal": true,
+    "ponytail@ponytail": true,
+    "taste-skill@taste-skill": true,
+    "playwright-skill@playwright-skill": true,
+    "gws@gws-marketplace": true,
+    "last30days@last30days-skill": true,
+    "firecrawl@firecrawl": true,
+    "autoresearch@autoresearch": true,
+    "supabase@supabase-plugin": true,
+    "obsidian@obsidian-skills": true,
+    "stripe@stripe": true
   },
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {
@@ -75,6 +85,66 @@
       "source": {
         "source": "github",
         "repo": "blader/humanizer"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "taste-skill": {
+      "source": {
+        "source": "github",
+        "repo": "Leonxlnx/taste-skill"
+      }
+    },
+    "playwright-skill": {
+      "source": {
+        "source": "github",
+        "repo": "lackeyjb/playwright-skill"
+      }
+    },
+    "gws-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "WadeWarren/gws-claude-plugin"
+      }
+    },
+    "last30days-skill": {
+      "source": {
+        "source": "github",
+        "repo": "mvanhorn/last30days-skill"
+      }
+    },
+    "firecrawl": {
+      "source": {
+        "source": "github",
+        "repo": "firecrawl/firecrawl-claude-plugin"
+      }
+    },
+    "autoresearch": {
+      "source": {
+        "source": "github",
+        "repo": "zircote/autoresearch"
+      }
+    },
+    "supabase-plugin": {
+      "source": {
+        "source": "github",
+        "repo": "supabase-community/supabase-plugin"
+      }
+    },
+    "obsidian-skills": {
+      "source": {
+        "source": "github",
+        "repo": "kepano/obsidian-skills"
+      }
+    },
+    "stripe": {
+      "source": {
+        "source": "github",
+        "repo": "stripe/ai"
       }
     }
   }
