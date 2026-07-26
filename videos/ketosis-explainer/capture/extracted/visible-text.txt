@@ -1,0 +1,27 @@
+Topic: How ketosis works — the physiology of switching your body's fuel from
+sugar to fat, and its connection to weight loss, insulin, adipose tissue, and
+brain health via lactate and BDNF.
+
+Key facts to teach, in order:
+1. Ketosis is a normal, physiologically achievable metabolic state — not a
+   fad — triggered when carbohydrate intake is low enough that liver
+   glycogen (stored sugar) runs low.
+2. With glycogen low, the body shifts to burning stored fat for fuel —
+   this is the mechanistic link to weight loss.
+3. Insulin is the hormone that signals cells to store fat. Lower carb
+   intake means lower insulin. Low insulin permits fat cells (adipose
+   tissue) to release stored fat into the bloodstream.
+4. As fat is released and used, adipose tissue shrinks.
+5. The liver converts released fatty acids into ketone bodies (such as
+   beta-hydroxybutyrate) — an alternative fuel the brain and muscles can
+   use instead of glucose.
+6. Exercise adds another brain-health pathway: working muscles produce
+   lactate. Lactate crosses the blood-brain barrier and drives BDNF
+   (brain-derived neurotrophic factor) expression, supporting brain-cell
+   growth and connectivity. (El Hayek et al. 2019, Journal of Neuroscience,
+   DOI 10.1523/JNEUROSCI.1661-18.2019 — lactate-induced hippocampal BDNF via
+   SIRT1/PGC-1a/FNDC5 signaling.)
+
+Audience: general public, 8th-grade reading level.
+Tone: energetic, confident, athletic/coach-style narration.
+Visual style: very basic flat/line-art icons only — no photorealism.
