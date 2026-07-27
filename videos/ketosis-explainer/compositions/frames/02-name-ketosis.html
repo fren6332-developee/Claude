@@ -19,9 +19,9 @@
     .kt-chipp{background:linear-gradient(180deg,#FFD9F0,#FF6FC0);}
 .kt-h{position:absolute;left:0;top:330px;width:1920px;text-align:center;font-size:250px;}.kt-s{position:absolute;left:0;top:636px;width:1920px;text-align:center;font-size:48px;}
   </style>
-  <div id="root" data-composition-id="02-name-ketosis" data-start="0" data-duration="4.639" data-width="1920" data-height="1080">
-    <div class="clip kt-bg" id="kt-bg" data-start="0" data-duration="4.639" data-track-index="0"></div>
-    <div class="clip kt-stage" id="kt-stage" data-start="0" data-duration="4.639" data-track-index="1">
+  <div id="root" data-composition-id="02-name-ketosis" data-start="0" data-duration="4.167" data-width="1920" data-height="1080">
+    <div class="clip kt-bg" id="kt-bg" data-start="0" data-duration="4.167" data-track-index="0"></div>
+    <div class="clip kt-stage" id="kt-stage" data-start="0" data-duration="4.167" data-track-index="1">
 <svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   <defs>
     <linearGradient id="kt-bg" x1="0" y1="0" x2="0.4" y2="1">
@@ -73,16 +73,31 @@
       if (!R) return;
       var q = function(s){ return R.querySelector(s); };
       var qa = function(s){ return Array.prototype.slice.call(R.querySelectorAll(s)); };
-      var tl = gsap.timeline({ paused: true });
-      var D = 4.139;
+      var __tl = gsap.timeline({ paused: true });
+      // Beats below are authored against BASE seconds and played over D seconds.
+      // SC rescales every position, duration and stagger so the choreography
+      // survives a change of narration length without truncating late beats.
+      var BASE = 4.139, D = 3.667, SC = D / BASE;
+      function sv(v){
+        if (!v) return v;
+        var o = {}, kx;
+        for (kx in v) o[kx] = v[kx];
+        if (typeof o.duration === "number") o.duration *= SC;
+        if (typeof o.stagger === "number") o.stagger *= SC;
+        return o;
+      }
+      var tl = {
+        to: function(t, v, p){ return __tl.to(t, sv(v), typeof p === "number" ? p * SC : p); },
+        fromTo: function(t, f, v, p){ return __tl.fromTo(t, f, sv(v), typeof p === "number" ? p * SC : p); }
+      };
       function shimmer(sel, start, cycles, amp){
-        var els = qa(sel); if(!els.length) return; var end = Math.max(0.3, D - start);
+        var els = qa(sel); if(!els.length) return; var end = Math.max(0.3, BASE - start);
         els.forEach(function(el, i){ var o = { p: i * 0.9 };
           tl.to(o, { p: i * 0.9 + Math.PI * 2 * cycles, duration: end, ease: "none", onUpdate: function(){
             gsap.set(el, { opacity: 0.55 + Math.abs(Math.sin(o.p)) * amp }); }}, start); });
       }
       function bob(el, start, amp, cycles, baseY){
-        if(!el) return; var end = Math.max(0.3, D - start), o = { p: 0 }, b = baseY || 0;
+        if(!el) return; var end = Math.max(0.3, BASE - start), o = { p: 0 }, b = baseY || 0;
         tl.to(o, { p: Math.PI * 2 * cycles, duration: end, ease: "none", onUpdate: function(){
           gsap.set(el, { y: b + Math.sin(o.p) * amp }); }}, start);
       }
@@ -92,7 +107,7 @@
       tl.fromTo(burst, { opacity: 0, scale: 0.6 }, { opacity: 0.9, scale: 1, duration: 0.9, ease: "power3.out", transformOrigin: "50% 50%" }, 0.6);
       tl.fromTo(h, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.9, ease: "back.out(1.7)", transformOrigin: "50% 50%" }, 0.9);
       tl.fromTo(s, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 2.3);
-      window.__timelines["02-name-ketosis"] = tl;
+      window.__timelines["02-name-ketosis"] = __tl;
     })();
   </script>
 </template>

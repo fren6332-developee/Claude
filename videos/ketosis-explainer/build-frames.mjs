@@ -198,7 +198,7 @@ function figLean(p) {
 }
 
 /* ============ shell ============ */
-function shell(id, k, dur, body, js, css = "") {
+function shell(id, k, dur, base, body, js, css = "") {
   return `<template>
   <style>
 @font-face{font-family:'ZenMaru';src:url('assets/fonts/ZenMaru-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:block;}
@@ -234,21 +234,36 @@ ${body}
       if (!R) return;
       var q = function(s){ return R.querySelector(s); };
       var qa = function(s){ return Array.prototype.slice.call(R.querySelectorAll(s)); };
-      var tl = gsap.timeline({ paused: true });
-      var D = ${dur};
+      var __tl = gsap.timeline({ paused: true });
+      // Beats below are authored against BASE seconds and played over D seconds.
+      // SC rescales every position, duration and stagger so the choreography
+      // survives a change of narration length without truncating late beats.
+      var BASE = ${base}, D = ${dur}, SC = D / BASE;
+      function sv(v){
+        if (!v) return v;
+        var o = {}, kx;
+        for (kx in v) o[kx] = v[kx];
+        if (typeof o.duration === "number") o.duration *= SC;
+        if (typeof o.stagger === "number") o.stagger *= SC;
+        return o;
+      }
+      var tl = {
+        to: function(t, v, p){ return __tl.to(t, sv(v), typeof p === "number" ? p * SC : p); },
+        fromTo: function(t, f, v, p){ return __tl.fromTo(t, f, sv(v), typeof p === "number" ? p * SC : p); }
+      };
       function shimmer(sel, start, cycles, amp){
-        var els = qa(sel); if(!els.length) return; var end = Math.max(0.3, D - start);
+        var els = qa(sel); if(!els.length) return; var end = Math.max(0.3, BASE - start);
         els.forEach(function(el, i){ var o = { p: i * 0.9 };
           tl.to(o, { p: i * 0.9 + Math.PI * 2 * cycles, duration: end, ease: "none", onUpdate: function(){
             gsap.set(el, { opacity: 0.55 + Math.abs(Math.sin(o.p)) * amp }); }}, start); });
       }
       function bob(el, start, amp, cycles, baseY){
-        if(!el) return; var end = Math.max(0.3, D - start), o = { p: 0 }, b = baseY || 0;
+        if(!el) return; var end = Math.max(0.3, BASE - start), o = { p: 0 }, b = baseY || 0;
         tl.to(o, { p: Math.PI * 2 * cycles, duration: end, ease: "none", onUpdate: function(){
           gsap.set(el, { y: b + Math.sin(o.p) * amp }); }}, start);
       }
 ${js}
-      window.__timelines["${id}"] = tl;
+      window.__timelines["${id}"] = __tl;
     })();
   </script>
 </template>
@@ -260,7 +275,7 @@ const HERO = (k, top, size) => `.${k}-h{position:absolute;left:0;top:${top}px;wi
 const SUB  = (k, top, size) => `.${k}-s{position:absolute;left:0;top:${top}px;width:1920px;text-align:center;font-size:${size}px;}`;
 
 /* ===== 1 HOOK ===== */
-F.push({ id: "01-hook", k: "hk", dur: 4.288,
+F.push({ id: "01-hook", k: "hk", dur: 4.108, base: 4.288,
   css: HERO("hk", 92, 128) + SUB("hk", 262, 46),
   body: `<svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   ${cosmos("hk", { seed: 11 })}
@@ -284,7 +299,7 @@ F.push({ id: "01-hook", k: "hk", dur: 4.288,
 });
 
 /* ===== 2 KETOSIS ===== */
-F.push({ id: "02-name-ketosis", k: "kt", dur: 4.139,
+F.push({ id: "02-name-ketosis", k: "kt", dur: 3.667, base: 4.139,
   css: HERO("kt", 330, 250) + SUB("kt", 636, 48),
   body: `<svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   ${cosmos("kt", { seed: 23, a: "#FFB03A", b: "#FF3D9A" })}
@@ -303,7 +318,7 @@ F.push({ id: "02-name-ketosis", k: "kt", dur: 4.139,
 });
 
 /* ===== 3 GLYCOGEN ===== */
-F.push({ id: "03-glycogen", k: "gl", dur: 6.400,
+F.push({ id: "03-glycogen", k: "gl", dur: 6.310, base: 6.400,
   css: HERO("gl", 74, 92) + SUB("gl", 196, 40),
   body: `<svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   ${cosmos("gl", { seed: 31, a: "#FF6A5E", b: "#8A46D6" })}
@@ -337,7 +352,7 @@ F.push({ id: "03-glycogen", k: "gl", dur: 6.400,
 });
 
 /* ===== 4 INSULIN ===== */
-F.push({ id: "04-insulin", k: "in", dur: 5.525,
+F.push({ id: "04-insulin", k: "in", dur: 5.792, base: 5.525,
   css: HERO("in", 74, 92) + SUB("in", 196, 40),
   body: `<svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   ${cosmos("in", { seed: 41, a: "#A46BFF", b: "#5B2FB0", c: "#43E0FF" })}
@@ -366,7 +381,7 @@ F.push({ id: "04-insulin", k: "in", dur: 5.525,
 });
 
 /* ===== 5 FAT RELEASE ===== */
-F.push({ id: "05-fat-release", k: "fr", dur: 6.933,
+F.push({ id: "05-fat-release", k: "fr", dur: 5.447, base: 6.933,
   css: HERO("fr", 74, 88) + SUB("fr", 190, 40),
   body: `<svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   ${cosmos("fr", { seed: 53, a: "#FFC93A", b: "#FF4FA3" })}
@@ -402,7 +417,7 @@ F.push({ id: "05-fat-release", k: "fr", dur: 6.933,
 });
 
 /* ===== 6 KETONES ===== */
-F.push({ id: "06-ketones", k: "ke", dur: 7.765,
+F.push({ id: "06-ketones", k: "ke", dur: 8.274, base: 7.765,
   css: HERO("ke", 68, 86) + SUB("ke", 182, 38),
   body: `<svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   ${cosmos("ke", { seed: 61, a: "#FFC93A", b: "#FF4FA3", c: "#5BE8FF" })}
@@ -441,7 +456,7 @@ F.push({ id: "06-ketones", k: "ke", dur: 7.765,
 });
 
 /* ===== 7 WEIGHT LOSS ===== */
-F.push({ id: "07-weight-loss", k: "wl", dur: 6.165,
+F.push({ id: "07-weight-loss", k: "wl", dur: 7.001, base: 6.165,
   css: HERO("wl", 66, 128) + SUB("wl", 226, 40),
   body: `<svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   ${cosmos("wl", { seed: 71, a: "#3AE0C0", b: "#7A4CE0" })}
@@ -466,7 +481,7 @@ F.push({ id: "07-weight-loss", k: "wl", dur: 6.165,
 });
 
 /* ===== 8 EXERCISE ===== */
-F.push({ id: "08-exercise-lactate", k: "ex", dur: 5.248,
+F.push({ id: "08-exercise-lactate", k: "ex", dur: 4.814, base: 5.248,
   css: HERO("ex", 74, 92) + SUB("ex", 196, 40),
   body: `<svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   ${cosmos("ex", { seed: 83, a: "#FF7A3A", b: "#E03A8A", c: "#4BE8FF" })}
@@ -493,7 +508,7 @@ F.push({ id: "08-exercise-lactate", k: "ex", dur: 5.248,
 });
 
 /* ===== 9 BDNF ===== */
-F.push({ id: "09-bdnf", k: "bd", dur: 8.533,
+F.push({ id: "09-bdnf", k: "bd", dur: 7.108, base: 8.533,
   css: HERO("bd", 62, 84) + SUB("bd", 172, 38) + `.bd-cite{position:absolute;left:110px;top:970px;font-size:26px;
       font-family:'KleeOne',serif;color:#EAF3FF;background:rgba(30,10,60,0.82);border:3px solid #7A4CE0;border-radius:999px;padding:11px 26px;}`,
   body: `<svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
@@ -530,7 +545,7 @@ F.push({ id: "09-bdnf", k: "bd", dur: 8.533,
 });
 
 /* ===== 10 LANDING ===== */
-F.push({ id: "10-landing", k: "ld", dur: 3.925,
+F.push({ id: "10-landing", k: "ld", dur: 3.400, base: 3.925,
   css: HERO("ld", 616, 116) + SUB("ld", 800, 42),
   body: `<svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   ${cosmos("ld", { seed: 101, a: "#FFB03A", b: "#FF3D9A", c: "#4BE8FF" })}
@@ -552,10 +567,10 @@ F.push({ id: "10-landing", k: "ld", dur: 3.925,
       tl.fromTo(pres, { opacity: 0, x: 200, y: 1010 }, { opacity: 1, x: 300, y: 1010, duration: 0.8, ease: "power3.out" }, 0.2);
       tl.fromTo(h, { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)", transformOrigin: "50% 50%" }, 1.1);
       tl.fromTo(s, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2.0);
-      tl.to(g2, { opacity: 0, duration: 0.3, ease: "power2.in" }, D - 0.3);`,
+      tl.to(g2, { opacity: 0, duration: 0.3, ease: "power2.in" }, BASE - 0.3);`,
 });
 
 for (const fr of F) {
-  writeFileSync(join(OUT, fr.id + ".html"), shell(fr.id, fr.k, fr.dur, fr.body, fr.js, fr.css || ""));
+  writeFileSync(join(OUT, fr.id + ".html"), shell(fr.id, fr.k, fr.dur, fr.base, fr.body, fr.js, fr.css || ""));
   console.log("wrote", fr.id);
 }

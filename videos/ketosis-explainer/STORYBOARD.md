@@ -1,6 +1,6 @@
 ---
 format: 1920x1080
-duration: 62s
+duration: 56s
 message: "Ketosis is a real, physiologically achievable state where your body burns fat for fuel instead of sugar — and it even fuels your brain — told with jokes, not just diagrams."
 arc: concept-explainer with process
 audience: general public, 8th-grade reading level
@@ -46,7 +46,7 @@ music: none
 
 - scene: A wide-eyed, googly little body-blob character looks around, surprised, on a sunny-sky background, as the headline burns in above it.
 - voiceover: "Ever wonder how your body can go from hangry to a full-on fat-burning furnace?"
-- duration: 4.288s
+- duration: 4.108s
 - transition_in: cut
 - status: animated
 - src: compositions/frames/01-hook.html
@@ -70,7 +70,7 @@ Scene 3 (3.4–5.0s): headline + mascot hold; the tummy-flame has one low-amplit
 
 - scene: The body-blob mascot gives a confident thumbs-up on a sunny butter-yellow background as the word "ketosis" locks in.
 - voiceover: "That's ketosis, and no, it's not magic — it's just chemistry showing off."
-- duration: 4.139s
+- duration: 3.667s
 - transition_in: crossfade
 - status: animated
 - src: compositions/frames/02-name-ketosis.html
@@ -94,7 +94,7 @@ Scene 3 (2.6–4.5s): as the VO lands "chemistry showing off," the mascot's arm 
 
 - scene: A tired-looking liver-blob character wears a little fuel-gauge dial around its neck labeled "glycogen," which drains toward empty.
 - voiceover: "Eat fewer carbs, and your liver's sugar stash — glycogen — empties out faster than free snacks at a meeting."
-- duration: 6.4s
+- duration: 6.31s
 - transition_in: push-slide RIGHT
 - status: animated
 - src: compositions/frames/03-glycogen.html
@@ -118,7 +118,7 @@ Scene 3 (4.0–7.0s): as the VO delivers "empties out faster than free snacks at
 
 - scene: A bouncy hexagon "insulin" character, holding a tiny drooping "SAVE EVERYTHING" sign, shrinks and looks sleepy.
 - voiceover: "That drop makes insulin, the hormone whose whole job is \"save everything,\" chill out and drop too."
-- duration: 5.525s
+- duration: 5.792s
 - transition_in: push-slide RIGHT
 - status: animated
 - src: compositions/frames/04-insulin.html
@@ -142,7 +142,7 @@ Scene 3 (3.8–6.0s): as the VO lands "chill out and drop too," the hexagon char
 
 - scene: Three googly-eyed fat-cell characters fling open little hatches and comically launch droplet-characters into the bloodstream while a mustached bouncer icon steps aside.
 - voiceover: "Low insulin is like a bouncer stepping aside — fat cells fling the doors open and dump stored fat into your blood."
-- duration: 6.933s
+- duration: 5.447s
 - transition_in: push-slide RIGHT
 - status: animated
 - src: compositions/frames/05-fat-release.html
@@ -167,7 +167,7 @@ Scene 4 (5.5–7.5s): as the VO lands "into your blood," the droplets land on a 
 
 - scene: The liver-blob character (now grinning like a chef) catches the fat droplets, stamps them into shiny diamond ketone tokens, and tosses them to a grinning brain character and a flexing muscle character.
 - voiceover: "Your liver scoops up all that fat and cooks it into ketones — basically premium fuel for your brain and muscles, no sugar required."
-- duration: 7.765s
+- duration: 8.274s
 - transition_in: push-slide RIGHT
 - status: animated
 - src: compositions/frames/06-ketones.html
@@ -191,7 +191,7 @@ Scene 3 (5.0–8.0s): as the VO says "premium fuel for your brain and muscles, n
 
 - scene: The fat-cell character row visibly deflates with comedic little "poof" sparkles while a winking bathroom-scale character's needle drops.
 - voiceover: "Less carbs, less insulin, shrinking fat cells — that combo right there is the actual weight-loss plot twist."
-- duration: 6.165s
+- duration: 7.001s
 - transition_in: crossfade
 - status: animated
 - src: compositions/frames/07-weight-loss.html
@@ -215,7 +215,7 @@ Scene 3 (4.5–6.5s): as the VO lands "the actual weight-loss plot twist," a sim
 
 - scene: A bouncy running-shoe character sprints in place while a flexing muscle character winks and pops out a "lactate" droplet character.
 - voiceover: "Now toss in a workout. Your muscles start pumping out lactate like it's getting paid overtime."
-- duration: 5.248s
+- duration: 4.814s
 - transition_in: crossfade
 - status: animated
 - src: compositions/frames/08-exercise-lactate.html
@@ -238,7 +238,7 @@ Scene 2 (1.8–5.5s): as the VO says "muscles start pumping out lactate like it'
 
 - scene: The lactate droplet character rides a tiny rocket-trail up into a big grinning brain character whose fairy-light neuron squiggles switch on one by one; a small citation chip sits in the corner.
 - voiceover: "That lactate zooms straight to your brain and cranks up BDNF — a protein that basically waters your brain cells so they grow stronger connections."
-- duration: 8.533s
+- duration: 7.108s
 - transition_in: push-slide RIGHT
 - status: animated
 - src: compositions/frames/09-bdnf.html
@@ -262,7 +262,7 @@ Scene 3 (6.0–9.0s): as the VO lands "grow stronger connections," a small mono 
 
 - scene: The body-blob mascot, brain character, and muscle character line up together, high-fiving, as the closing punchline locks in on a sunny-sky background.
 - voiceover: "Real science, real fuel, one seriously overachieving body."
-- duration: 3.925s
+- duration: 3.4s
 - transition_in: crossfade
 - status: animated
 - src: compositions/frames/10-landing.html

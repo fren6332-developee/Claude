@@ -19,9 +19,9 @@
     .ld-chipp{background:linear-gradient(180deg,#FFD9F0,#FF6FC0);}
 .ld-h{position:absolute;left:0;top:616px;width:1920px;text-align:center;font-size:116px;}.ld-s{position:absolute;left:0;top:800px;width:1920px;text-align:center;font-size:42px;}
   </style>
-  <div id="root" data-composition-id="10-landing" data-start="0" data-duration="3.925" data-width="1920" data-height="1080">
-    <div class="clip ld-bg" id="ld-bg" data-start="0" data-duration="3.925" data-track-index="0"></div>
-    <div class="clip ld-stage" id="ld-stage" data-start="0" data-duration="3.925" data-track-index="1">
+  <div id="root" data-composition-id="10-landing" data-start="0" data-duration="3.4" data-width="1920" data-height="1080">
+    <div class="clip ld-bg" id="ld-bg" data-start="0" data-duration="3.4" data-track-index="0"></div>
+    <div class="clip ld-stage" id="ld-stage" data-start="0" data-duration="3.4" data-track-index="1">
 <svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   <defs>
     <linearGradient id="ld-bg" x1="0" y1="0" x2="0.4" y2="1">
@@ -149,16 +149,31 @@
       if (!R) return;
       var q = function(s){ return R.querySelector(s); };
       var qa = function(s){ return Array.prototype.slice.call(R.querySelectorAll(s)); };
-      var tl = gsap.timeline({ paused: true });
-      var D = 3.925;
+      var __tl = gsap.timeline({ paused: true });
+      // Beats below are authored against BASE seconds and played over D seconds.
+      // SC rescales every position, duration and stagger so the choreography
+      // survives a change of narration length without truncating late beats.
+      var BASE = 3.925, D = 3.4, SC = D / BASE;
+      function sv(v){
+        if (!v) return v;
+        var o = {}, kx;
+        for (kx in v) o[kx] = v[kx];
+        if (typeof o.duration === "number") o.duration *= SC;
+        if (typeof o.stagger === "number") o.stagger *= SC;
+        return o;
+      }
+      var tl = {
+        to: function(t, v, p){ return __tl.to(t, sv(v), typeof p === "number" ? p * SC : p); },
+        fromTo: function(t, f, v, p){ return __tl.fromTo(t, f, sv(v), typeof p === "number" ? p * SC : p); }
+      };
       function shimmer(sel, start, cycles, amp){
-        var els = qa(sel); if(!els.length) return; var end = Math.max(0.3, D - start);
+        var els = qa(sel); if(!els.length) return; var end = Math.max(0.3, BASE - start);
         els.forEach(function(el, i){ var o = { p: i * 0.9 };
           tl.to(o, { p: i * 0.9 + Math.PI * 2 * cycles, duration: end, ease: "none", onUpdate: function(){
             gsap.set(el, { opacity: 0.55 + Math.abs(Math.sin(o.p)) * amp }); }}, start); });
       }
       function bob(el, start, amp, cycles, baseY){
-        if(!el) return; var end = Math.max(0.3, D - start), o = { p: 0 }, b = baseY || 0;
+        if(!el) return; var end = Math.max(0.3, BASE - start), o = { p: 0 }, b = baseY || 0;
         tl.to(o, { p: Math.PI * 2 * cycles, duration: end, ease: "none", onUpdate: function(){
           gsap.set(el, { y: b + Math.sin(o.p) * amp }); }}, start);
       }
@@ -172,8 +187,8 @@
       tl.fromTo(pres, { opacity: 0, x: 200, y: 1010 }, { opacity: 1, x: 300, y: 1010, duration: 0.8, ease: "power3.out" }, 0.2);
       tl.fromTo(h, { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)", transformOrigin: "50% 50%" }, 1.1);
       tl.fromTo(s, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2.0);
-      tl.to(g2, { opacity: 0, duration: 0.3, ease: "power2.in" }, D - 0.3);
-      window.__timelines["10-landing"] = tl;
+      tl.to(g2, { opacity: 0, duration: 0.3, ease: "power2.in" }, BASE - 0.3);
+      window.__timelines["10-landing"] = __tl;
     })();
   </script>
 </template>

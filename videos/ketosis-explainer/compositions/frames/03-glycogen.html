@@ -19,9 +19,9 @@
     .gl-chipp{background:linear-gradient(180deg,#FFD9F0,#FF6FC0);}
 .gl-h{position:absolute;left:0;top:74px;width:1920px;text-align:center;font-size:92px;}.gl-s{position:absolute;left:0;top:196px;width:1920px;text-align:center;font-size:40px;}
   </style>
-  <div id="root" data-composition-id="03-glycogen" data-start="0" data-duration="6.9" data-width="1920" data-height="1080">
-    <div class="clip gl-bg" id="gl-bg" data-start="0" data-duration="6.9" data-track-index="0"></div>
-    <div class="clip gl-stage" id="gl-stage" data-start="0" data-duration="6.9" data-track-index="1">
+  <div id="root" data-composition-id="03-glycogen" data-start="0" data-duration="6.81" data-width="1920" data-height="1080">
+    <div class="clip gl-bg" id="gl-bg" data-start="0" data-duration="6.81" data-track-index="0"></div>
+    <div class="clip gl-stage" id="gl-stage" data-start="0" data-duration="6.81" data-track-index="1">
 <svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   <defs>
     <linearGradient id="gl-bg" x1="0" y1="0" x2="0.4" y2="1">
@@ -138,16 +138,31 @@
       if (!R) return;
       var q = function(s){ return R.querySelector(s); };
       var qa = function(s){ return Array.prototype.slice.call(R.querySelectorAll(s)); };
-      var tl = gsap.timeline({ paused: true });
-      var D = 6.4;
+      var __tl = gsap.timeline({ paused: true });
+      // Beats below are authored against BASE seconds and played over D seconds.
+      // SC rescales every position, duration and stagger so the choreography
+      // survives a change of narration length without truncating late beats.
+      var BASE = 6.4, D = 6.31, SC = D / BASE;
+      function sv(v){
+        if (!v) return v;
+        var o = {}, kx;
+        for (kx in v) o[kx] = v[kx];
+        if (typeof o.duration === "number") o.duration *= SC;
+        if (typeof o.stagger === "number") o.stagger *= SC;
+        return o;
+      }
+      var tl = {
+        to: function(t, v, p){ return __tl.to(t, sv(v), typeof p === "number" ? p * SC : p); },
+        fromTo: function(t, f, v, p){ return __tl.fromTo(t, f, sv(v), typeof p === "number" ? p * SC : p); }
+      };
       function shimmer(sel, start, cycles, amp){
-        var els = qa(sel); if(!els.length) return; var end = Math.max(0.3, D - start);
+        var els = qa(sel); if(!els.length) return; var end = Math.max(0.3, BASE - start);
         els.forEach(function(el, i){ var o = { p: i * 0.9 };
           tl.to(o, { p: i * 0.9 + Math.PI * 2 * cycles, duration: end, ease: "none", onUpdate: function(){
             gsap.set(el, { opacity: 0.55 + Math.abs(Math.sin(o.p)) * amp }); }}, start); });
       }
       function bob(el, start, amp, cycles, baseY){
-        if(!el) return; var end = Math.max(0.3, D - start), o = { p: 0 }, b = baseY || 0;
+        if(!el) return; var end = Math.max(0.3, BASE - start), o = { p: 0 }, b = baseY || 0;
         tl.to(o, { p: Math.PI * 2 * cycles, duration: end, ease: "none", onUpdate: function(){
           gsap.set(el, { y: b + Math.sin(o.p) * amp }); }}, start);
       }
@@ -166,7 +181,7 @@
       tl.fromTo(c2, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 3.3);
       tl.fromTo(fill, { scaleY: 1 }, { scaleY: 0.1, duration: 2.3, ease: "power2.inOut" }, 3.7);
       bob(big, 0.9, 12, 1.4, 560);
-      window.__timelines["03-glycogen"] = tl;
+      window.__timelines["03-glycogen"] = __tl;
     })();
   </script>
 </template>

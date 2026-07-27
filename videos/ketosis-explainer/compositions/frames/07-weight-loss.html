@@ -19,9 +19,9 @@
     .wl-chipp{background:linear-gradient(180deg,#FFD9F0,#FF6FC0);}
 .wl-h{position:absolute;left:0;top:66px;width:1920px;text-align:center;font-size:128px;}.wl-s{position:absolute;left:0;top:226px;width:1920px;text-align:center;font-size:40px;}
   </style>
-  <div id="root" data-composition-id="07-weight-loss" data-start="0" data-duration="6.665" data-width="1920" data-height="1080">
-    <div class="clip wl-bg" id="wl-bg" data-start="0" data-duration="6.665" data-track-index="0"></div>
-    <div class="clip wl-stage" id="wl-stage" data-start="0" data-duration="6.665" data-track-index="1">
+  <div id="root" data-composition-id="07-weight-loss" data-start="0" data-duration="7.501" data-width="1920" data-height="1080">
+    <div class="clip wl-bg" id="wl-bg" data-start="0" data-duration="7.501" data-track-index="0"></div>
+    <div class="clip wl-stage" id="wl-stage" data-start="0" data-duration="7.501" data-track-index="1">
 <svg width="1920" height="1080" viewBox="0 0 1920 1080" style="position:absolute;inset:0;">
   <defs>
     <linearGradient id="wl-bg" x1="0" y1="0" x2="0.4" y2="1">
@@ -95,16 +95,31 @@
       if (!R) return;
       var q = function(s){ return R.querySelector(s); };
       var qa = function(s){ return Array.prototype.slice.call(R.querySelectorAll(s)); };
-      var tl = gsap.timeline({ paused: true });
-      var D = 6.165;
+      var __tl = gsap.timeline({ paused: true });
+      // Beats below are authored against BASE seconds and played over D seconds.
+      // SC rescales every position, duration and stagger so the choreography
+      // survives a change of narration length without truncating late beats.
+      var BASE = 6.165, D = 7.001, SC = D / BASE;
+      function sv(v){
+        if (!v) return v;
+        var o = {}, kx;
+        for (kx in v) o[kx] = v[kx];
+        if (typeof o.duration === "number") o.duration *= SC;
+        if (typeof o.stagger === "number") o.stagger *= SC;
+        return o;
+      }
+      var tl = {
+        to: function(t, v, p){ return __tl.to(t, sv(v), typeof p === "number" ? p * SC : p); },
+        fromTo: function(t, f, v, p){ return __tl.fromTo(t, f, sv(v), typeof p === "number" ? p * SC : p); }
+      };
       function shimmer(sel, start, cycles, amp){
-        var els = qa(sel); if(!els.length) return; var end = Math.max(0.3, D - start);
+        var els = qa(sel); if(!els.length) return; var end = Math.max(0.3, BASE - start);
         els.forEach(function(el, i){ var o = { p: i * 0.9 };
           tl.to(o, { p: i * 0.9 + Math.PI * 2 * cycles, duration: end, ease: "none", onUpdate: function(){
             gsap.set(el, { opacity: 0.55 + Math.abs(Math.sin(o.p)) * amp }); }}, start); });
       }
       function bob(el, start, amp, cycles, baseY){
-        if(!el) return; var end = Math.max(0.3, D - start), o = { p: 0 }, b = baseY || 0;
+        if(!el) return; var end = Math.max(0.3, BASE - start), o = { p: 0 }, b = baseY || 0;
         tl.to(o, { p: Math.PI * 2 * cycles, duration: end, ease: "none", onUpdate: function(){
           gsap.set(el, { y: b + Math.sin(o.p) * amp }); }}, start);
       }
@@ -118,7 +133,7 @@
       cells.forEach(function(el, i){ tl.to(el, { scale: 0.4, duration: 0.9, ease: "power3.out", transformOrigin: "50% 50%" }, 2.2 + i * 0.4); });
       tl.fromTo(bodies, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 3.6);
       tl.fromTo(c, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 4.4);
-      window.__timelines["07-weight-loss"] = tl;
+      window.__timelines["07-weight-loss"] = __tl;
     })();
   </script>
 </template>
