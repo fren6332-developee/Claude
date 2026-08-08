@@ -5,13 +5,7 @@
       "args": ["--transport", "stdio"]
     },
     "davinci-resolve": {
-      "command": "./.venv/bin/python",
-      "args": ["./src/server.py"],
-      "env": {
-        "RESOLVE_SCRIPT_API": "/path/to/DaVinci Resolve/Developer/Scripting",
-        "RESOLVE_SCRIPT_LIB": "/path/to/fusionscript.so-or-dll",
-        "PYTHONPATH": "/path/to/DaVinci Resolve/Developer/Scripting/Modules"
-      }
+      "command": "davinci-resolve-mcp"
     }
   }
 }

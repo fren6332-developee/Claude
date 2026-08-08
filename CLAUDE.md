@@ -43,40 +43,32 @@ the `command` path in `.mcp.json` if you clone it elsewhere.
 
 ## DaVinci Resolve MCP (local desktop only)
 
-`.mcp.json` also registers [samuelgursky/davinci-resolve-mcp](https://github.com/samuelgursky/davinci-resolve-mcp),
-a local MCP server that lets Claude control DaVinci Resolve (timeline editing,
-color grading, Fusion, rendering/export). Like the Premiere Pro MCP above, it
-only works on a machine that has DaVinci Resolve 18.5+ installed and running
-(Studio edition required for the external scripting API; the free edition
-uses a more limited in-app bridge) — it cannot run in a headless/remote
-session.
+`.mcp.json` also registers [lordhoell/davinci-resolve-mcp](https://github.com/lordhoell/davinci-resolve-mcp),
+a local MCP server that lets Claude control DaVinci Resolve (440+ tools:
+timeline editing, color grading, Fusion node wiring, rendering/export). It
+also ships a Claude Code skill covering object registry patterns, workflow
+recipes, and render configuration. Like the Premiere Pro MCP above, it only
+works on a machine that has DaVinci Resolve or Studio 19.0+ installed and
+running — it cannot run in a headless/remote session.
 
 To set it up on your own machine:
 
 ```bash
-git clone https://github.com/samuelgursky/davinci-resolve-mcp.git
+git clone https://github.com/lordhoell/davinci-resolve-mcp.git
 cd davinci-resolve-mcp
-python3 -m venv .venv && ./.venv/bin/python -m pip install -r requirements.txt
-./.venv/bin/python install.py   # or: npx davinci-resolve-mcp setup
+pip install -e ".[dev]"
 ```
 
-Requires Python 3.10–3.12 (3.13/3.14 work but may hit compatibility issues on
-older Resolve builds) and `ffmpeg` on `PATH`; `numpy`, `librosa`,
-`openai-whisper`, and `opencv-python` unlock optional features.
+Requires Python 3.10+. The `davinci-resolve-mcp` console command (matching
+the `command` in this repo's `.mcp.json`) needs to be on `PATH` — that's
+automatic with the `pip install -e` above, or use `pipx install
+davinci-resolve-mcp` / the `uvx davinci-resolve-mcp` alternative if you'd
+rather not install it into your environment.
 
-The server also needs Resolve's scripting environment on the environment
-variables in `.mcp.json`'s `davinci-resolve` entry — update the placeholder
-paths for your OS, e.g. on macOS:
+`RESOLVE_SCRIPT_API` and `RESOLVE_SCRIPT_LIB` (Resolve's scripting paths) are
+auto-detected on Windows, macOS, and Linux — only set them manually in
+`.mcp.json`'s `env` if auto-detection fails for your install.
 
-```
-RESOLVE_SCRIPT_API=/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Scripting
-RESOLVE_SCRIPT_LIB=/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Libraries/Fusion/fusionscript.so
-PYTHONPATH=/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Scripting/Modules
-```
-
-(Windows: scripting lives under `%PROGRAMDATA%\Blackmagic Design\DaVinci Resolve\Support\Developer\Scripting`
-and `fusionscript.dll` under the Resolve install dir. Linux: under `/opt/resolve/...`.)
-
-Once configured, launch Claude Code from the `davinci-resolve-mcp` directory
-so the relative `command`/`args` paths in `.mcp.json` resolve — or update
-them to absolute paths if you clone it elsewhere.
+To also get the bundled skill in Claude Code, copy
+`skill/davinci-resolve-mcp/` from the cloned repo into your skills folder
+(e.g. `~/.claude/skills/`).
