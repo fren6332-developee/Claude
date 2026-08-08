@@ -3,6 +3,9 @@
     "premiere-pro": {
       "command": "./go-orchestrator/bin/server",
       "args": ["--transport", "stdio"]
+    },
+    "davinci-resolve": {
+      "command": "davinci-resolve-mcp"
     }
   }
 }
