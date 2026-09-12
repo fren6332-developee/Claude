@@ -1,4 +1,4 @@
-# Scott M.'s Prostate Health Guide
+# Prostate Cancer Health Guide
 
 A private, single-file web app that helps a person newly diagnosed with prostate
 cancer **organize their records** and **understand the language, drugs, and choices**
