@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Scott M.'s Prostate Health Guide</title>
+<title>Prostate Cancer Health Guide</title>
 <meta name="description" content="A private, plain-language companion for organizing prostate cancer records and understanding treatment. Educational only — not medical advice.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -289,9 +289,9 @@ details.actions-d[open]>summary .chev{transform:rotate(90deg)}
 <!-- First-run acknowledgement gate -->
 <div class="ack" id="ackScreen" role="dialog" aria-modal="true" aria-labelledby="ackTitle">
   <div class="ack-card">
-    <div class="ack-mark">S</div>
+    <div class="ack-mark">P</div>
     <h2 id="ackTitle">Before you start</h2>
-    <div class="ack-sub">Scott M.'s Prostate Health Guide</div>
+    <div class="ack-sub">Prostate Cancer Health Guide</div>
     <div class="ack-points">
       <div class="ack-point"><span class="i" style="background:var(--warn-soft);color:var(--warn)">!</span><div><strong>This is not medical advice.</strong> It's an educational and organizing tool. It cannot diagnose or recommend treatment, and it does not replace Scott's doctors.</div></div>
       <div class="ack-point"><span class="i" style="background:var(--primary-soft);color:var(--primary-ink)">♥</span><div><strong>Always follow the care team.</strong> Never delay, stop, or change prescribed care because of anything you read here.</div></div>
@@ -307,8 +307,8 @@ details.actions-d[open]>summary .chev{transform:rotate(90deg)}
   <!-- Sidebar -->
   <nav class="sidebar" id="sidebar" aria-label="Main navigation">
     <div class="brand">
-      <div class="mark">S</div>
-      <div class="who"><strong>Scott M.'s</strong>Prostate Health Guide</div>
+      <div class="mark">P</div>
+      <div class="who"><strong>Prostate Cancer</strong>Health Guide</div>
     </div>
     <div id="nav"></div>
     <div class="theme-toggle">
@@ -320,7 +320,7 @@ details.actions-d[open]>summary .chev{transform:rotate(90deg)}
   <div>
     <div class="topbar">
       <button class="hamb" id="hamb" aria-label="Open menu">☰</button>
-      <strong style="font-family:var(--serif)">Scott M.'s Prostate Health Guide</strong>
+      <strong style="font-family:var(--serif)">Prostate Cancer Health Guide</strong>
     </div>
     <main class="main" id="main"></main>
   </div>
@@ -328,7 +328,7 @@ details.actions-d[open]>summary .chev{transform:rotate(90deg)}
 
 <script>
 /* ============================================================
-   Scott M.'s Prostate Health Guide  —  single-file app
+   Prostate Cancer Health Guide  —  single-file app
    Educational only. Not medical advice. Data stays on device.
    ============================================================ */
 
@@ -1823,7 +1823,7 @@ function viewDisclaimer(){
   return `<div class="eyebrow">Research &amp; trust</div>
   <h1 class="page-h">Medical disclaimers</h1>
   <div class="card section-gap">
-    <p><strong style="font-family:var(--serif)">Not medical advice.</strong> Scott M.'s Prostate Health Guide is an educational and personal-organizing tool. It does not provide medical advice, diagnosis, or treatment, and it is not a substitute for the judgment of licensed healthcare professionals.</p>
+    <p><strong style="font-family:var(--serif)">Not medical advice.</strong> Prostate Cancer Health Guide is an educational and personal-organizing tool. It does not provide medical advice, diagnosis, or treatment, and it is not a substitute for the judgment of licensed healthcare professionals.</p>
     <p style="margin-top:12px"><strong style="font-family:var(--serif)">Always consult the care team.</strong> Any decision about testing, medication, surgery, radiation, diet, or supplements must be made with Scott's doctors, who know his full situation. Never delay or stop prescribed care because of anything read here.</p>
     <p style="margin-top:12px"><strong style="font-family:var(--serif)">General information.</strong> Content is written in general terms and may not reflect the very latest research or Scott's specific case. Medicine changes quickly; details can become out of date.</p>
     <p style="margin-top:12px"><strong style="font-family:var(--serif)">No professional relationship.</strong> Using this app creates no doctor–patient relationship with its creator.</p>
@@ -2000,7 +2000,7 @@ function printSummary(){
   ${symLog.length?`<h2>Recent symptoms</h2><table>${symLog.map(e=>`<tr><th>${esc2(e.date||'—')}</th><td>${esc2(e.symptom||'—')}${e.severity?' — severity '+esc2(e.severity)+'/10':''} ${e.note?'· '+esc2(e.note):''}</td></tr>`).join('')}</table>`:''}
   ${urnLog.length?`<h2>Recent urine output</h2><table>${urnLog.map(e=>`<tr><th>${esc2(e.date||'—')}</th><td>${esc2(e.count||'—')}x/day, ${esc2(e.vol||'—')}${e.leak?' · leakage: '+esc2(e.leak):''} ${e.note?'· '+esc2(e.note):''}</td></tr>`).join('')}</table>`:''}
   ${qs.length?`<h2>Questions for the care team</h2><ul>${qs.map(q=>`<li>${esc2(q)}</li>`).join('')}</ul>`:''}
-  <div class="note">Generated by Scott M.'s Prostate Health Guide, a personal educational tool. This is not a medical record and not medical advice. Confirm all information with the licensed care team.</div>
+  <div class="note">Generated by Prostate Cancer Health Guide, a personal educational tool. This is not a medical record and not medical advice. Confirm all information with the licensed care team.</div>
   </body></html>`;
   const w=window.open('','_blank');
   if(!w){alert('Please allow pop-ups to open the printable summary.');return;}
