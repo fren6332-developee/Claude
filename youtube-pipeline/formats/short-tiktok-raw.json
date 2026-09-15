@@ -1,0 +1,15 @@
+{
+  "format": "short-tiktok-raw",
+  "aspect_ratio": "9:16",
+  "resolution": "1080x1920",
+  "graphics": {
+    "style": "hook card -> raw",
+    "preset": "tiktok-raw-style"
+  },
+  "captions": {
+    "position": "low, under face",
+    "locked": false,
+    "preset": "tiktok-raw-style"
+  },
+  "thumbnail": "skip"
+}

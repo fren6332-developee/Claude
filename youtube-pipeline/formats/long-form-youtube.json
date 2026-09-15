@@ -1,0 +1,14 @@
+{
+  "format": "long-form-youtube",
+  "aspect_ratio": "16:9",
+  "resolution": "1920x1080",
+  "graphics": {
+    "style": "glass + zoom",
+    "preset": "liquid-glass-style"
+  },
+  "captions": {
+    "mode": "none",
+    "note": "relies on native YouTube CC, not burned in"
+  },
+  "thumbnail": "always"
+}

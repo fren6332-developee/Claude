@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  .panel {
+    position: absolute;
+    left: 8%;
+    bottom: 10%;
+    width: 60%;
+    box-sizing: border-box;
+    padding: 3% 4%;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    color: #fff;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    transform-origin: center;
+  }
+  .copy {
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+  <div class="panel" id="panel">
+    <p class="copy" id="copy"></p>
+  </div>
+  <script id="hf-data" type="application/json">{{DATA}}</script>
+  <script>
+    const data = JSON.parse(document.getElementById('hf-data').textContent);
+    document.getElementById('copy').textContent = data.copy;
+
+    const panel = document.getElementById('panel');
+    // liquid-glass-style.json: slow zoom (ken-burns), 2-4% per beat.
+    const zoomPct = data.zoomPct ?? 3;
+    const inDur = data.inDurationSec ?? 0.4;
+
+    window.hfSetTime = function (t) {
+      const zoomP = data.durationSec > 0 ? t / data.durationSec : 0;
+      const scale = 1 + (zoomPct / 100) * zoomP;
+      const introP = Math.min(1, t / inDur);
+      panel.style.opacity = String(introP);
+      panel.style.transform = `scale(${scale})`;
+    };
+    window.hfSetTime(0);
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  .card {
+    position: absolute;
+    left: 6%;
+    top: 8%;
+    width: 88%;
+    box-sizing: border-box;
+    padding: 5% 6%;
+    border-radius: 24px;
+    background: rgba(18, 18, 24, 0.86);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    color: #f4f4f6;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .copy {
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <p class="copy" id="copy"></p>
+  </div>
+  <script id="hf-data" type="application/json">{{DATA}}</script>
+  <script>
+    const data = JSON.parse(document.getElementById('hf-data').textContent);
+    document.getElementById('copy').textContent = data.copy;
+
+    const card = document.getElementById('card');
+    const inDur = data.inDurationSec ?? 0.35;
+    const outStart = data.durationSec - (data.outDurationSec ?? 0.35);
+
+    window.hfSetTime = function (t) {
+      let opacity, translateY;
+      if (t < inDur) {
+        const p = t / inDur;
+        opacity = p;
+        translateY = 24 * (1 - p);
+      } else if (t > outStart) {
+        const p = Math.min(1, (t - outStart) / (data.durationSec - outStart));
+        opacity = 1 - p;
+        translateY = -12 * p;
+      } else {
+        opacity = 1;
+        translateY = 0;
+      }
+      card.style.opacity = String(opacity);
+      card.style.transform = `translateY(${translateY}px)`;
+    };
+    window.hfSetTime(0);
+  </script>
+</body>
+</html>

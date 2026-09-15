@@ -1,0 +1,23 @@
+{
+  "_locked": true,
+  "_update_policy": "Edit only via a deliberate design change + version bump. Skills must treat this file as read-only input, never rewrite it as a side effect of rendering a job.",
+  "preset": "signature-style",
+  "used_by": ["graphics-plan"],
+  "applies_to_formats": ["short-explainer", "long-form-youtube"],
+  "typography": {
+    "heading_font": "brand-heading",
+    "body_font": "brand-body",
+    "accent_color": "#brand-accent"
+  },
+  "graphics": {
+    "card_shape": "rounded-rect",
+    "card_shadow": "soft",
+    "animation": "ease-out slide + fade",
+    "safe_margins_pct": 6
+  },
+  "engine": {
+    "graphics_template": "signature-card.html",
+    "in_duration_sec": 0.35,
+    "out_duration_sec": 0.35
+  }
+}
